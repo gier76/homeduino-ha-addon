@@ -1,9 +1,10 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base-nodejs:latest
-FROM $BUILD_FROM
+# Hardcoded base image to ensure nodejs/npm are available
+FROM ghcr.io/home-assistant/amd64-base-nodejs:latest
 
 # Set working directory
 WORKDIR /app
 
+# Cache bust: 2026-03-12-20-45
 # Install build dependencies
 RUN apk add --no-cache \
     python3 \
