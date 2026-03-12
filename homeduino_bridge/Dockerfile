@@ -1,11 +1,13 @@
-ARG BUILD_FROM
+ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:latest
 FROM $BUILD_FROM
 
 # Set working directory
 WORKDIR /app
 
-# Install native dependencies for serialport
+# Install native dependencies for serialport and nodejs
 RUN apk add --no-cache \
+    nodejs \
+    npm \
     python3 \
     make \
     g++ \
