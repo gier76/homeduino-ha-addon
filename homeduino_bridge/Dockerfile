@@ -1,11 +1,11 @@
-# Hardcoded base image to ensure nodejs/npm are available
-FROM ghcr.io/home-assistant/amd64-base-nodejs:latest
+# Use standard Node Alpine base
+FROM node:16-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Cache bust: 2026-03-12-20-45
-# Install build dependencies
+# Cache bust: 2026-03-12-20-50
+# Install build dependencies for native modules
 RUN apk add --no-cache \
     python3 \
     make \
