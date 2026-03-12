@@ -1,11 +1,10 @@
-ARG BUILD_FROM
-FROM $BUILD_FROM
+# CACHE BUST: 2026-03-12-21-00-FINAL-TRY
+FROM alpine:3.19
 
 # Set working directory
 WORKDIR /app
 
-# UNIQUE CACHE BREAK: Force fresh build at 2026-03-12 20:55
-# Install nodejs, npm and build dependencies manually on the base image
+# Install nodejs, npm and build dependencies
 RUN apk add --no-cache \
     nodejs \
     npm \
@@ -19,10 +18,10 @@ RUN apk add --no-cache \
 # Copy package files
 COPY package.json .
 
-# Install node dependencies but ignore scripts for a moment to prevent building old serialport
+# Install node dependencies
 RUN npm install --production --ignore-scripts --unsafe-perm
 
-# Now surgically remove any old serialport and install the new one
+# Surgical serialport fix
 RUN rm -rf node_modules/homeduino/node_modules/serialport \
     && npm install serialport@latest --production --unsafe-perm
 
