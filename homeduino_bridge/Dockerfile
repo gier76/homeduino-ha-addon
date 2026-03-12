@@ -1,4 +1,4 @@
-FROM node:14-bullseye-slim
+FROM node:12-bullseye-slim
 
 # Set working directory
 WORKDIR /app
@@ -19,7 +19,7 @@ RUN npm config set python python3
 COPY package.json .
 
 # Install node dependencies
-# We use --unsafe-perm to allow serialport to build as root if needed
+# Node 12 should handle serialport 6.x better
 RUN npm install --production --unsafe-perm
 
 # Copy all files
