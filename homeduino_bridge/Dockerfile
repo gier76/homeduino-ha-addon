@@ -1,24 +1,27 @@
-FROM node:16-bullseye-slim
+ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base-nodejs:latest
+FROM $BUILD_FROM
 
 # Set working directory
 WORKDIR /app
 
 # Install build dependencies
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
     python3 \
     make \
     g++ \
     udev \
     git \
-    && rm -rf /var/lib/apt/lists/*
+    linux-headers
 
 # Copy package files
 COPY package.json .
 
-# Install node dependencies
-# We install serialport first to ensure it's built correctly
-RUN npm install serialport@10.5.0 --production --unsafe-perm
-RUN npm install --production --unsafe-perm
+# Install node dependencies but ignore scripts for a moment to prevent building old serialport
+RUN npm install --production --ignore-scripts --unsafe-perm
+
+# Now surgically remove any old serialport and install the new one
+RUN rm -rf node_modules/homeduino/node_modules/serialport \
+    && npm install serialport@latest --production --unsafe-perm
 
 # Copy all files
 COPY . .
