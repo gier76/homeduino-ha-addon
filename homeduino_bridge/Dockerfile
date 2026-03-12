@@ -1,12 +1,14 @@
-# Use standard Node Alpine base
-FROM node:16-alpine
+ARG BUILD_FROM
+FROM $BUILD_FROM
 
 # Set working directory
 WORKDIR /app
 
-# Cache bust: 2026-03-12-20-50
-# Install build dependencies for native modules
+# UNIQUE CACHE BREAK: Force fresh build at 2026-03-12 20:55
+# Install nodejs, npm and build dependencies manually on the base image
 RUN apk add --no-cache \
+    nodejs \
+    npm \
     python3 \
     make \
     g++ \
