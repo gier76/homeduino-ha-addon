@@ -1,0 +1,33 @@
+name: "Homeduino Bridge"
+version: "1.0.0"
+slug: "homeduino_bridge"
+description: "Bridge between Homeduino (433MHz) and Home Assistant with Pimatic-style scanning"
+url: "https://github.com/gier76/homeduino-ha-addon"
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+startup: services
+boot: auto
+ingress: true
+ingress_port: 8080
+panel_icon: mdi:radio-tower
+options:
+  serial_port: "/dev/ttyUSB0"
+  mqtt_broker: "localhost"
+  mqtt_user: ""
+  mqtt_password: ""
+  debug: false
+schema:
+  serial_port: str
+  mqtt_broker: str
+  mqtt_user: str?
+  mqtt_password: password?
+  debug: bool
+devices:
+  - /dev/ttyUSB0
+  - /dev/ttyUSB1
+  - /dev/ttyACM0
+  - /dev/ttyACM1

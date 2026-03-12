@@ -1,0 +1,7 @@
+node_modules/
+.env
+.DS_Store
+logs/
+.playwright-mcp/
+Credentials_Gitub.txt.txt
+home_assistant_login.txt

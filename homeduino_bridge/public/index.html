@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Homeduino Scanner</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #03a9f4; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .signal-list { list-style: none; padding: 0; }
+        .signal-item { border-bottom: 1px solid #eee; padding: 10px 0; display: flex; flex-direction: column; }
+        .signal-item:last-child { border-bottom: none; }
+        .timestamp { font-size: 0.8em; color: #888; }
+        .protocol { font-weight: bold; color: #d32f2f; margin-right: 10px; }
+        .values { font-family: monospace; background: #f9f9f9; padding: 5px; border-radius: 4px; margin-top: 5px; word-break: break-all; }
+        .raw { color: #7b1fa2; font-style: italic; }
+        .status { margin-bottom: 20px; padding: 10px; border-radius: 4px; }
+        .status.connected { background: #e8f5e9; color: #2e7d32; }
+        .status.disconnected { background: #ffebee; color: #c62828; }
+        .actions { margin-top: 5px; display: flex; gap: 5px; }
+        button { cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; background: #fff; border-radius: 4px; }
+        button:hover { background: #eee; }
+        button.add-btn { background: #03a9f4; color: white; border-color: #0288d1; }
+        button.add-btn:hover { background: #0288d1; }
+        button.test-btn { background: #4caf50; color: white; border-color: #388e3c; }
+        button.test-btn:hover { background: #388e3c; }
+        .toast { position: fixed; bottom: 20px; right: 20px; background: #323232; color: white; padding: 10px 20px; border-radius: 4px; opacity: 0; transition: opacity 0.3s; }
+        .toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Homeduino 433MHz Scanner</h1>
+        <div id="status" class="status disconnected">Disconnected from Bridge</div>
+        
+        <div class="controls">
+            <button onclick="clearSignals()">Clear List</button>
+        </div>
+
+        <ul id="signals" class="signal-list">
+            <!-- Signals will appear here -->
+        </ul>
+    </div>
+    <div id="toast" class="toast"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const signalsList = document.getElementById('signals');
+        const statusDiv = document.getElementById('status');
+        const toastDiv = document.getElementById('toast');
+
+        socket.on('connect', () => {
+            statusDiv.textContent = 'Connected to Bridge - Listening for signals...';
+            statusDiv.className = 'status connected';
+        });
+
+        socket.on('disconnect', () => {
+            statusDiv.textContent = 'Disconnected from Bridge';
+            statusDiv.className = 'status disconnected';
+        });
+
+        socket.on('signal', (data) => {
+            addSignal(data);
+        });
+
+        socket.on('toast', (msg) => {
+            showToast(msg);
+        });
+
+        socket.on('error', (msg) => {
+            showToast('Error: ' + msg);
+        });
+
+        function showToast(msg) {
+            toastDiv.textContent = msg;
+            toastDiv.className = 'toast show';
+            setTimeout(() => { toastDiv.className = 'toast'; }, 3000);
+        }
+
+        function addSignal(data) {
+            // Check if existing to avoid duplicates spamming the list? 
+            // For now, just prepend as log.
+            
+            const li = document.createElement('li');
+            li.className = 'signal-item';
+            
+            const time = new Date(data.timestamp).toLocaleTimeString();
+            const valuesStr = JSON.stringify(data.values, null, 2);
+            const isSwitch = data.values.state !== undefined || 
+                             ['switch1', 'switch2', 'switch3', 'switch4', 'kaku', 'elro_he', 'intertechno'].some(p => data.protocol.includes(p));
+
+            let actionButtons = '';
+            if (isSwitch) {
+                const valuesJson = JSON.stringify(data.values).replace(/"/g, '&quot;');
+                actionButtons = `
+                    <div class="actions">
+                        <button class="test-btn" onclick="testSignal('${data.protocol}', ${valuesJson}, 'on')">Test ON</button>
+                        <button class="test-btn" onclick="testSignal('${data.protocol}', ${valuesJson}, 'off')">Test OFF</button>
+                        <button class="add-btn" onclick="addToHA('${data.protocol}', ${valuesJson})">Add to HA</button>
+                    </div>
+                `;
+            }
+
+            li.innerHTML = `
+                <div>
+                    <span class="timestamp">${time}</span>
+                    <span class="protocol">[${data.protocol}]</span>
+                </div>
+                <div class="values">${valuesStr}</div>
+                ${actionButtons}
+            `;
+            
+            signalsList.prepend(li);
+            
+            // Limit to 50 items
+            while (signalsList.children.length > 50) {
+                signalsList.removeChild(signalsList.lastChild);
+            }
+        }
+
+        function testSignal(protocol, values, state) {
+            const payload = { ...values, state: state };
+            socket.emit('send_command', { protocol, values: payload });
+        }
+
+        function addToHA(protocol, values) {
+            const name = prompt("Enter a friendly name for this device:", `Switch ${values.id || ''}`);
+            if (name) {
+                socket.emit('add_device', {
+                    protocol,
+                    values,
+                    type: 'switch',
+                    name
+                });
+            }
+        }
+
+        function clearSignals() {
+            signalsList.innerHTML = '';
+        }
+    </script>
+</body>
+</html>
