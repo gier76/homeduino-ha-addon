@@ -1,28 +1,23 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:latest
-FROM $BUILD_FROM
+FROM node:14-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Install nodejs, npm and build dependencies
-# Cache break: 2026-03-12-19-45
+# Install build dependencies for serialport
 RUN apk add --no-cache \
-    nodejs \
-    npm \
-    python3 \
+    python2 \
     make \
     g++ \
     udev \
-    git
-
-# Verify
-RUN node --version && npm --version
+    git \
+    linux-headers
 
 # Copy package files
 COPY package.json .
 
 # Install node dependencies
-RUN npm install --production
+# We use --unsafe-perm to allow serialport to build as root if needed
+RUN npm install --production --unsafe-perm
 
 # Copy all files
 COPY . .
@@ -34,4 +29,6 @@ RUN chmod a+x run.sh
 EXPOSE 8080
 
 # Run bridge
-CMD [ "./run.sh" ]
+# Note: Since we are not using HA base image, we might miss bashio features,
+# but for index.js we only need env vars.
+CMD [ "node", "index.js" ]
