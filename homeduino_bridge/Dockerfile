@@ -1,11 +1,14 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base-nodejs:latest
+ARG BUILD_FROM
 FROM $BUILD_FROM
 
 # Set working directory
 WORKDIR /app
 
-# Install build dependencies
+# CACHE BUST: 2026-03-12-21-25-FORCED-REBUILD
+# Manually install EVERYTHING since the base image is unreliable
 RUN apk add --no-cache \
+    nodejs \
+    npm \
     python3 \
     make \
     g++ \
