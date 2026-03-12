@@ -1,10 +1,10 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:latest
+ARG BUILD_FROM
 FROM $BUILD_FROM
 
 # Set working directory
 WORKDIR /app
 
-# Install native dependencies for serialport and nodejs
+# Install native dependencies
 RUN apk add --no-cache \
     nodejs \
     npm \
@@ -13,6 +13,9 @@ RUN apk add --no-cache \
     g++ \
     udev \
     git
+
+# Verify node and npm installation
+RUN node --version && npm --version
 
 # Copy package files
 COPY package.json .
