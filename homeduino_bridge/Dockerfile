@@ -1,16 +1,19 @@
-FROM node:14-alpine
+FROM node:14-bullseye-slim
 
 # Set working directory
 WORKDIR /app
 
 # Install build dependencies for serialport
-RUN apk add --no-cache \
-    python2 \
+RUN apt-get update && apt-get install -y \
+    python3 \
     make \
     g++ \
     udev \
     git \
-    linux-headers
+    && rm -rf /var/lib/apt/lists/*
+
+# Set python path for node-gyp
+RUN npm config set python python3
 
 # Copy package files
 COPY package.json .
@@ -29,6 +32,4 @@ RUN chmod a+x run.sh
 EXPOSE 8080
 
 # Run bridge
-# Note: Since we are not using HA base image, we might miss bashio features,
-# but for index.js we only need env vars.
 CMD [ "node", "index.js" ]
