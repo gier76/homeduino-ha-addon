@@ -4,8 +4,7 @@ FROM $BUILD_FROM
 # Set working directory
 WORKDIR /app
 
-# CACHE BUST: 2026-03-12-21-25-FORCED-REBUILD
-# Manually install EVERYTHING since the base image is unreliable
+# CACHE BUST: 2026-03-12-21-35-ULTRA-AGGRESSIVE
 RUN apk add --no-cache \
     nodejs \
     npm \
@@ -19,14 +18,17 @@ RUN apk add --no-cache \
 # Copy package files
 COPY package.json .
 
-# Install node dependencies without running scripts (prevents building old serialport)
+# Step 1: Install EVERYTHING without running any scripts
 RUN npm install --production --ignore-scripts --unsafe-perm
 
-# Surgically remove any nested serialport folders to be 100% sure
-RUN find node_modules -name "serialport" -type d -exec rm -rf {} +
+# Step 2: Nuke ALL nested serialport directories anywhere in the tree
+RUN find . -name "serialport" -type d -exec rm -rf {} +
 
-# Now install the LATEST serialport at the root and allow IT to build
+# Step 3: Install the latest serialport at the root and allow IT to build
 RUN npm install serialport@latest --production --unsafe-perm
+
+# Step 4: Verify the structure
+RUN ls -R node_modules/homeduino/node_modules || echo "No nested modules"
 
 # Copy all files
 COPY . .
