@@ -1,9 +1,9 @@
-FROM node:12-bullseye-slim
+FROM node:16-bullseye-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install build dependencies for serialport
+# Install build dependencies
 RUN apt-get update && apt-get install -y \
     python3 \
     make \
@@ -12,14 +12,12 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Set python path for node-gyp
-RUN npm config set python python3
-
 # Copy package files
 COPY package.json .
 
 # Install node dependencies
-# Node 12 should handle serialport 6.x better
+# We install serialport first to ensure it's built correctly
+RUN npm install serialport@10.5.0 --production --unsafe-perm
 RUN npm install --production --unsafe-perm
 
 # Copy all files
