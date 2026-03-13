@@ -62,7 +62,7 @@ class Homeduino extends EventEmitter {
         const info = rfcontrol.prepareCompressedPulses(strSeq);
         this.decode(info.pulseLengths, info.pulses);
       } catch (e) {
-        if (process.env.DEBUG || options.debug) console.error('Decoding Error:', e.message);
+        if (process.env.DEBUG) console.error('Decoding Error:', e.message);
       }
     }
   }
@@ -169,53 +169,61 @@ const io = new Server(server);
 
 app.use(express.static('public'));
 
+function getDeviceMeta(protocol, values) {
+  const id = values.id !== undefined ? values.id : (values.channel !== undefined ? values.channel : 0);
+  const channel = values.channel !== undefined ? values.channel : 0;
+  const unit = values.unit !== undefined ? values.unit : 0;
+  
+  // Create a truly unique identifier string
+  const uid = `hd_${protocol}_i${id}_c${channel}_u${unit}`.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
+  // Exclusive topic for this specific device
+  const topic = `homeduino/stat/${uid}`;
+  
+  return { id, channel, unit, uid, topic };
+}
+
 io.on('connection', (socket) => {
   socket.emit('status', { connected: homeduino.connected, error: lastError });
   socket.emit('mqtt_status', { connected: mqttClient.connected });
 
+  socket.on('send_command', (data) => {
+    homeduino.send(data.protocol, data.values).catch(err => socket.emit('error', err.message));
+  });
+
   socket.on('add_device', (data) => {
     const { protocol, values, type, name } = data;
+    const meta = getDeviceMeta(protocol, values);
     
-    // Improved unique identification
-    const id = values.id !== undefined ? values.id : 0;
-    const channel = values.channel !== undefined ? values.channel : 0;
-    const unit = values.unit !== undefined ? values.unit : 0;
-    
-    // UID contains ALL identifiers to ensure separation
-    const deviceUid = `homeduino_${protocol}_i${id}_c${channel}_u${unit}`.replace(/[^a-zA-Z0-9_-]/g, '_');
-    const stateTopic = `homeduino/received/${protocol}/${id}/${channel}/${unit}`;
-    
-    console.log(`[Discovery] Registering Device: ${deviceUid} on Topic: ${stateTopic}`);
+    console.log(`[Discovery] Adding ${type} ${meta.uid} to HA`);
 
     const commonDevice = {
-      identifiers: [deviceUid],
-      name: name || `Homeduino ${protocol} ${id}:${channel}`,
+      identifiers: [meta.uid],
+      name: name || `Homeduino ${protocol} ${meta.id}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.3.1"
+      sw_version: "3.3.2"
     };
 
     if (type === 'switch' || values.state !== undefined) {
       const payload = {
         name: null,
-        unique_id: `${deviceUid}_switch`,
+        unique_id: `${meta.uid}_sw`,
         command_topic: `homeduino/command/${protocol}`,
-        payload_on: JSON.stringify({ ...values, id, channel, unit, state: 'on' }),
-        payload_off: JSON.stringify({ ...values, id, channel, unit, state: 'off' }),
-        state_topic: stateTopic,
+        payload_on: JSON.stringify({ ...values, id: meta.id, channel: meta.channel, unit: meta.unit, state: 'on' }),
+        payload_off: JSON.stringify({ ...values, id: meta.id, channel: meta.channel, unit: meta.unit, state: 'off' }),
+        state_topic: meta.topic,
         value_template: "{{ value_json.state }}",
         availability_topic: "homeduino/status",
         device: commonDevice
       };
-      mqttClient.publish(`homeassistant/switch/homeduino/${deviceUid}/config`, JSON.stringify(payload), { retain: true });
+      mqttClient.publish(`homeassistant/switch/homeduino/${meta.uid}/config`, JSON.stringify(payload), { retain: true });
     } else {
-      // Aggressive weather sensor registration
       const sensors = [];
-      const isWeatherProto = ['weather', 'mandolyn', 'oregon', 'cresta'].some(p => protocol.includes(p));
+      const isWeather = ['weather', 'mandolyn', 'oregon', 'cresta'].some(p => protocol.includes(p));
       
-      if (values.temperature !== undefined || isWeatherProto) 
+      if (values.temperature !== undefined || isWeather) 
         sensors.push({ key: 'temperature', unit: '°C', class: 'temperature' });
-      if (values.humidity !== undefined || isWeatherProto) 
+      if (values.humidity !== undefined || values.hum !== undefined || isWeather) 
         sensors.push({ key: 'humidity', unit: '%', class: 'humidity' });
       if (values.battery !== undefined) 
         sensors.push({ key: 'battery', unit: '%', class: 'battery' });
@@ -223,38 +231,36 @@ io.on('connection', (socket) => {
       sensors.forEach(s => {
         const payload = {
           name: s.key.charAt(0).toUpperCase() + s.key.slice(1),
-          unique_id: `${deviceUid}_${s.key}`,
-          state_topic: stateTopic,
+          unique_id: `${meta.uid}_${s.key}`,
+          state_topic: meta.topic,
           unit_of_measurement: s.unit,
           device_class: s.class,
-          value_template: `{{ value_json.${s.key} if value_json.${s.key} is defined else states('sensor.${deviceUid}_${s.key}') }}`,
+          // Simple template as topic is exclusive
+          value_template: `{{ value_json.${s.key} if value_json.${s.key} is defined else (value_json.hum if '${s.key}' == 'humidity' and value_json.hum is defined else states('sensor.${meta.uid}_${s.key}')) }}`,
           availability_topic: "homeduino/status",
           device: commonDevice
         };
-        console.log(`[Discovery] Publishing sensor entity: ${payload.unique_id}`);
-        mqttClient.publish(`homeassistant/sensor/homeduino/${deviceUid}_${s.key}/config`, JSON.stringify(payload), { retain: true });
+        mqttClient.publish(`homeassistant/sensor/homeduino/${meta.uid}_${s.key}/config`, JSON.stringify(payload), { retain: true });
       });
     }
-    socket.emit('toast', 'Device and entities registered in HA');
+    socket.emit('toast', 'Registered unique device in HA');
   });
 });
 
 // 6. Signal handling
 homeduino.on('rfControlReceive', (event) => {
-  const v = { ...event.values };
-  const id = v.id !== undefined ? v.id : 0;
-  const channel = v.channel !== undefined ? v.channel : 0;
-  const unit = v.unit !== undefined ? v.unit : 0;
+  const meta = getDeviceMeta(event.protocol, event.values);
+  const data = { ...event.values };
   
-  if (v.state === true || v.state === 1 || v.state === 'on') v.state = 'on';
-  else if (v.state === false || v.state === 0 || v.state === 'off') v.state = 'off';
+  // Normalize state
+  if (data.state === true || data.state === 1 || data.state === 'on') data.state = 'on';
+  else if (data.state === false || data.state === 0 || data.state === 'off') data.state = 'off';
 
-  const topic = `homeduino/received/${event.protocol}/${id}/${channel}/${unit}`;
-  
-  if (options.debug) console.log(`[RF Receive] Protocol: ${event.protocol} | ID: ${id} | CH: ${channel} | U: ${unit} | Data: ${JSON.stringify(v)}`);
-  
-  mqttClient.publish(topic, JSON.stringify(v));
-  io.emit('signal', { timestamp: new Date().toISOString(), protocol: event.protocol, values: event.values });
+  // Include IDs in published JSON for template safety
+  data.hd_uid = meta.uid;
+
+  mqttClient.publish(meta.topic, JSON.stringify(data));
+  io.emit('signal', { timestamp: new Date().toISOString(), protocol: event.protocol, values: event.values, uid: meta.uid });
 });
 
 server.listen(8080);
