@@ -173,26 +173,15 @@ const io = new Server(server);
 app.use(express.static('public'));
 
 function getDeviceMeta(protocol, values) {
-  // Ultra-robust ID extraction: check for any identifying fields
-  const idFields = ['id', 'channel', 'rolling_code', 'address', 'house', 'unit', 'contact', 'systemcode'];
+  // Ultra-robust ID extraction: capture all identifying fields
+  const idFields = ['id', 'channel', 'rolling_code', 'address', 'house', 'unit', 'systemcode', 'knocode', 'all', 'group', 'contact', 'housecode'];
   let uidParts = [protocol];
   
-  let foundId = false;
   idFields.forEach(f => {
     if (values[f] !== undefined) {
       uidParts.push(`${f}${values[f]}`);
-      foundId = true;
     }
   });
-
-  if (!foundId) {
-    const dataFields = ['temperature', 'humidity', 'hum', 'battery', 'state', 'contact', 'lowbattery'];
-    Object.keys(values).forEach(k => {
-      if (!dataFields.includes(k) && typeof values[k] !== 'object') {
-        uidParts.push(`${k}${values[k]}`);
-      }
-    });
-  }
 
   const uid = `hd_${uidParts.join('_')}`.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
   const topic = `homeduino/stat/${uid}`;
@@ -219,7 +208,7 @@ io.on('connection', (socket) => {
       name: name || `Homeduino ${protocol}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.3.5"
+      sw_version: "3.3.6"
     };
 
     if (type === 'switch' || values.state !== undefined) {
@@ -237,13 +226,13 @@ io.on('connection', (socket) => {
       mqttClient.publish(`homeassistant/switch/homeduino/${meta.uid}/config`, JSON.stringify(payload), { retain: true });
     } else {
       const sensors = [];
-      const isWeather = ['weather', 'mandolyn', 'oregon', 'cresta', 'tfa'].some(p => protocol.includes(p));
+      const isWeather = ['weather', 'mandolyn', 'oregon', 'cresta', 'tfa', 'weather2'].some(p => protocol.includes(p));
       
       if (values.temperature !== undefined || isWeather) 
         sensors.push({ key: 'temperature', unit: '°C', class: 'temperature' });
       if (values.humidity !== undefined || values.hum !== undefined || isWeather) 
         sensors.push({ key: 'humidity', unit: '%', class: 'humidity' });
-      if (values.battery !== undefined) 
+      if (values.battery !== undefined || values.lowbattery !== undefined) 
         sensors.push({ key: 'battery', unit: '%', class: 'battery' });
 
       sensors.forEach(s => {
@@ -271,9 +260,9 @@ io.on('connection', (socket) => {
 homeduino.on('rfControlReceive', (event) => {
   const meta = getDeviceMeta(event.protocol, event.values);
   
-  if (!deviceStates[meta.uid]) deviceStates[meta.uid] = { 
-    protocol: event.protocol 
-  };
+  if (!deviceStates[meta.uid]) {
+    deviceStates[meta.uid] = { protocol: event.protocol };
+  }
 
   const currentValues = { ...event.values };
   
