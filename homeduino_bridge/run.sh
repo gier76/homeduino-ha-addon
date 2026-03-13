@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bashio
+#!/bin/sh
 
-echo "Starting Homeduino Bridge..."
+echo "Starting Homeduino Bridge (Modernized)..."
 node index.js
