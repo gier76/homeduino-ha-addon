@@ -255,21 +255,22 @@ io.on('connection', (socket) => {
     const { protocol, values, type, name } = data;
     const deviceId = values.id !== undefined ? values.id : (values.channel !== undefined ? values.channel : 0);
     const deviceUnit = values.unit !== undefined ? values.unit : 0;
+    // Strict unique ID without dots or special chars
     const uniqueBase = `homeduino_${protocol}_${deviceId}_${deviceUnit}`.replace(/[^a-zA-Z0-9_-]/g, '_');
     
-    console.log(`Adding device: ${type} (${protocol}) ID:${deviceId} Unit:${deviceUnit}`);
+    console.log(`Adding device to HA: ${type} (${protocol}) ID:${deviceId} Unit:${deviceUnit}`);
 
     if (type === 'switch' || (!type && values.state !== undefined)) {
       // --- SWITCH DISCOVERY ---
       const uniqueId = uniqueBase;
       const payload = {
-        name: name || `Homeduino ${protocol} ${deviceId}:${deviceUnit}`,
+        name: name || `Homeduino Switch ${deviceId}:${deviceUnit}`,
         unique_id: uniqueId,
         command_topic: `homeduino/command/${protocol}`,
         payload_on: JSON.stringify({ ...values, id: deviceId, unit: deviceUnit, state: 'on' }),
         payload_off: JSON.stringify({ ...values, id: deviceId, unit: deviceUnit, state: 'off' }),
         state_topic: `homeduino/received/${protocol}`,
-        // Template: Normalize incoming state and filter by ID/Unit
+        // Template: Filter by ID and Unit, then return state
         value_template: `{% if value_json.id|string == '${deviceId}' and value_json.unit|string == '${deviceUnit}' %}{{ value_json.state }}{% else %}{{ states('switch.${uniqueId}') }}{% endif %}`,
         state_on: 'on',
         state_off: 'off',
@@ -278,10 +279,11 @@ io.on('connection', (socket) => {
           name: name || `Homeduino Switch ${deviceId}`, 
           model: protocol, 
           manufacturer: "Homeduino Bridge",
-          sw_version: "3.2.6"
+          sw_version: "3.2.7"
         }
       };
-      mqttClient.publish(`homeassistant/switch/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
+      // Use 'homeduino' as node_id for easier management/deletion
+      mqttClient.publish(`homeassistant/switch/homeduino/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
       socket.emit('toast', `Switch added: ${name || uniqueId}`);
     } else {
       // --- WEATHER / SENSOR DISCOVERY ---
@@ -298,17 +300,17 @@ io.on('connection', (socket) => {
           state_topic: `homeduino/received/${protocol}`,
           unit_of_measurement: s.unit,
           device_class: s.class,
-          // Filter by ID or Channel
+          // Template: Filter by ID, return value
           value_template: `{% if value_json.id|string == '${deviceId}' %}{{ value_json.${s.key} }}{% else %}{{ states('sensor.${uniqueId}') }}{% endif %}`,
           device: { 
             identifiers: [uniqueBase], 
             name: name || `Homeduino Sensor ${deviceId}`, 
             model: protocol, 
             manufacturer: "Homeduino Bridge",
-            sw_version: "3.2.6"
+            sw_version: "3.2.7"
           }
         };
-        mqttClient.publish(`homeassistant/sensor/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
+        mqttClient.publish(`homeassistant/sensor/homeduino/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
       });
       socket.emit('toast', `Weather sensors added: ${name || uniqueBase}`);
     }
