@@ -33,7 +33,8 @@ class Homeduino extends EventEmitter {
       console.log('Serial port opened.');
       this.connected = true;
       this.emit('connected');
-      // Start receiving on pin 0
+      // Start receiving on pin 0 (common for most Homeduino setups)
+      console.log('Initializing RF reception on pin 0...');
       this.write('RF receive 0'); 
     });
 
@@ -43,20 +44,21 @@ class Homeduino extends EventEmitter {
     });
 
     this.parser.on('data', (line) => {
-      if (process.env.DEBUG || options.debug) console.log(`[Serial Raw]: ${line.trim()}`);
+      line = line.trim();
+      if (process.env.DEBUG || options.debug) console.log(`[Serial Raw]: "${line}"`);
       this.handleLine(line);
     });
   }
 
   handleLine(line) {
-    line = line.trim();
     if (line === 'ready') {
-      console.log('Homeduino Arduino is ready.');
+      console.log('Homeduino Arduino is ready. Re-initializing reception...');
+      this.write('RF receive 0');
       return;
     }
 
     if (line.startsWith('RF receive ')) {
-      console.log(`[RF Data]: Received raw pulses: ${line}`);
+      console.log(`[RF Data]: Incoming raw pulses detected: ${line}`);
       // Homeduino sends "RF receive [pulse1] [pulse2] ... [pulse10]"
       // We need to join them and pass to prepareCompressedPulses
       const parts = line.split(' ');
@@ -174,6 +176,12 @@ const mqttClient = mqtt.connect(MQTT_URL, mqttOptions);
 mqttClient.on('connect', () => {
   console.log('MQTT connected successfully!');
   mqttClient.publish('homeduino/status', 'online', { retain: true });
+  
+  // Heartbeat every 60 seconds
+  setInterval(() => {
+    mqttClient.publish('homeduino/status/heartbeat', new Date().toISOString());
+  }, 60000);
+
   io.emit('mqtt_status', { connected: true });
   mqttClient.subscribe('homeduino/command/#', (err) => {
     if (err) console.error('MQTT subscribe error:', err);
