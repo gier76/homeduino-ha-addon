@@ -43,6 +43,7 @@ class Homeduino extends EventEmitter {
     });
 
     this.parser.on('data', (line) => {
+      if (process.env.DEBUG || options.debug) console.log(`[Serial Raw]: ${line.trim()}`);
       this.handleLine(line);
     });
   }
@@ -55,6 +56,7 @@ class Homeduino extends EventEmitter {
     }
 
     if (line.startsWith('RF receive ')) {
+      console.log(`[RF Data]: Received raw pulses: ${line}`);
       // Homeduino sends "RF receive [pulse1] [pulse2] ... [pulse10]"
       // We need to join them and pass to prepareCompressedPulses
       const parts = line.split(' ');
@@ -151,6 +153,12 @@ homeduino.on('error', (err) => {
 const mqttOptions = {
   reconnectPeriod: 5000,
   connectTimeout: 30 * 1000,
+  will: {
+    topic: 'homeduino/status',
+    payload: 'offline',
+    retain: true,
+    qos: 1
+  }
 };
 
 if (MQTT_USER && MQTT_USER.trim() !== '') {
@@ -165,6 +173,7 @@ const mqttClient = mqtt.connect(MQTT_URL, mqttOptions);
 
 mqttClient.on('connect', () => {
   console.log('MQTT connected successfully!');
+  mqttClient.publish('homeduino/status', 'online', { retain: true });
   io.emit('mqtt_status', { connected: true });
   mqttClient.subscribe('homeduino/command/#', (err) => {
     if (err) console.error('MQTT subscribe error:', err);
