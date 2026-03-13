@@ -1,7 +1,7 @@
 name: "Homeduino Bridge"
-version: "3.0.0"
+version: "3.1.0"
 slug: "homeduino_bridge"
-description: "Bridge between Homeduino (433MHz) and Home Assistant - Modernized with RFControlJS"
+description: "Bridge between Homeduino (433MHz) and Home Assistant - Modernized with hardware error handling"
 url: "https://github.com/gier76/homeduino-ha-addon"
 arch:
   - amd64

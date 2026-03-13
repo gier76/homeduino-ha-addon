@@ -131,6 +131,19 @@ const MQTT_URL = `mqtt://${options.mqtt_broker}`;
 
 // 3. Initialize Homeduino
 const homeduino = new Homeduino(SERIAL_PORT);
+let lastError = null;
+
+homeduino.on('connected', () => {
+  console.log('Homeduino connected!');
+  lastError = null;
+  io.emit('status', { connected: true });
+});
+
+homeduino.on('error', (err) => {
+  console.error('Homeduino Error:', err.message);
+  lastError = err.message;
+  io.emit('status', { connected: false, error: err.message });
+});
 
 // 4. Initialize MQTT
 const mqttClient = mqtt.connect(MQTT_URL, {
@@ -166,6 +179,9 @@ app.use(express.static('public'));
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 
 io.on('connection', (socket) => {
+  console.log('Web UI connected');
+  socket.emit('status', { connected: homeduino.connected, error: lastError });
+
   socket.on('send_command', (data) => {
     homeduino.send(data.protocol, data.values).catch(err => socket.emit('error', err.message));
   });

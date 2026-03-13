@@ -16,6 +16,7 @@
         .status { margin-bottom: 20px; padding: 10px; border-radius: 4px; }
         .status.connected { background: #e8f5e9; color: #2e7d32; }
         .status.disconnected { background: #ffebee; color: #c62828; }
+        .error-banner { background: #c62828; color: white; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
         .actions { margin-top: 5px; display: flex; gap: 5px; }
         button { cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; background: #fff; border-radius: 4px; }
         button:hover { background: #eee; }
@@ -30,6 +31,7 @@
 <body>
     <div class="container">
         <h1>Homeduino 433MHz Scanner</h1>
+        <div id="error-msg" class="error-banner"></div>
         <div id="status" class="status disconnected">Disconnected from Bridge</div>
         
         <div class="controls">
@@ -69,6 +71,16 @@
 
         socket.on('error', (msg) => {
             showToast('Error: ' + msg);
+        });
+
+        socket.on('status', (data) => {
+            const errorMsg = document.getElementById('error-msg');
+            if (data.error) {
+                errorMsg.textContent = 'Hardware Warning: ' + data.error + '. Please check if your USB Transceiver is connected and correctly configured.';
+                errorMsg.style.display = 'block';
+            } else {
+                errorMsg.style.display = 'none';
+            }
         });
 
         function showToast(msg) {
