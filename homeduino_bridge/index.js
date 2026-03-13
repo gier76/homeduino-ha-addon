@@ -8,6 +8,9 @@ const { ReadlineParser } = require('@serialport/parser-readline');
 const rfcontrol = require('rfcontroljs');
 const EventEmitter = require('events');
 
+// Global state store to prevent "unknown" values in HA
+const deviceStates = {}; 
+
 // 1. Homeduino Bridge Class
 class Homeduino extends EventEmitter {
   constructor(port, baudRate = 115200) {
@@ -162,7 +165,7 @@ mqttClient.on('message', (topic, message) => {
   }
 });
 
-// 5. Web UI & Discovery
+// 5. Web UI & Discovery Functions
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
@@ -174,9 +177,8 @@ function getDeviceMeta(protocol, values) {
   const channel = values.channel !== undefined ? values.channel : 0;
   const unit = values.unit !== undefined ? values.unit : 0;
   
-  // Create a truly unique identifier string
+  // UID is the unique key for everything
   const uid = `hd_${protocol}_i${id}_c${channel}_u${unit}`.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
-  // Exclusive topic for this specific device
   const topic = `homeduino/stat/${uid}`;
   
   return { id, channel, unit, uid, topic };
@@ -194,14 +196,14 @@ io.on('connection', (socket) => {
     const { protocol, values, type, name } = data;
     const meta = getDeviceMeta(protocol, values);
     
-    console.log(`[Discovery] Adding ${type} ${meta.uid} to HA`);
+    console.log(`[Discovery] Registering ${type} ${meta.uid} on topic ${meta.topic}`);
 
     const commonDevice = {
       identifiers: [meta.uid],
       name: name || `Homeduino ${protocol} ${meta.id}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.3.2"
+      sw_version: "3.3.3"
     };
 
     if (type === 'switch' || values.state !== undefined) {
@@ -219,7 +221,7 @@ io.on('connection', (socket) => {
       mqttClient.publish(`homeassistant/switch/homeduino/${meta.uid}/config`, JSON.stringify(payload), { retain: true });
     } else {
       const sensors = [];
-      const isWeather = ['weather', 'mandolyn', 'oregon', 'cresta'].some(p => protocol.includes(p));
+      const isWeather = ['weather', 'mandolyn', 'oregon', 'cresta', 'tfa'].some(p => protocol.includes(p));
       
       if (values.temperature !== undefined || isWeather) 
         sensors.push({ key: 'temperature', unit: '°C', class: 'temperature' });
@@ -235,32 +237,46 @@ io.on('connection', (socket) => {
           state_topic: meta.topic,
           unit_of_measurement: s.unit,
           device_class: s.class,
-          // Simple template as topic is exclusive
-          value_template: `{{ value_json.${s.key} if value_json.${s.key} is defined else (value_json.hum if '${s.key}' == 'humidity' and value_json.hum is defined else states('sensor.${meta.uid}_${s.key}')) }}`,
+          value_template: `{{ value_json.${s.key} if value_json.${s.key} is defined else (value_json.hum if '${s.key}' == 'humidity' and value_json.hum is defined else states(entity_id)) }}`,
           availability_topic: "homeduino/status",
           device: commonDevice
         };
         mqttClient.publish(`homeassistant/sensor/homeduino/${meta.uid}_${s.key}/config`, JSON.stringify(payload), { retain: true });
       });
     }
-    socket.emit('toast', 'Registered unique device in HA');
+    socket.emit('toast', 'Device Registered in HA');
   });
 });
 
 // 6. Signal handling
 homeduino.on('rfControlReceive', (event) => {
   const meta = getDeviceMeta(event.protocol, event.values);
-  const data = { ...event.values };
+  
+  // Initialize state cache for this UID
+  if (!deviceStates[meta.uid]) deviceStates[meta.uid] = { 
+    id: meta.id, channel: meta.channel, unit: meta.unit, protocol: event.protocol 
+  };
+
+  const currentValues = { ...event.values };
   
   // Normalize state
-  if (data.state === true || data.state === 1 || data.state === 'on') data.state = 'on';
-  else if (data.state === false || data.state === 0 || data.state === 'off') data.state = 'off';
+  if (currentValues.state === true || currentValues.state === 1 || currentValues.state === 'on') currentValues.state = 'on';
+  else if (currentValues.state === false || currentValues.state === 0 || currentValues.state === 'off') currentValues.state = 'off';
 
-  // Include IDs in published JSON for template safety
-  data.hd_uid = meta.uid;
+  // Merge incoming values with last known values
+  Object.assign(deviceStates[meta.uid], currentValues);
 
-  mqttClient.publish(meta.topic, JSON.stringify(data));
-  io.emit('signal', { timestamp: new Date().toISOString(), protocol: event.protocol, values: event.values, uid: meta.uid });
+  // Publish full state to the device-specific topic
+  mqttClient.publish(meta.topic, JSON.stringify(deviceStates[meta.uid]));
+  
+  if (options.debug) console.log(`[Data] Published to ${meta.topic}: ${JSON.stringify(deviceStates[meta.uid])}`);
+  
+  io.emit('signal', { 
+    timestamp: new Date().toISOString(), 
+    protocol: event.protocol, 
+    values: event.values, 
+    uid: meta.uid 
+  });
 });
 
 server.listen(8080);
