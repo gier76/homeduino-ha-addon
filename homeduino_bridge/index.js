@@ -65,7 +65,7 @@ class Homeduino extends EventEmitter {
         const info = rfcontrol.prepareCompressedPulses(strSeq);
         this.decode(info.pulseLengths, info.pulses);
       } catch (e) {
-        if (process.env.DEBUG || options.debug) console.error('Decoding Error:', e.message);
+        if (process.env.DEBUG) console.error('Decoding Error:', e.message);
       }
     }
   }
@@ -173,16 +173,31 @@ const io = new Server(server);
 app.use(express.static('public'));
 
 function getDeviceMeta(protocol, values) {
-  // Robust ID extraction from various possible fields
-  const id = values.id !== undefined ? values.id : (values.rolling_code !== undefined ? values.rolling_code : (values.channel !== undefined ? values.channel : (values.address !== undefined ? values.address : 0)));
-  const channel = values.channel !== undefined ? values.channel : 0;
-  const unit = values.unit !== undefined ? values.unit : 0;
+  // Ultra-robust ID extraction: check for any identifying fields
+  const idFields = ['id', 'channel', 'rolling_code', 'address', 'house', 'unit', 'contact', 'systemcode'];
+  let uidParts = [protocol];
   
-  // UID must be unique per physical sensor
-  const uid = `hd_${protocol}_i${id}_c${channel}_u${unit}`.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
+  let foundId = false;
+  idFields.forEach(f => {
+    if (values[f] !== undefined) {
+      uidParts.push(`${f}${values[f]}`);
+      foundId = true;
+    }
+  });
+
+  if (!foundId) {
+    const dataFields = ['temperature', 'humidity', 'hum', 'battery', 'state', 'contact', 'lowbattery'];
+    Object.keys(values).forEach(k => {
+      if (!dataFields.includes(k) && typeof values[k] !== 'object') {
+        uidParts.push(`${k}${values[k]}`);
+      }
+    });
+  }
+
+  const uid = `hd_${uidParts.join('_')}`.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
   const topic = `homeduino/stat/${uid}`;
   
-  return { id, channel, unit, uid, topic };
+  return { uid, topic };
 }
 
 io.on('connection', (socket) => {
@@ -201,10 +216,10 @@ io.on('connection', (socket) => {
 
     const commonDevice = {
       identifiers: [meta.uid],
-      name: name || `Homeduino ${protocol} ${meta.id}`,
+      name: name || `Homeduino ${protocol}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.3.4"
+      sw_version: "3.3.5"
     };
 
     if (type === 'switch' || values.state !== undefined) {
@@ -212,8 +227,8 @@ io.on('connection', (socket) => {
         name: null,
         unique_id: `${meta.uid}_sw`,
         command_topic: `homeduino/command/${protocol}`,
-        payload_on: JSON.stringify({ ...values, id: meta.id, channel: meta.channel, unit: meta.unit, state: 'on' }),
-        payload_off: JSON.stringify({ ...values, id: meta.id, channel: meta.channel, unit: meta.unit, state: 'off' }),
+        payload_on: JSON.stringify({ ...values, state: 'on' }),
+        payload_off: JSON.stringify({ ...values, state: 'off' }),
         state_topic: meta.topic,
         value_template: "{{ value_json.state }}",
         availability_topic: "homeduino/status",
@@ -239,8 +254,9 @@ io.on('connection', (socket) => {
           state_topic: meta.topic,
           unit_of_measurement: s.unit,
           device_class: s.class,
-          // Robust template: check for both 'humidity' and 'hum'
-          value_template: `{% if value_json.${s.key} is defined %}{{ value_json.${s.key} }}{% elif '${s.key}' == 'humidity' and value_json.hum is defined %}{{ value_json.hum }}{% else %}{{ states('${entityId}') }}{% endif %}`,
+          value_template: s.key === 'humidity' 
+            ? `{{ value_json.humidity if value_json.humidity is defined else (value_json.hum if value_json.hum is defined else states('${entityId}')) }}`
+            : `{{ value_json.${s.key} if value_json.${s.key} is defined else states('${entityId}') }}`,
           availability_topic: "homeduino/status",
           device: commonDevice
         };
@@ -255,25 +271,22 @@ io.on('connection', (socket) => {
 homeduino.on('rfControlReceive', (event) => {
   const meta = getDeviceMeta(event.protocol, event.values);
   
-  // Initialize state cache
   if (!deviceStates[meta.uid]) deviceStates[meta.uid] = { 
-    id: meta.id, channel: meta.channel, unit: meta.unit, protocol: event.protocol 
+    protocol: event.protocol 
   };
 
   const currentValues = { ...event.values };
   
-  // Normalize state
   if (currentValues.state === true || currentValues.state === 1 || currentValues.state === 'on') currentValues.state = 'on';
   else if (currentValues.state === false || currentValues.state === 0 || currentValues.state === 'off') currentValues.state = 'off';
 
-  // Merge values
   Object.assign(deviceStates[meta.uid], currentValues);
+  deviceStates[meta.uid].hd_uid = meta.uid;
 
-  // Publish
-  mqttClient.publish(meta.topic, JSON.stringify(deviceStates[meta.uid]));
+  mqttClient.publish(meta.topic, JSON.stringify(deviceStates[meta.uid]), { retain: true });
   
   if (options.debug || process.env.DEBUG) {
-    console.log(`[RF Receive] Protocol: ${event.protocol} | UID: ${meta.uid} | Data: ${JSON.stringify(deviceStates[meta.uid])}`);
+    console.log(`[Data] Published to ${meta.topic}: ${JSON.stringify(deviceStates[meta.uid])}`);
   }
   
   io.emit('signal', { 
