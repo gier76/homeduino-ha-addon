@@ -59,8 +59,6 @@ class Homeduino extends EventEmitter {
 
     if (line.startsWith('RF receive ')) {
       console.log(`[RF Data]: Incoming raw pulses detected: ${line}`);
-      // Homeduino sends "RF receive [pulse1] [pulse2] ... [pulse10]"
-      // We need to join them and pass to prepareCompressedPulses
       const parts = line.split(' ');
       const strSeq = parts.slice(2).join(' ');
       try {
@@ -70,8 +68,6 @@ class Homeduino extends EventEmitter {
         if (process.env.DEBUG) console.error('Decoding Error:', e.message);
       }
     } else if (line.startsWith('PULSES ')) {
-      // Some versions send PULSES directly
-      // We might need to bucket them manually or use another rfcontrol method
       if (process.env.DEBUG) console.log('Raw pulses received:', line);
     }
   }
@@ -93,8 +89,6 @@ class Homeduino extends EventEmitter {
     try {
       const result = rfcontrol.encodeMessage(protocol, values);
       if (result && result.pulseLengths && result.pulses) {
-        // Format for Homeduino: RF send [pin] [repeats] [p1] [p2] [p3] [p4] [p5] [p6] [p7] [p8] [bitstring]
-        // We use pin 4 for sending as default, repeats 4
         const p = result.pulseLengths;
         const pStr = [p[0]||0, p[1]||0, p[2]||0, p[3]||0, p[4]||0, p[5]||0, p[6]||0, p[7]||0].join(' ');
         const command = `RF send 4 4 ${pStr} ${result.pulses}`;
@@ -177,7 +171,6 @@ mqttClient.on('connect', () => {
   console.log('MQTT connected successfully!');
   mqttClient.publish('homeduino/status', 'online', { retain: true });
   
-  // Heartbeat every 60 seconds
   setInterval(() => {
     mqttClient.publish('homeduino/status/heartbeat', new Date().toISOString());
   }, 60000);
@@ -207,12 +200,10 @@ mqttClient.on('offline', () => {
 mqttClient.on('error', (err) => {
   console.error('MQTT Connection Error:', err.message);
   io.emit('mqtt_status', { connected: false, error: err.message });
-  if (err.stack) console.debug(err.stack);
 });
 
 mqttClient.on('message', (topic, message) => {
   if (topic === 'homeduino/test') {
-    console.log('MQTT Test message received!');
     mqttClient.publish('homeduino/status/test_response', 'I am alive: ' + new Date().toISOString());
     return;
   }
@@ -221,7 +212,6 @@ mqttClient.on('message', (topic, message) => {
     const protocol = topic.split('/').pop();
     try {
       const values = JSON.parse(message.toString());
-      // Handle "on"/"off" strings from HA and convert to boolean if needed for rfcontroljs
       if (values.state === 'on') values.state = true;
       if (values.state === 'off') values.state = false;
 
@@ -243,7 +233,6 @@ app.use(express.static('public'));
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 
 io.on('connection', (socket) => {
-  console.log('Web UI connected');
   socket.emit('status', { connected: homeduino.connected, error: lastError });
   socket.emit('mqtt_status', { connected: mqttClient.connected });
 
@@ -255,13 +244,12 @@ io.on('connection', (socket) => {
     const { protocol, values, type, name } = data;
     const deviceId = values.id !== undefined ? values.id : (values.channel !== undefined ? values.channel : 0);
     const deviceUnit = values.unit !== undefined ? values.unit : 0;
-    // Strict unique ID without dots or special chars
     const uniqueBase = `homeduino_${protocol}_${deviceId}_${deviceUnit}`.replace(/[^a-zA-Z0-9_-]/g, '_');
     
+    const deviceStateTopic = `homeduino/received/${protocol}/${deviceId}/${deviceUnit}`;
     console.log(`Adding device to HA: ${type} (${protocol}) ID:${deviceId} Unit:${deviceUnit}`);
 
     if (type === 'switch' || (!type && values.state !== undefined)) {
-      // --- SWITCH DISCOVERY ---
       const uniqueId = uniqueBase;
       const payload = {
         name: name || `Homeduino Switch ${deviceId}:${deviceUnit}`,
@@ -269,8 +257,8 @@ io.on('connection', (socket) => {
         command_topic: `homeduino/command/${protocol}`,
         payload_on: JSON.stringify({ ...values, id: deviceId, unit: deviceUnit, state: 'on' }),
         payload_off: JSON.stringify({ ...values, id: deviceId, unit: deviceUnit, state: 'off' }),
-        state_topic: `homeduino/received/${protocol}`,
-        value_template: `{% if value_json.id|string == '${deviceId}' and value_json.unit|string == '${deviceUnit}' %}{{ value_json.state }}{% else %}{{ states('switch.${uniqueId}') }}{% endif %}`,
+        state_topic: deviceStateTopic,
+        value_template: "{{ value_json.state }}",
         state_on: 'on',
         state_off: 'off',
         device: { 
@@ -278,14 +266,12 @@ io.on('connection', (socket) => {
           name: name || `Homeduino Switch ${deviceId}`, 
           model: protocol, 
           manufacturer: "Homeduino Bridge",
-          sw_version: "3.2.8"
+          sw_version: "3.2.9"
         }
       };
       mqttClient.publish(`homeassistant/switch/homeduino/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
       socket.emit('toast', `Switch added: ${name || uniqueId}`);
     } else {
-      // --- WEATHER / SENSOR DISCOVERY ---
-      // For weather protocols, we always try to register both temp and humidity if they likely exist
       const sensors = [];
       const hasTemp = values.temperature !== undefined || ['weather', 'mandolyn', 'oregon', 'cresta'].some(p => protocol.includes(p));
       const hasHum = values.humidity !== undefined || ['weather', 'mandolyn', 'oregon', 'cresta'].some(p => protocol.includes(p));
@@ -300,23 +286,21 @@ io.on('connection', (socket) => {
         const payload = {
           name: `${name || protocol + ' ' + deviceId} ${s.key.charAt(0).toUpperCase() + s.key.slice(1)}`,
           unique_id: uniqueId,
-          state_topic: `homeduino/received/${protocol}`,
+          state_topic: deviceStateTopic,
           unit_of_measurement: s.unit,
           device_class: s.class,
-          // Robust template: check ID or Channel, ensure value exists, else keep current state
-          value_template: `{% if (value_json.id|string == '${deviceId}' or value_json.channel|string == '${deviceId}') and value_json.${s.key} is defined %}{{ value_json.${s.key} }}{% else %}{{ states('sensor.${uniqueId}') }}{% endif %}`,
+          value_template: `{{ value_json.${s.key} if value_json.${s.key} is defined else states('sensor.${uniqueId}') }}`,
           device: { 
             identifiers: [uniqueBase], 
             name: name || `Homeduino Sensor ${deviceId}`, 
             model: protocol, 
             manufacturer: "Homeduino Bridge",
-            sw_version: "3.2.8"
+            sw_version: "3.2.9"
           }
         };
-        console.log(`Publishing discovery for ${uniqueId} to MQTT...`);
         mqttClient.publish(`homeassistant/sensor/homeduino/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
       });
-      socket.emit('toast', `Weather sensors registered: ${name || uniqueBase}`);
+      socket.emit('toast', `Weather sensors added: ${name || uniqueBase}`);
     }
   });
 });
@@ -324,18 +308,17 @@ io.on('connection', (socket) => {
 // 6. Signal handling
 homeduino.on('rfControlReceive', (event) => {
   const mqttValues = { ...event.values };
+  const id = mqttValues.id !== undefined ? mqttValues.id : (mqttValues.channel !== undefined ? mqttValues.channel : 0);
+  const unit = mqttValues.unit !== undefined ? mqttValues.unit : 0;
   
-  // Normalize fields for consistent MQTT discovery processing
-  if (mqttValues.id === undefined && mqttValues.channel !== undefined) mqttValues.id = mqttValues.channel;
-  if (mqttValues.unit === undefined) mqttValues.unit = 0;
+  mqttValues.id = id;
+  mqttValues.unit = unit;
 
-  // Normalize state to "on" / "off" strings
   if (mqttValues.state === true || mqttValues.state === 1 || mqttValues.state === 'on') mqttValues.state = 'on';
   else if (mqttValues.state === false || mqttValues.state === 0 || mqttValues.state === 'off') mqttValues.state = 'off';
 
-  console.log(`[RF Decode] ${event.protocol}:`, JSON.stringify(mqttValues));
-  
-  mqttClient.publish(`homeduino/received/${event.protocol}`, JSON.stringify(mqttValues));
+  const deviceTopic = `homeduino/received/${event.protocol}/${id}/${unit}`;
+  mqttClient.publish(deviceTopic, JSON.stringify(mqttValues));
   io.emit('signal', { timestamp: new Date().toISOString(), protocol: event.protocol, values: event.values });
 });
 
