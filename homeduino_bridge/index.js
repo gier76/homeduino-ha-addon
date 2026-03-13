@@ -65,7 +65,7 @@ class Homeduino extends EventEmitter {
         const info = rfcontrol.prepareCompressedPulses(strSeq);
         this.decode(info.pulseLengths, info.pulses);
       } catch (e) {
-        if (process.env.DEBUG) console.error('Decoding Error:', e.message);
+        if (process.env.DEBUG || options.debug) console.error('Decoding Error:', e.message);
       }
     }
   }
@@ -173,11 +173,12 @@ const io = new Server(server);
 app.use(express.static('public'));
 
 function getDeviceMeta(protocol, values) {
-  const id = values.id !== undefined ? values.id : (values.channel !== undefined ? values.channel : 0);
+  // Robust ID extraction from various possible fields
+  const id = values.id !== undefined ? values.id : (values.rolling_code !== undefined ? values.rolling_code : (values.channel !== undefined ? values.channel : (values.address !== undefined ? values.address : 0)));
   const channel = values.channel !== undefined ? values.channel : 0;
   const unit = values.unit !== undefined ? values.unit : 0;
   
-  // UID is the unique key for everything
+  // UID must be unique per physical sensor
   const uid = `hd_${protocol}_i${id}_c${channel}_u${unit}`.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
   const topic = `homeduino/stat/${uid}`;
   
@@ -203,7 +204,7 @@ io.on('connection', (socket) => {
       name: name || `Homeduino ${protocol} ${meta.id}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.3.3"
+      sw_version: "3.3.4"
     };
 
     if (type === 'switch' || values.state !== undefined) {
@@ -231,13 +232,15 @@ io.on('connection', (socket) => {
         sensors.push({ key: 'battery', unit: '%', class: 'battery' });
 
       sensors.forEach(s => {
+        const entityId = `sensor.${meta.uid}_${s.key}`;
         const payload = {
           name: s.key.charAt(0).toUpperCase() + s.key.slice(1),
           unique_id: `${meta.uid}_${s.key}`,
           state_topic: meta.topic,
           unit_of_measurement: s.unit,
           device_class: s.class,
-          value_template: `{{ value_json.${s.key} if value_json.${s.key} is defined else (value_json.hum if '${s.key}' == 'humidity' and value_json.hum is defined else states(entity_id)) }}`,
+          // Robust template: check for both 'humidity' and 'hum'
+          value_template: `{% if value_json.${s.key} is defined %}{{ value_json.${s.key} }}{% elif '${s.key}' == 'humidity' and value_json.hum is defined %}{{ value_json.hum }}{% else %}{{ states('${entityId}') }}{% endif %}`,
           availability_topic: "homeduino/status",
           device: commonDevice
         };
@@ -252,7 +255,7 @@ io.on('connection', (socket) => {
 homeduino.on('rfControlReceive', (event) => {
   const meta = getDeviceMeta(event.protocol, event.values);
   
-  // Initialize state cache for this UID
+  // Initialize state cache
   if (!deviceStates[meta.uid]) deviceStates[meta.uid] = { 
     id: meta.id, channel: meta.channel, unit: meta.unit, protocol: event.protocol 
   };
@@ -263,13 +266,15 @@ homeduino.on('rfControlReceive', (event) => {
   if (currentValues.state === true || currentValues.state === 1 || currentValues.state === 'on') currentValues.state = 'on';
   else if (currentValues.state === false || currentValues.state === 0 || currentValues.state === 'off') currentValues.state = 'off';
 
-  // Merge incoming values with last known values
+  // Merge values
   Object.assign(deviceStates[meta.uid], currentValues);
 
-  // Publish full state to the device-specific topic
+  // Publish
   mqttClient.publish(meta.topic, JSON.stringify(deviceStates[meta.uid]));
   
-  if (options.debug) console.log(`[Data] Published to ${meta.topic}: ${JSON.stringify(deviceStates[meta.uid])}`);
+  if (options.debug || process.env.DEBUG) {
+    console.log(`[RF Receive] Protocol: ${event.protocol} | UID: ${meta.uid} | Data: ${JSON.stringify(deviceStates[meta.uid])}`);
+  }
   
   io.emit('signal', { 
     timestamp: new Date().toISOString(), 
