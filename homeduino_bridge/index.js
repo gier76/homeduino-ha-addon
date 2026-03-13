@@ -16,7 +16,7 @@ class Homeduino extends EventEmitter {
     this.baudRate = baudRate;
     this.serial = null;
     this.parser = null;
-    this.controller = new rfcontrol.Controller();
+    this.controller = new rfcontrol();
     this.connected = false;
   }
 
