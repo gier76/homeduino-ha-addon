@@ -119,6 +119,8 @@
             const valuesStr = JSON.stringify(data.values, null, 2);
             const isSwitch = data.values.state !== undefined || 
                              ['switch1', 'switch2', 'switch3', 'switch4', 'kaku', 'elro_he', 'intertechno'].some(p => data.protocol.includes(p));
+            const isWeather = data.values.temperature !== undefined || data.values.humidity !== undefined ||
+                              ['weather', 'mandolyn', 'oregon', 'cresta'].some(p => data.protocol.includes(p));
 
             let actionButtons = '';
             if (isSwitch) {
@@ -127,7 +129,14 @@
                     <div class="actions">
                         <button class="test-btn" onclick="testSignal('${data.protocol}', ${valuesJson}, 'on')">Test ON</button>
                         <button class="test-btn" onclick="testSignal('${data.protocol}', ${valuesJson}, 'off')">Test OFF</button>
-                        <button class="add-btn" onclick="addToHA('${data.protocol}', ${valuesJson})">Add to HA</button>
+                        <button class="add-btn" onclick="addToHA('${data.protocol}', ${valuesJson}, 'switch')">Add to HA</button>
+                    </div>
+                `;
+            } else if (isWeather) {
+                const valuesJson = JSON.stringify(data.values).replace(/"/g, '&quot;');
+                actionButtons = `
+                    <div class="actions">
+                        <button class="add-btn" onclick="addToHA('${data.protocol}', ${valuesJson}, 'weather')">Add Weather to HA</button>
                     </div>
                 `;
             }
@@ -154,13 +163,13 @@
             socket.emit('send_command', { protocol, values: payload });
         }
 
-        function addToHA(protocol, values) {
-            const name = prompt("Enter a friendly name for this device:", `Switch ${values.id || ''}`);
+        function addToHA(protocol, values, type) {
+            const name = prompt(`Enter a friendly name for this ${type}:`, `${type.charAt(0).toUpperCase() + type.slice(1)} ${values.id || values.channel || ''}`);
             if (name) {
                 socket.emit('add_device', {
                     protocol,
                     values,
-                    type: 'switch',
+                    type: type,
                     name
                 });
             }
