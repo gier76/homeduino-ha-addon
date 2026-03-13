@@ -253,30 +253,32 @@ io.on('connection', (socket) => {
 
   socket.on('add_device', (data) => {
     const { protocol, values, type, name } = data;
-    const id = values.id !== undefined ? values.id : (values.channel !== undefined ? values.channel : 0);
-    const unit = values.unit !== undefined ? values.unit : 0;
-    const uniqueBase = `homeduino_${protocol}_${id}_${unit}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const deviceId = values.id !== undefined ? values.id : (values.channel !== undefined ? values.channel : 0);
+    const deviceUnit = values.unit !== undefined ? values.unit : 0;
+    const uniqueBase = `homeduino_${protocol}_${deviceId}_${deviceUnit}`.replace(/[^a-zA-Z0-9_-]/g, '_');
     
+    console.log(`Adding device: ${type} (${protocol}) ID:${deviceId} Unit:${deviceUnit}`);
+
     if (type === 'switch' || (!type && values.state !== undefined)) {
       // --- SWITCH DISCOVERY ---
       const uniqueId = uniqueBase;
       const payload = {
-        name: name || `Homeduino ${protocol} ${id}:${unit}`,
+        name: name || `Homeduino ${protocol} ${deviceId}:${deviceUnit}`,
         unique_id: uniqueId,
         command_topic: `homeduino/command/${protocol}`,
-        payload_on: JSON.stringify({ ...values, state: 'on' }),
-        payload_off: JSON.stringify({ ...values, state: 'off' }),
+        payload_on: JSON.stringify({ ...values, id: deviceId, unit: deviceUnit, state: 'on' }),
+        payload_off: JSON.stringify({ ...values, id: deviceId, unit: deviceUnit, state: 'off' }),
         state_topic: `homeduino/received/${protocol}`,
-        // Template: check if ID and Unit match, then extract state
-        value_template: `{% if value_json.id|string == '${id}' and value_json.unit|string == '${unit}' %}{% if value_json.state|string in ['on', 'true', '1'] %}on{% else %}off{% endif %}{% else %}{{ states('switch.${uniqueId}') }}{% endif %}`,
+        // Template: Normalize incoming state and filter by ID/Unit
+        value_template: `{% if value_json.id|string == '${deviceId}' and value_json.unit|string == '${deviceUnit}' %}{{ value_json.state }}{% else %}{{ states('switch.${uniqueId}') }}{% endif %}`,
         state_on: 'on',
         state_off: 'off',
         device: { 
           identifiers: [uniqueId], 
-          name: name || `Homeduino Device ${id}`, 
+          name: name || `Homeduino Switch ${deviceId}`, 
           model: protocol, 
           manufacturer: "Homeduino Bridge",
-          sw_version: "3.2.5"
+          sw_version: "3.2.6"
         }
       };
       mqttClient.publish(`homeassistant/switch/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
@@ -291,18 +293,19 @@ io.on('connection', (socket) => {
       sensors.forEach(s => {
         const uniqueId = `${uniqueBase}_${s.key}`;
         const payload = {
-          name: `${name || protocol + ' ' + id} ${s.key.charAt(0).toUpperCase() + s.key.slice(1)}`,
+          name: `${name || protocol + ' ' + deviceId} ${s.key.charAt(0).toUpperCase() + s.key.slice(1)}`,
           unique_id: uniqueId,
           state_topic: `homeduino/received/${protocol}`,
           unit_of_measurement: s.unit,
           device_class: s.class,
-          value_template: `{% if value_json.id|string == '${id}' or value_json.channel|string == '${id}' %}{{ value_json.${s.key} }}{% else %}{{ states('sensor.${uniqueId}') }}{% endif %}`,
+          // Filter by ID or Channel
+          value_template: `{% if value_json.id|string == '${deviceId}' %}{{ value_json.${s.key} }}{% else %}{{ states('sensor.${uniqueId}') }}{% endif %}`,
           device: { 
             identifiers: [uniqueBase], 
-            name: name || `Homeduino Sensor ${id}`, 
+            name: name || `Homeduino Sensor ${deviceId}`, 
             model: protocol, 
             manufacturer: "Homeduino Bridge",
-            sw_version: "3.2.5"
+            sw_version: "3.2.6"
           }
         };
         mqttClient.publish(`homeassistant/sensor/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
@@ -314,11 +317,18 @@ io.on('connection', (socket) => {
 
 // 6. Signal handling
 homeduino.on('rfControlReceive', (event) => {
-  // Normalize state for MQTT (always use "on"/"off" strings)
   const mqttValues = { ...event.values };
+  
+  // Normalize fields for consistent MQTT discovery processing
+  if (mqttValues.id === undefined && mqttValues.channel !== undefined) mqttValues.id = mqttValues.channel;
+  if (mqttValues.unit === undefined) mqttValues.unit = 0;
+
+  // Normalize state to "on" / "off" strings
   if (mqttValues.state === true || mqttValues.state === 1 || mqttValues.state === 'on') mqttValues.state = 'on';
   else if (mqttValues.state === false || mqttValues.state === 0 || mqttValues.state === 'off') mqttValues.state = 'off';
 
+  console.log(`[RF Decode] ${event.protocol}:`, JSON.stringify(mqttValues));
+  
   mqttClient.publish(`homeduino/received/${event.protocol}`, JSON.stringify(mqttValues));
   io.emit('signal', { timestamp: new Date().toISOString(), protocol: event.protocol, values: event.values });
 });
