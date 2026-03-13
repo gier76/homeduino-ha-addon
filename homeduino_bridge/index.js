@@ -270,7 +270,6 @@ io.on('connection', (socket) => {
         payload_on: JSON.stringify({ ...values, id: deviceId, unit: deviceUnit, state: 'on' }),
         payload_off: JSON.stringify({ ...values, id: deviceId, unit: deviceUnit, state: 'off' }),
         state_topic: `homeduino/received/${protocol}`,
-        // Template: Filter by ID and Unit, then return state
         value_template: `{% if value_json.id|string == '${deviceId}' and value_json.unit|string == '${deviceUnit}' %}{{ value_json.state }}{% else %}{{ states('switch.${uniqueId}') }}{% endif %}`,
         state_on: 'on',
         state_off: 'off',
@@ -279,18 +278,22 @@ io.on('connection', (socket) => {
           name: name || `Homeduino Switch ${deviceId}`, 
           model: protocol, 
           manufacturer: "Homeduino Bridge",
-          sw_version: "3.2.7"
+          sw_version: "3.2.8"
         }
       };
-      // Use 'homeduino' as node_id for easier management/deletion
       mqttClient.publish(`homeassistant/switch/homeduino/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
       socket.emit('toast', `Switch added: ${name || uniqueId}`);
     } else {
       // --- WEATHER / SENSOR DISCOVERY ---
+      // For weather protocols, we always try to register both temp and humidity if they likely exist
       const sensors = [];
-      if (values.temperature !== undefined) sensors.push({ key: 'temperature', unit: '°C', class: 'temperature' });
-      if (values.humidity !== undefined) sensors.push({ key: 'humidity', unit: '%', class: 'humidity' });
-      if (values.battery !== undefined) sensors.push({ key: 'battery', unit: '%', class: 'battery' });
+      const hasTemp = values.temperature !== undefined || ['weather', 'mandolyn', 'oregon', 'cresta'].some(p => protocol.includes(p));
+      const hasHum = values.humidity !== undefined || ['weather', 'mandolyn', 'oregon', 'cresta'].some(p => protocol.includes(p));
+      const hasBatt = values.battery !== undefined;
+
+      if (hasTemp) sensors.push({ key: 'temperature', unit: '°C', class: 'temperature' });
+      if (hasHum) sensors.push({ key: 'humidity', unit: '%', class: 'humidity' });
+      if (hasBatt) sensors.push({ key: 'battery', unit: '%', class: 'battery' });
 
       sensors.forEach(s => {
         const uniqueId = `${uniqueBase}_${s.key}`;
@@ -300,19 +303,20 @@ io.on('connection', (socket) => {
           state_topic: `homeduino/received/${protocol}`,
           unit_of_measurement: s.unit,
           device_class: s.class,
-          // Template: Filter by ID, return value
-          value_template: `{% if value_json.id|string == '${deviceId}' %}{{ value_json.${s.key} }}{% else %}{{ states('sensor.${uniqueId}') }}{% endif %}`,
+          // Robust template: check ID or Channel, ensure value exists, else keep current state
+          value_template: `{% if (value_json.id|string == '${deviceId}' or value_json.channel|string == '${deviceId}') and value_json.${s.key} is defined %}{{ value_json.${s.key} }}{% else %}{{ states('sensor.${uniqueId}') }}{% endif %}`,
           device: { 
             identifiers: [uniqueBase], 
             name: name || `Homeduino Sensor ${deviceId}`, 
             model: protocol, 
             manufacturer: "Homeduino Bridge",
-            sw_version: "3.2.7"
+            sw_version: "3.2.8"
           }
         };
+        console.log(`Publishing discovery for ${uniqueId} to MQTT...`);
         mqttClient.publish(`homeassistant/sensor/homeduino/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
       });
-      socket.emit('toast', `Weather sensors added: ${name || uniqueBase}`);
+      socket.emit('toast', `Weather sensors registered: ${name || uniqueBase}`);
     }
   });
 });

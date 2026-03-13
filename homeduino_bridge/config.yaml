@@ -1,5 +1,5 @@
 name: "Homeduino Bridge"
-version: "3.2.7"
+version: "3.2.8"
 slug: "homeduino_bridge"
 description: "Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling"
 url: "https://github.com/gier76/homeduino-ha-addon"
