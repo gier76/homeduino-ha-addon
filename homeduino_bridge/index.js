@@ -211,10 +211,20 @@ mqttClient.on('error', (err) => {
 });
 
 mqttClient.on('message', (topic, message) => {
+  if (topic === 'homeduino/test') {
+    console.log('MQTT Test message received!');
+    mqttClient.publish('homeduino/status/test_response', 'I am alive: ' + new Date().toISOString());
+    return;
+  }
+
   if (topic.startsWith('homeduino/command/')) {
     const protocol = topic.split('/').pop();
     try {
       const values = JSON.parse(message.toString());
+      // Handle "on"/"off" strings from HA and convert to boolean if needed for rfcontroljs
+      if (values.state === 'on') values.state = true;
+      if (values.state === 'off') values.state = false;
+
       homeduino.send(protocol, values).catch(err => {
         console.error('Send Error:', err);
       });
@@ -243,10 +253,11 @@ io.on('connection', (socket) => {
 
   socket.on('add_device', (data) => {
     const { protocol, values, type, name } = data;
-    const id = values.id || 0;
-    const unit = values.unit || 0;
+    const id = values.id !== undefined ? values.id : 0;
+    const unit = values.unit !== undefined ? values.unit : 0;
     const uniqueId = `homeduino_${protocol}_${id}_${unit}`.replace(/[^a-zA-Z0-9_-]/g, '_');
     
+    // Discovery Payload with better state handling
     const payload = {
       name: name || `Homeduino ${protocol} ${id}:${unit}`,
       unique_id: uniqueId,
@@ -254,8 +265,17 @@ io.on('connection', (socket) => {
       payload_on: JSON.stringify({ ...values, state: 'on' }),
       payload_off: JSON.stringify({ ...values, state: 'off' }),
       state_topic: `homeduino/received/${protocol}`,
-      value_template: `{% if value_json.id == ${id} and value_json.unit == ${unit} %}{{ value_json.state }}{% else %}{{ states('switch.${uniqueId}') }}{% endif %}`,
-      device: { identifiers: [uniqueId], name: name || `Homeduino Device ${id}`, model: protocol, manufacturer: "Homeduino Bridge" }
+      state_on: 'on',
+      state_off: 'off',
+      // Template checks ID and Unit, then normalizes the state to 'on' or 'off'
+      value_template: `{% if value_json.id|string == '${id}' and value_json.unit|string == '${unit}' %}{% if value_json.state|string in ['on', 'true', '1'] %}on{% else %}off{% endif %}{% else %}{{ states('switch.${uniqueId}') }}{% endif %}`,
+      device: { 
+        identifiers: [uniqueId], 
+        name: name || `Homeduino Device ${id}`, 
+        model: protocol, 
+        manufacturer: "Homeduino Bridge",
+        sw_version: "3.2.4"
+      }
     };
 
     mqttClient.publish(`homeassistant/switch/${uniqueId}/config`, JSON.stringify(payload), { retain: true });
@@ -265,7 +285,12 @@ io.on('connection', (socket) => {
 
 // 6. Signal handling
 homeduino.on('rfControlReceive', (event) => {
-  mqttClient.publish(`homeduino/received/${event.protocol}`, JSON.stringify(event.values));
+  // Normalize state for MQTT (always use "on"/"off" strings)
+  const mqttValues = { ...event.values };
+  if (mqttValues.state === true || mqttValues.state === 1 || mqttValues.state === 'on') mqttValues.state = 'on';
+  else if (mqttValues.state === false || mqttValues.state === 0 || mqttValues.state === 'off') mqttValues.state = 'off';
+
+  mqttClient.publish(`homeduino/received/${event.protocol}`, JSON.stringify(mqttValues));
   io.emit('signal', { timestamp: new Date().toISOString(), protocol: event.protocol, values: event.values });
 });
 
