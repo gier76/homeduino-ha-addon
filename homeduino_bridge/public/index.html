@@ -32,7 +32,10 @@
     <div class="container">
         <h1>Homeduino 433MHz Scanner</h1>
         <div id="error-msg" class="error-banner"></div>
-        <div id="status" class="status disconnected">Disconnected from Bridge</div>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <div id="status" class="status disconnected" style="flex: 1; margin-bottom: 0;">Disconnected from Bridge</div>
+            <div id="mqtt-status" class="status disconnected" style="flex: 1; margin-bottom: 0;">MQTT Disconnected</div>
+        </div>
         
         <div class="controls">
             <button onclick="clearSignals()">Clear List</button>
@@ -76,6 +79,17 @@
 
         socket.on('error', (msg) => {
             showToast('Error: ' + msg);
+        });
+
+        socket.on('mqtt_status', (data) => {
+            const mqttStatusDiv = document.getElementById('mqtt-status');
+            if (data.connected) {
+                mqttStatusDiv.textContent = 'MQTT Connected';
+                mqttStatusDiv.className = 'status connected';
+            } else {
+                mqttStatusDiv.textContent = 'MQTT Disconnected' + (data.message ? ': ' + data.message : '') + (data.error ? ': ' + data.error : '');
+                mqttStatusDiv.className = 'status disconnected';
+            }
         });
 
         socket.on('status', (data) => {

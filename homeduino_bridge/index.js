@@ -115,19 +115,21 @@ class Homeduino extends EventEmitter {
 // 2. Read configuration
 let options = {};
 try {
-  options = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
+  if (fs.existsSync('/data/options.json')) {
+    options = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
+  }
 } catch (e) {
-  options = {
-    serial_port: process.env.SERIAL_PORT || '/dev/ttyUSB0',
-    mqtt_broker: process.env.MQTT_BROKER || 'localhost',
-    mqtt_user: process.env.MQTT_USER || '',
-    mqtt_password: process.env.MQTT_PASSWORD || '',
-    debug: true
-  };
+  console.warn('Could not read /data/options.json, using defaults.');
 }
 
-const SERIAL_PORT = options.serial_port;
-const MQTT_URL = `mqtt://${options.mqtt_broker}`;
+const SERIAL_PORT = options.serial_port || process.env.SERIAL_PORT || '/dev/ttyUSB0';
+const MQTT_HOST = options.mqtt_broker && options.mqtt_broker !== 'localhost' ? options.mqtt_broker : (process.env.MQTT_HOST || 'core-mosquitto');
+const MQTT_PORT = options.mqtt_port || process.env.MQTT_PORT || 1883;
+const MQTT_USER = options.mqtt_user || process.env.MQTT_USER || '';
+const MQTT_PASS = options.mqtt_password || process.env.MQTT_PASSWORD || '';
+const MQTT_PROTOCOL = (MQTT_PORT == 8883) ? 'mqtts' : 'mqtt';
+
+const MQTT_URL = `${MQTT_PROTOCOL}://${MQTT_HOST}:${MQTT_PORT}`;
 
 // 3. Initialize Homeduino
 const homeduino = new Homeduino(SERIAL_PORT);
@@ -146,14 +148,49 @@ homeduino.on('error', (err) => {
 });
 
 // 4. Initialize MQTT
-const mqttClient = mqtt.connect(MQTT_URL, {
-  username: options.mqtt_user,
-  password: options.mqtt_password
-});
+const mqttOptions = {
+  reconnectPeriod: 5000,
+  connectTimeout: 30 * 1000,
+};
+
+if (MQTT_USER && MQTT_USER.trim() !== '') {
+  mqttOptions.username = MQTT_USER;
+}
+if (MQTT_PASS && MQTT_PASS.trim() !== '') {
+  mqttOptions.password = MQTT_PASS;
+}
+
+console.log(`Connecting to MQTT broker: ${MQTT_URL} ...`);
+const mqttClient = mqtt.connect(MQTT_URL, mqttOptions);
 
 mqttClient.on('connect', () => {
-  console.log('MQTT connected!');
-  mqttClient.subscribe('homeduino/command/#');
+  console.log('MQTT connected successfully!');
+  io.emit('mqtt_status', { connected: true });
+  mqttClient.subscribe('homeduino/command/#', (err) => {
+    if (err) console.error('MQTT subscribe error:', err);
+    else console.log('MQTT subscribed to homeduino/command/#');
+  });
+});
+
+mqttClient.on('reconnect', () => {
+  console.log('MQTT reconnecting...');
+  io.emit('mqtt_status', { connected: false, message: 'Reconnecting...' });
+});
+
+mqttClient.on('close', () => {
+  console.log('MQTT connection closed.');
+  io.emit('mqtt_status', { connected: false });
+});
+
+mqttClient.on('offline', () => {
+  console.log('MQTT offline.');
+  io.emit('mqtt_status', { connected: false, message: 'Offline' });
+});
+
+mqttClient.on('error', (err) => {
+  console.error('MQTT Connection Error:', err.message);
+  io.emit('mqtt_status', { connected: false, error: err.message });
+  if (err.stack) console.debug(err.stack);
 });
 
 mqttClient.on('message', (topic, message) => {
@@ -181,6 +218,7 @@ app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 io.on('connection', (socket) => {
   console.log('Web UI connected');
   socket.emit('status', { connected: homeduino.connected, error: lastError });
+  socket.emit('mqtt_status', { connected: mqttClient.connected });
 
   socket.on('send_command', (data) => {
     homeduino.send(data.protocol, data.values).catch(err => socket.emit('error', err.message));
