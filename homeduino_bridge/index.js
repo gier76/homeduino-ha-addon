@@ -3,9 +3,110 @@ const http = require('http');
 const express = require('express');
 const { Server } = require('socket.io');
 const mqtt = require('mqtt');
-const { Homeduino } = require('homeduino');
+const { SerialPort } = require('serialport');
+const { ReadlineParser } = require('@serialport/parser-readline');
+const rfcontrol = require('rfcontroljs');
+const EventEmitter = require('events');
 
-// 1. Read configuration (Hass.io standard)
+// 1. Homeduino Bridge Class (Modern implementation)
+class Homeduino extends EventEmitter {
+  constructor(port, baudRate = 115200) {
+    super();
+    this.portPath = port;
+    this.baudRate = baudRate;
+    this.serial = null;
+    this.parser = null;
+    this.controller = new rfcontrol.Controller();
+    this.connected = false;
+  }
+
+  connect() {
+    console.log(`Opening serial port ${this.portPath}...`);
+    this.serial = new SerialPort({
+      path: this.portPath,
+      baudRate: this.baudRate,
+      autoOpen: true
+    });
+
+    this.parser = this.serial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+
+    this.serial.on('open', () => {
+      console.log('Serial port opened.');
+      this.connected = true;
+      this.emit('connected');
+      // Start receiving on pin 0 (standard homeduino pin)
+      // Note: In original homeduino pin 4 was often used for receiver.
+      // We'll try to find the pin from options or use 0 as default.
+      this.write('RF receive 0'); 
+    });
+
+    this.serial.on('error', (err) => {
+      console.error('Serial Error:', err);
+      this.emit('error', err);
+    });
+
+    this.parser.on('data', (line) => {
+      this.handleLine(line);
+    });
+  }
+
+  handleLine(line) {
+    if (line.trim() === 'ready') {
+      console.log('Homeduino Arduino is ready.');
+      return;
+    }
+
+    if (line.startsWith('PULSES ')) {
+      const parts = line.substring(7).trim().split(' ');
+      const pulses = parts.map(p => parseInt(p, 10));
+      this.decode(pulses);
+    } else {
+      if (process.env.DEBUG) console.log('Arduino Log:', line);
+    }
+  }
+
+  decode(pulses) {
+    const results = this.controller.decode(pulses);
+    if (results && results.length > 0) {
+      for (const result of results) {
+        this.emit('rfControlReceive', {
+          protocol: result.protocol,
+          values: result.values
+        });
+      }
+    } else {
+      // Optional: emit raw for UI scanning
+      this.emit('rfControlRaw', {
+        timestamp: new Date().toISOString(),
+        pulses: pulses
+      });
+    }
+  }
+
+  async send(protocol, values) {
+    console.log(`Encoding command: ${protocol}`, values);
+    const pulses = this.controller.encode(protocol, values);
+    if (pulses) {
+      // Format: RF send [pulse_count] [p1] [p2] ...
+      const command = `RF send ${pulses.length} ${pulses.join(' ')}`;
+      return this.write(command);
+    } else {
+      throw new Error(`Failed to encode protocol ${protocol}`);
+    }
+  }
+
+  write(data) {
+    if (!this.connected) return;
+    return new Promise((resolve, reject) => {
+      this.serial.write(data + '\n', (err) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+  }
+}
+
+// 2. Read configuration (Hass.io standard)
 let options = {};
 try {
   options = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
@@ -23,23 +124,16 @@ try {
 const SERIAL_PORT = options.serial_port;
 const MQTT_URL = `mqtt://${options.mqtt_broker}`;
 const DEBUG = options.debug;
+if (DEBUG) process.env.DEBUG = 'true';
 
-// 2. Initialize Homeduino
-console.log(`Connecting to Homeduino on ${SERIAL_PORT}...`);
-const homeduino = new Homeduino('serialport', {
-  serialDevice: SERIAL_PORT,
-  baudrate: 115200
-});
+// 3. Initialize Homeduino
+const homeduino = new Homeduino(SERIAL_PORT);
 
 homeduino.on('connected', () => {
   console.log('Homeduino connected!');
 });
 
-homeduino.on('error', (err) => {
-  console.error('Homeduino Error:', err);
-});
-
-// 3. Initialize MQTT
+// 4. Initialize MQTT
 console.log(`Connecting to MQTT at ${MQTT_URL}...`);
 const mqttClient = mqtt.connect(MQTT_URL, {
   username: options.mqtt_user,
@@ -52,13 +146,10 @@ mqttClient.on('connect', () => {
 });
 
 mqttClient.on('message', (topic, message) => {
-  // Handle commands sent from HA to Homeduino
-  // Format: homeduino/command/[protocol] - payload: JSON values
   if (topic.startsWith('homeduino/command/')) {
     const protocol = topic.split('/').pop();
     try {
       const values = JSON.parse(message.toString());
-      console.log(`Sending command: protocol=${protocol}, values=`, values);
       homeduino.send(protocol, values).catch(err => {
         console.error('Send Error:', err);
       });
@@ -68,7 +159,7 @@ mqttClient.on('message', (topic, message) => {
   }
 });
 
-// 4. Web UI for Scanning (Ingress)
+// 5. Web UI for Scanning (Ingress)
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
@@ -82,25 +173,16 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log('Web UI connected');
 
-  // Handle "Send Command" from UI (Test button)
   socket.on('send_command', (data) => {
-    // data: { protocol, values }
-    console.log('UI Request: Send Command', data);
     homeduino.send(data.protocol, data.values).catch(err => {
-      console.error('Send Error:', err);
       socket.emit('error', err.message);
     });
   });
 
-  // Handle "Add to HA" from UI
   socket.on('add_device', (data) => {
-    // data: { protocol, values, type (switch/sensor), name }
-    console.log('UI Request: Add Device', data);
-    
     const { protocol, values, type, name } = data;
     const id = values.id || 0;
     const unit = values.unit || 0;
-    // Create a unique ID safely
     const uniqueId = `homeduino_${protocol}_${id}_${unit}`.replace(/[^a-zA-Z0-9_-]/g, '_');
     
     let configTopic = '';
@@ -108,9 +190,6 @@ io.on('connection', (socket) => {
 
     if (type === 'switch') {
       configTopic = `homeassistant/switch/${uniqueId}/config`;
-      
-      // Construct the payload required to turn this specific device ON/OFF
-      // The bridge listens on homeduino/command/[protocol]
       const cmdPayloadOn = { ...values, state: 'on' };
       const cmdPayloadOff = { ...values, state: 'off' };
 
@@ -121,8 +200,6 @@ io.on('connection', (socket) => {
         payload_on: JSON.stringify(cmdPayloadOn),
         payload_off: JSON.stringify(cmdPayloadOff),
         state_topic: `homeduino/received/${protocol}`,
-        // Template to extract state if the device reports back, 
-        // matching the id/unit to ensure we only update OUR state
         value_template: `{% if value_json.id == ${id} and value_json.unit == ${unit} %}{{ value_json.state }}{% else %}{{ states('switch.${uniqueId}') }}{% endif %}`,
         device: {
           identifiers: [uniqueId],
@@ -132,28 +209,19 @@ io.on('connection', (socket) => {
         }
       };
     } 
-    // Add other types (sensor) here as needed
     
     if (configTopic && payload) {
-      console.log(`Publishing Discovery to ${configTopic}`);
       mqttClient.publish(configTopic, JSON.stringify(payload), { retain: true });
       socket.emit('toast', `Device added: ${name}`);
     }
   });
 });
 
-// 5. Signal handling (The "Pimatic" Scanning experience)
+// 6. Signal handling
 homeduino.on('rfControlReceive', (event) => {
-  // event contains: protocol, values
-  if (DEBUG) {
-    console.log(`Received: [${event.protocol}]`, event.values);
-  }
-
-  // Publish to MQTT (for HA automation/devices)
   const mqttTopic = `homeduino/received/${event.protocol}`;
   mqttClient.publish(mqttTopic, JSON.stringify(event.values));
 
-  // Push to Web UI (for Scanning)
   io.emit('signal', {
     timestamp: new Date().toISOString(),
     protocol: event.protocol,
@@ -161,19 +229,13 @@ homeduino.on('rfControlReceive', (event) => {
   });
 });
 
-// Also handle raw signals for advanced scanning
 homeduino.on('rfControlRaw', (event) => {
-  // This is what pimatic shows in logs when it can't decode or for debugging
-  io.emit('raw', {
-    timestamp: new Date().toISOString(),
-    pulses: event.pulses,
-    buckets: event.buckets
-  });
+  io.emit('raw', event);
 });
 
 const PORT = 8080;
 server.listen(PORT, () => {
-  console.log(`Web UI (Scanning) listening on port ${PORT}`);
+  console.log(`Web UI listening on port ${PORT}`);
 });
 
 homeduino.connect();

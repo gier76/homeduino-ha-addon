@@ -1,19 +1,15 @@
 {
   "name": "homeduino-ha-addon",
-  "version": "1.0.0",
-  "description": "Bridge between Homeduino (433MHz) and Home Assistant with Pimatic-style scanning",
+  "version": "2.0.0",
+  "description": "Bridge between Homeduino (433MHz) and Home Assistant with modern dependencies",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gier76/homeduino-ha-addon.git"
-  },
   "dependencies": {
-    "homeduino": "0.0.71",
-    "serialport": "^10.5.0",
-    "mqtt": "^4.3.7",
+    "serialport": "^12.0.0",
+    "rfcontroljs": "^0.0.10",
+    "mqtt": "^5.0.0",
     "express": "^4.18.2",
     "socket.io": "^4.6.1"
   }
