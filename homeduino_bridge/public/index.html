@@ -44,9 +44,14 @@
     </div>
     <div id="toast" class="toast"></div>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
     <script>
-        const socket = io();
+        // Auto-detect base path for ingress
+        const path = window.location.pathname.replace(/\/$/, "");
+        const socket = io({ 
+            path: path + "/socket.io",
+            transports: ["websocket"] 
+        });
         const signalsList = document.getElementById('signals');
         const statusDiv = document.getElementById('status');
         const toastDiv = document.getElementById('toast');
