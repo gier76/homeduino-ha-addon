@@ -8,6 +8,9 @@ const { ReadlineParser } = require('@serialport/parser-readline');
 const rfcontrol = require('rfcontroljs');
 const EventEmitter = require('events');
 
+// Global state store
+const deviceStates = {}; 
+
 // 1. Homeduino Bridge Class
 class Homeduino extends EventEmitter {
   constructor(port, baudRate = 115200) {
@@ -43,7 +46,7 @@ class Homeduino extends EventEmitter {
 
     this.parser.on('data', (line) => {
       line = line.trim();
-      if (process.env.DEBUG || options.debug) console.log(`[Serial Raw]: "${line}"`);
+      if (options.debug) console.log(`[Serial Raw]: "${line}"`);
       this.handleLine(line);
     });
   }
@@ -62,7 +65,7 @@ class Homeduino extends EventEmitter {
         const info = rfcontrol.prepareCompressedPulses(strSeq);
         this.decode(info.pulseLengths, info.pulses);
       } catch (e) {
-        if (process.env.DEBUG) console.error('Decoding Error:', e.message);
+        if (options.debug) console.error('Decoding Error:', e.message);
       }
     }
   }
@@ -105,7 +108,7 @@ class Homeduino extends EventEmitter {
 }
 
 // 2. Read configuration
-let options = {};
+let options = { debug: false };
 try {
   if (fs.existsSync('/data/options.json')) {
     options = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
@@ -170,16 +173,46 @@ const io = new Server(server);
 
 app.use(express.static('public'));
 
-function getIdentity(protocol, values) {
-  // System ID: Higher level grouping (House, Address, Code)
-  const systemId = values.housecode || values.house || values.address || values.rolling_code || values.systemcode || values.id || '0';
-  // Device ID: Lower level grouping (Channel, Unit, Button)
-  const deviceId = values.channel || values.unit || (values.id !== systemId ? values.id : null) || values.button || '0';
-  
+function getHierarchy(protocol, values) {
+  const telemetry = ['temperature', 'humidity', 'hum', 'battery', 'lowbattery', 'state', 'contact', 'hd_uid', 'timestamp'];
+  const idFields = ['id', 'channel', 'rolling_code', 'address', 'house', 'unit', 'systemcode', 'knocode', 'all', 'group', 'housecode', 'unitcode', 'switch', 'button'];
+
+  let systemId = 'unk';
+  let deviceId = 'unk';
+
+  // Find systemId (first matching field)
+  for (const f of idFields) {
+    if (values[f] !== undefined) {
+      systemId = values[f].toString();
+      break;
+    }
+  }
+
+  // Find deviceId (second matching field)
+  let foundSystem = false;
+  for (const f of idFields) {
+    if (values[f] !== undefined) {
+      if (!foundSystem) {
+        foundSystem = true;
+        continue;
+      }
+      deviceId = values[f].toString();
+      break;
+    }
+  }
+
+  // Fallback: Use ANY non-telemetry field if still unknown
+  if (systemId === 'unk') {
+    const others = Object.keys(values).filter(k => !telemetry.includes(k) && !idFields.includes(k)).sort();
+    if (others.length > 0) systemId = values[others[0]].toString();
+    if (others.length > 1) deviceId = values[others[1]].toString();
+  }
+
+  const uidSuffix = `${systemId}_${deviceId}`;
+  const uid = `hd_${protocol}_${uidSuffix}`.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
   const basePath = `${protocol}/${systemId}/${deviceId}`;
-  const uid = `hd_${protocol}_s${systemId}_d${deviceId}`.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
   
-  return { systemId, deviceId, basePath, uid };
+  return { uid, basePath, systemId, deviceId };
 }
 
 io.on('connection', (socket) => {
@@ -192,21 +225,21 @@ io.on('connection', (socket) => {
 
   socket.on('add_device', (data) => {
     const { protocol, values, type, name } = data;
-    const { basePath, uid } = getIdentity(protocol, values);
+    const { uid, basePath } = getHierarchy(protocol, values);
     
-    console.log(`[Discovery] Adding ${type} ${uid} at homeduino/${basePath}`);
+    console.log(`[Discovery] Adding ${type} ${uid} to HA at homeduino/${basePath}`);
 
     const commonDevice = {
       identifiers: [uid],
-      name: name || `Homeduino ${protocol} ${uid.split('_').pop()}`,
+      name: name || `Homeduino ${protocol} ${uid.split('_').slice(-2).join(':')}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.3.7"
+      sw_version: "3.3.8"
     };
 
     if (type === 'switch' || values.state !== undefined) {
       const payload = {
-        name: null,
+        name: "Switch",
         unique_id: `${uid}_sw`,
         command_topic: `homeduino/command/${protocol}`,
         payload_on: JSON.stringify({ ...values, state: 'on' }),
@@ -218,11 +251,10 @@ io.on('connection', (socket) => {
       mqttClient.publish(`homeassistant/switch/homeduino/${uid}/config`, JSON.stringify(payload), { retain: true });
     } else {
       const keys = Object.keys(values).filter(k => 
-        ['temperature', 'humidity', 'hum', 'battery', 'lowbattery'].includes(k)
+        ['temperature', 'humidity', 'hum', 'battery', 'lowbattery', 'contact'].includes(k)
       );
       
-      // Ensure we have at least temp and humidity for weather sensors
-      if (['weather', 'mandolyn', 'oregon', 'cresta', 'weather2'].some(p => protocol.includes(p))) {
+      if (['weather', 'mandolyn', 'oregon', 'cresta', 'weather2', 'tfa'].some(p => protocol.includes(p))) {
         if (!keys.includes('temperature')) keys.push('temperature');
         if (!keys.includes('humidity')) keys.push('humidity');
       }
@@ -234,41 +266,36 @@ io.on('connection', (socket) => {
           unique_id: `${uid}_${haKey}`,
           state_topic: `homeduino/${basePath}/${haKey}`,
           unit_of_measurement: haKey === 'temperature' ? '°C' : (haKey === 'humidity' ? '%' : (haKey === 'battery' ? '%' : null)),
-          device_class: haKey === 'temperature' ? 'temperature' : (haKey === 'humidity' ? 'humidity' : (haKey === 'battery' ? 'battery' : null)),
+          device_class: haKey === 'temperature' ? 'temperature' : (haKey === 'humidity' ? 'humidity' : (haKey === 'battery' ? 'battery' : (haKey === 'contact' ? 'door' : null))),
           availability_topic: "homeduino/status",
           device: commonDevice
         };
         mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_${haKey}/config`, JSON.stringify(payload), { retain: true });
       });
     }
-    socket.emit('toast', 'Device Hierarchical Discovery Sent');
+    socket.emit('toast', 'Hierarchical Discovery Sent');
   });
 });
 
 // 6. Signal handling
 homeduino.on('rfControlReceive', (event) => {
-  const { basePath, uid } = getIdentity(event.protocol, event.values);
+  const { uid, basePath } = getHierarchy(event.protocol, event.values);
   const v = { ...event.values };
 
-  // Publish each value to its own topic
+  if (options.debug) console.log(`[RF Receive] Protocol: ${event.protocol} | UID: ${uid} | Data: ${JSON.stringify(v)}`);
+
   Object.keys(v).forEach(key => {
     let value = v[key];
     let topicKey = key;
 
-    // Normalizations
-    if (key === 'state') {
-      value = (value === true || value === 1 || value === 'on') ? 'on' : 'off';
-    }
+    if (key === 'state') value = (value === true || value === 1 || value === 'on') ? 'on' : 'off';
     if (key === 'hum') topicKey = 'humidity';
 
-    // Filter data fields for MQTT sub-topics
     if (['temperature', 'humidity', 'battery', 'state', 'lowbattery', 'contact'].includes(topicKey)) {
       mqttClient.publish(`homeduino/${basePath}/${topicKey}`, value.toString(), { retain: true });
     }
   });
 
-  if (options.debug) console.log(`[RF] ${uid} -> homeduino/${basePath}`);
-  
   io.emit('signal', { 
     timestamp: new Date().toISOString(), 
     protocol: event.protocol, 
