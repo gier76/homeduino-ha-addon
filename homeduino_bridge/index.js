@@ -224,14 +224,23 @@ function getHierarchy(protocol, values, raw) {
 
   // 3. Last Resort: Use a hash of the raw pulses if available
   if (systemId === 'unk' && deviceId === 'unk' && raw) {
-    // Basic hash of raw string to get some stability
+    // We only hash the start of the sequence part of the raw signal.
+    // Raw signal format: "P1 P2 P3 P4 P5 P6 P7 P8 SYMBOL_SEQ"
+    // The symbol sequence contains ID + DATA. By hashing only the first part of it,
+    // we have a better chance of hitting the ID but not the changing data (temp/hum).
+    const parts = raw.split(' ');
+    const symbolSeq = parts[parts.length - 1] || "";
+    
+    // Use first 20 symbols for ID hashing (usually enough for ID/Channel)
+    const stablePart = symbolSeq.substring(0, 20);
+    
     let hash = 0;
-    for (let i = 0; i < raw.length; i++) {
-        hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+    for (let i = 0; i < stablePart.length; i++) {
+        hash = ((hash << 5) - hash) + stablePart.charCodeAt(i);
         hash |= 0;
     }
     systemId = 'raw' + Math.abs(hash).toString(16).substring(0, 4);
-    deviceId = 'seq' + raw.length;
+    deviceId = 'fixed'; // We use 'fixed' to avoid new device per sequence length change
   }
 
   const uidSuffix = `${systemId}_${deviceId}`;
