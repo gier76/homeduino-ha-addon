@@ -140,6 +140,7 @@ try {
 } catch (e) {}
 
 const SERIAL_PORT = options.serial_port || '/dev/ttyUSB0';
+const BAUD_RATE = parseInt(options.baud_rate) || 115200;
 const MQTT_HOST = options.mqtt_broker || 'core-mosquitto';
 const MQTT_PORT = options.mqtt_port || 1883;
 const MQTT_USER = options.mqtt_user || '';
@@ -147,7 +148,7 @@ const MQTT_PASS = options.mqtt_password || '';
 const MQTT_URL = `mqtt://${MQTT_HOST}:${MQTT_PORT}`;
 
 // 3. Initialize Homeduino
-const homeduino = new Homeduino(SERIAL_PORT);
+const homeduino = new Homeduino(SERIAL_PORT, BAUD_RATE);
 let lastError = null;
 
 homeduino.on('connected', () => {
@@ -302,7 +303,7 @@ io.on('connection', (socket) => {
       name: name || `Homeduino ${protocol} ${uid.split('_').slice(-2).join(':')}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.4.4"
+      sw_version: "3.4.5"
     };
 
     if (type === 'switch' || values.state !== undefined) {

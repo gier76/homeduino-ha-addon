@@ -1,5 +1,5 @@
 name: "Homeduino Bridge"
-version: "3.4.4"
+version: "3.4.5"
 slug: "homeduino_bridge"
 description: "Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling"
 url: "https://github.com/gier76/homeduino-ha-addon"
@@ -13,6 +13,7 @@ panel_icon: mdi:radio-tower
 mqtt: true
 options:
   serial_port: "/dev/ttyS0"
+  baud_rate: 115200
   mqtt_broker: "core-mosquitto"
   mqtt_port: 1883
   mqtt_user: ""
@@ -20,6 +21,7 @@ options:
   debug: false
 schema:
   serial_port: str
+  baud_rate: int?
   mqtt_broker: str
   mqtt_port: int?
   mqtt_user: str?
