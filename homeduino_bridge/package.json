@@ -1,6 +1,6 @@
 {
   "name": "homeduino-ha-addon",
-  "version": "3.4.3",
+  "version": "3.4.4",
   "description": "Bridge between Homeduino (433MHz) and Home Assistant with modern dependencies",
   "main": "index.js",
   "scripts": {

@@ -29,7 +29,17 @@ class Homeduino extends EventEmitter {
     this.connected = false;
   }
 
-  connect() {
+  async connect() {
+    logToFile(`Listing available serial ports...`);
+    try {
+      const ports = await SerialPort.list();
+      ports.forEach(p => {
+        logToFile(`Found port: ${p.path} | Manufacturer: ${p.manufacturer || 'N/A'} | VendorId: ${p.vendorId || 'N/A'}`);
+      });
+    } catch (e) {
+      logToFile(`Error listing ports: ${e.message}`);
+    }
+
     logToFile(`Opening serial port ${this.portPath}...`);
     this.serial = new SerialPort({
       path: this.portPath,
@@ -292,7 +302,7 @@ io.on('connection', (socket) => {
       name: name || `Homeduino ${protocol} ${uid.split('_').slice(-2).join(':')}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.4.3"
+      sw_version: "3.4.4"
     };
 
     if (type === 'switch' || values.state !== undefined) {
