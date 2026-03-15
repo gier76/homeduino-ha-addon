@@ -11,6 +11,13 @@ const EventEmitter = require('events');
 // Global state store
 const deviceStates = {}; 
 
+function logToFile(msg) {
+  const timestamp = new Date().toISOString();
+  const line = `[${timestamp}] ${msg}\n`;
+  fs.appendFileSync('bridge_debug.log', line);
+  console.log(line.trim());
+}
+
 // 1. Homeduino Bridge Class
 class Homeduino extends EventEmitter {
   constructor(port, baudRate = 115200) {
@@ -23,7 +30,7 @@ class Homeduino extends EventEmitter {
   }
 
   connect() {
-    console.log(`Opening serial port ${this.portPath}...`);
+    logToFile(`Opening serial port ${this.portPath}...`);
     this.serial = new SerialPort({
       path: this.portPath,
       baudRate: this.baudRate,
@@ -33,23 +40,24 @@ class Homeduino extends EventEmitter {
     this.parser = this.serial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
     this.serial.on('open', () => {
-      console.log('Serial port opened.');
+      logToFile('Serial port opened.');
       this.connected = true;
       this.emit('connected');
       this.write('RF receive 0'); 
     });
 
     this.serial.on('error', (err) => {
-      console.error('Serial Error:', err);
+      logToFile(`Serial Error: ${err.message}`);
       this.emit('error', err);
     });
 
     this.parser.on('data', (line) => {
       line = line.trim();
-      if (options.debug) console.log(`[Serial Raw]: "${line}"`);
+      if (options.debug) logToFile(`[Serial Raw]: "${line}"`);
       this.handleLine(line);
     });
   }
+// ...
 
   handleLine(line) {
     if (line === 'ready') {
@@ -179,6 +187,14 @@ const io = new Server(server);
 
 app.use(express.static('public'));
 
+app.get('/logs', (req, res) => {
+  if (fs.existsSync('bridge_debug.log')) {
+    res.type('text/plain').send(fs.readFileSync('bridge_debug.log', 'utf8'));
+  } else {
+    res.status(404).send('Log file not found yet. Wait for signals.');
+  }
+});
+
 function getHierarchy(protocol, values, raw) {
   // Telemetry fields (data that changes frequently)
   const telemetry = ['temperature', 'humidity', 'hum', 'battery', 'lowbattery', 'state', 'contact', 'hd_uid', 'timestamp', 'lux', 'pressure', 'rain'];
@@ -276,7 +292,7 @@ io.on('connection', (socket) => {
       name: name || `Homeduino ${protocol} ${uid.split('_').slice(-2).join(':')}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.4.2"
+      sw_version: "3.4.3"
     };
 
     if (type === 'switch' || values.state !== undefined) {
