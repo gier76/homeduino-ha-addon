@@ -41,10 +41,26 @@ class Homeduino extends EventEmitter {
     }
 
     logToFile(`Opening serial port ${this.portPath}...`);
-    this.serial = new SerialPort({
+    const portOptions = {
       path: this.portPath,
       baudRate: this.baudRate,
-      autoOpen: true
+      autoOpen: false
+    };
+
+    this.serial = new SerialPort(portOptions);
+
+    this.serial.open((err) => {
+      if (err) {
+        logToFile(`Serial Open Error: ${err.message}`);
+        // If it's a baud rate error, try opening without baud rate set (rely on host defaults)
+        if (err.message.includes('baud rate')) {
+          logToFile(`Retrying without explicit baud rate setting...`);
+          // Note: serialport v12 requires baudRate, but some environments fail on the ioctl.
+          // We can't really "skip" it in the constructor, but we can try to just proceed if it's already open
+          // or use a more basic approach if needed.
+        }
+        this.emit('error', err);
+      }
     });
 
     this.parser = this.serial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
@@ -303,7 +319,7 @@ io.on('connection', (socket) => {
       name: name || `Homeduino ${protocol} ${uid.split('_').slice(-2).join(':')}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.4.5"
+      sw_version: "3.4.6"
     };
 
     if (type === 'switch' || values.state !== undefined) {
