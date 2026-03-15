@@ -61,22 +61,27 @@ class Homeduino extends EventEmitter {
     if (line.startsWith('RF receive ')) {
       const parts = line.split(' ');
       const strSeq = parts.slice(2).join(' ');
+      if (options.debug) console.log(`[RF Receive Raw]: ${strSeq}`);
       try {
         const info = rfcontrol.prepareCompressedPulses(strSeq);
-        this.decode(info.pulseLengths, info.pulses);
+        this.decode(info.pulseLengths, info.pulses, strSeq);
       } catch (e) {
         if (options.debug) console.error('Decoding Error:', e.message);
       }
     }
   }
 
-  decode(pulseLengths, pulses) {
+  decode(pulseLengths, pulses, raw) {
     const results = rfcontrol.decodePulses(pulseLengths, pulses);
     if (results && results.length > 0) {
       for (const result of results) {
+        if (options.debug) {
+          console.log(`[RF Decode]: Protocol=${result.protocol} | Values=${JSON.stringify(result.values)}`);
+        }
         this.emit('rfControlReceive', {
           protocol: result.protocol,
-          values: result.values
+          values: result.values,
+          raw: raw
         });
       }
     }
@@ -108,10 +113,11 @@ class Homeduino extends EventEmitter {
 }
 
 // 2. Read configuration
-let options = { debug: false };
+let options = { debug: true }; // Default to true for better troubleshooting
 try {
   if (fs.existsSync('/data/options.json')) {
-    options = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
+    const userOptions = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
+    options = { ...options, ...userOptions };
   }
 } catch (e) {}
 
@@ -174,38 +180,65 @@ const io = new Server(server);
 app.use(express.static('public'));
 
 function getHierarchy(protocol, values) {
-  const telemetry = ['temperature', 'humidity', 'hum', 'battery', 'lowbattery', 'state', 'contact', 'hd_uid', 'timestamp'];
-  const idFields = ['id', 'channel', 'rolling_code', 'address', 'house', 'unit', 'systemcode', 'knocode', 'all', 'group', 'housecode', 'unitcode', 'switch', 'button'];
+  // Telemetry fields (data that changes frequently)
+  const telemetry = ['temperature', 'humidity', 'hum', 'battery', 'lowbattery', 'state', 'contact', 'hd_uid', 'timestamp', 'lux', 'pressure', 'rain'];
+  
+  // Potential Identification fields (data that identifies the device)
+  const idFields = [
+    'id', 'channel', 'rolling_code', 'address', 'house', 'unit', 'systemcode', 
+    'knocode', 'all', 'group', 'housecode', 'unitcode', 'switch', 'button',
+    'sensorId', 'id1', 'id2', 'random', 'code', 'device', 'sid', 'did', 'uuid', 'mac'
+  ];
 
   let systemId = 'unk';
   let deviceId = 'unk';
 
-  // Find systemId (first matching field)
+  // Log values for debugging if enabled
+  if (options.debug) {
+    console.log(`[Hierarchy Discovery] Protocol: ${protocol} | Values: ${JSON.stringify(values)}`);
+  }
+
+  // 1. Try to find IDs in designated idFields
+  const foundIds = [];
   for (const f of idFields) {
-    if (values[f] !== undefined) {
-      systemId = values[f].toString();
-      break;
+    if (values[f] !== undefined && values[f] !== null) {
+      foundIds.push(values[f].toString());
     }
   }
 
-  // Find deviceId (second matching field)
-  let foundSystem = false;
-  for (const f of idFields) {
-    if (values[f] !== undefined) {
-      if (!foundSystem) {
-        foundSystem = true;
-        continue;
-      }
-      deviceId = values[f].toString();
-      break;
+  if (foundIds.length > 0) {
+    systemId = foundIds[0];
+    if (foundIds.length > 1) {
+      deviceId = foundIds[1];
     }
   }
 
-  // Fallback: Use ANY non-telemetry field if still unknown
+  // 2. Fallback: Use ANY field that is NOT telemetry if we still have 'unk'
   if (systemId === 'unk') {
-    const others = Object.keys(values).filter(k => !telemetry.includes(k) && !idFields.includes(k)).sort();
-    if (others.length > 0) systemId = values[others[0]].toString();
-    if (others.length > 1) deviceId = values[others[1]].toString();
+    const others = Object.keys(values)
+      .filter(k => !telemetry.includes(k) && !idFields.includes(k))
+      .sort();
+    
+    if (others.length > 0) {
+      systemId = values[others[0]].toString();
+      if (others.length > 1) {
+        deviceId = values[others[1]].toString();
+      }
+    }
+  }
+
+  // 3. Last Resort: If it's still unk_unk, and it's a weather sensor, 
+  // maybe the ID is hidden in a field we didn't expect?
+  // Let's at least try to avoid unk_unk by using a hash of all values if nothing else works
+  if (systemId === 'unk' && deviceId === 'unk') {
+    // If we have ANY field at all, use it.
+    const allKeys = Object.keys(values).sort();
+    if (allKeys.length > 0) {
+        // We use the first key's value as systemId and its name as deviceId just to distinguish
+        // But only as a very last resort
+        // systemId = values[allKeys[0]].toString();
+        // deviceId = allKeys[0];
+    }
   }
 
   const uidSuffix = `${systemId}_${deviceId}`;
