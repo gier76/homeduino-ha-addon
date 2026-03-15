@@ -267,7 +267,7 @@ io.on('connection', (socket) => {
       name: name || `Homeduino ${protocol} ${uid.split('_').slice(-2).join(':')}`,
       model: protocol,
       manufacturer: "Homeduino Bridge",
-      sw_version: "3.3.8"
+      sw_version: "3.4.0"
     };
 
     if (type === 'switch' || values.state !== undefined) {
