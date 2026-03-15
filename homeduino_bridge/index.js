@@ -179,7 +179,7 @@ const io = new Server(server);
 
 app.use(express.static('public'));
 
-function getHierarchy(protocol, values) {
+function getHierarchy(protocol, values, raw) {
   // Telemetry fields (data that changes frequently)
   const telemetry = ['temperature', 'humidity', 'hum', 'battery', 'lowbattery', 'state', 'contact', 'hd_uid', 'timestamp', 'lux', 'pressure', 'rain'];
   
@@ -192,11 +192,6 @@ function getHierarchy(protocol, values) {
 
   let systemId = 'unk';
   let deviceId = 'unk';
-
-  // Log values for debugging if enabled
-  if (options.debug) {
-    console.log(`[Hierarchy Discovery] Protocol: ${protocol} | Values: ${JSON.stringify(values)}`);
-  }
 
   // 1. Try to find IDs in designated idFields
   const foundIds = [];
@@ -227,28 +222,32 @@ function getHierarchy(protocol, values) {
     }
   }
 
-  // 3. Last Resort: If it's still unk_unk, and it's a weather sensor, 
-  // maybe the ID is hidden in a field we didn't expect?
-  // Let's at least try to avoid unk_unk by using a hash of all values if nothing else works
-  if (systemId === 'unk' && deviceId === 'unk') {
-    // If we have ANY field at all, use it.
-    const allKeys = Object.keys(values).sort();
-    if (allKeys.length > 0) {
-        // We use the first key's value as systemId and its name as deviceId just to distinguish
-        // But only as a very last resort
-        // systemId = values[allKeys[0]].toString();
-        // deviceId = allKeys[0];
+  // 3. Last Resort: Use a hash of the raw pulses if available
+  if (systemId === 'unk' && deviceId === 'unk' && raw) {
+    // Basic hash of raw string to get some stability
+    let hash = 0;
+    for (let i = 0; i < raw.length; i++) {
+        hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+        hash |= 0;
     }
+    systemId = 'raw' + Math.abs(hash).toString(16).substring(0, 4);
+    deviceId = 'seq' + raw.length;
   }
 
   const uidSuffix = `${systemId}_${deviceId}`;
   const uid = `hd_${protocol}_${uidSuffix}`.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
   const basePath = `${protocol}/${systemId}/${deviceId}`;
   
+  // Log final hierarchy decision
+  if (options.debug) {
+    console.log(`[Hierarchy Discovery] Protocol: ${protocol} | UID: ${uid} | System: ${systemId} | Device: ${deviceId}`);
+  }
+
   return { uid, basePath, systemId, deviceId };
 }
 
 io.on('connection', (socket) => {
+  if (options.debug) console.log('New Socket.io connection');
   socket.emit('status', { connected: homeduino.connected, error: lastError });
   socket.emit('mqtt_status', { connected: mqttClient.connected });
 
@@ -257,10 +256,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('add_device', (data) => {
-    const { protocol, values, type, name } = data;
-    const { uid, basePath } = getHierarchy(protocol, values);
+    const { protocol, values, type, name, raw } = data;
+    const { uid, basePath } = getHierarchy(protocol, values, raw);
     
     console.log(`[Discovery] Adding ${type} ${uid} to HA at homeduino/${basePath}`);
+// ... rest of the handler (omitted for brevity in replace, but I will provide full next)
 
     const commonDevice = {
       identifiers: [uid],
@@ -312,7 +312,7 @@ io.on('connection', (socket) => {
 
 // 6. Signal handling
 homeduino.on('rfControlReceive', (event) => {
-  const { uid, basePath } = getHierarchy(event.protocol, event.values);
+  const { uid, basePath } = getHierarchy(event.protocol, event.values, event.raw);
   const v = { ...event.values };
 
   if (options.debug) console.log(`[RF Receive] Protocol: ${event.protocol} | UID: ${uid} | Data: ${JSON.stringify(v)}`);
@@ -333,7 +333,8 @@ homeduino.on('rfControlReceive', (event) => {
     timestamp: new Date().toISOString(), 
     protocol: event.protocol, 
     values: event.values, 
-    uid: uid 
+    uid: uid,
+    raw: event.raw
   });
 });
 
