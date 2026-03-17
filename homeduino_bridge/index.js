@@ -360,6 +360,7 @@ io.on('connection', (socket) => {
           state_topic: `homeduino/${basePath}/${haKey}`,
           unit_of_measurement: haKey === 'temperature' ? '°C' : (haKey === 'humidity' ? '%' : (haKey === 'battery' ? '%' : null)),
           device_class: haKey === 'temperature' ? 'temperature' : (haKey === 'humidity' ? 'humidity' : (haKey === 'battery' ? 'battery' : (haKey === 'contact' ? 'door' : null))),
+          state_class: (haKey === 'temperature' || haKey === 'humidity' ) ? 'measurement' : null,
           availability_topic: "homeduino/status",
           device: commonDevice
         };
