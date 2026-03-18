@@ -74,16 +74,23 @@ class Homeduino extends EventEmitter {
             
             // Warte auf Arduino-Boot
             setTimeout(() => {
-                log('Sending init signal...');
+                log('Sending init signal (RF receive 0)...');
+                // Sende leeren Befehl zum Leeren des Buffers
+                this.write('');
                 this.write('RF receive 0');
                 
                 // Wiederhole init alle 5s, bis "ready" kommt
                 const checkInterval = setInterval(() => {
-                    if (this.connected) this.write('RF receive 0');
+                    if (this.connected) {
+                         this.write('RF receive 0');
+                    }
                     else clearInterval(checkInterval);
                 }, 5000);
-                this.once('ready', () => clearInterval(checkInterval));
-            }, 5000);
+                this.once('ready', () => {
+                    log('Arduino acknowledged ready.');
+                    clearInterval(checkInterval);
+                });
+            }, 3000); // Etwas kürzer, da der Serial-Port jetzt erst bereit ist
             
             this.emit('connected');
         });
