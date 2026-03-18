@@ -66,33 +66,25 @@ class Homeduino extends EventEmitter {
             if (err) {
                 log(`Serial Error: ${err.message}`);
                 this.emit('error', err.message);
+                
+                // List available ports to help user
+                SerialPort.list().then(ports => {
+                    log('Available serial ports:');
+                    ports.forEach(p => log(`- ${p.path} (${p.manufacturer || 'unknown'})`));
+                }).catch(e => log(`Failed to list ports: ${e.message}`));
+
+                // Retry after 10 seconds
                 setTimeout(() => this.connect(), 10000);
                 return;
             }
             this.connected = true;
-            log('Serial Port Opened. Waiting for Arduino...');
-            
-            // Warte auf Arduino-Boot
-            setTimeout(() => {
-                log('Sending init signal (RF receive 0)...');
-                // Sende leeren Befehl zum Leeren des Buffers
-                this.write('');
-                this.write('RF receive 0');
-                
-                // Wiederhole init alle 5s, bis "ready" kommt
-                const checkInterval = setInterval(() => {
-                    if (this.connected) {
-                         this.write('RF receive 0');
-                    }
-                    else clearInterval(checkInterval);
-                }, 5000);
-                this.once('ready', () => {
-                    log('Arduino acknowledged ready.');
-                    clearInterval(checkInterval);
-                });
-            }, 3000); // Etwas kürzer, da der Serial-Port jetzt erst bereit ist
-            
+            log('Serial Port Opened');
             this.emit('connected');
+            
+            // Simple init command after a short delay to be safe
+            setTimeout(() => {
+                this.write('RF receive 0');
+            }, 2000);
         });
 
         this.parser.on('data', (line) => this.handleLine(line));
