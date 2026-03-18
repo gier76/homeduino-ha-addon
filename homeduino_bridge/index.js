@@ -310,7 +310,8 @@ homeduino.on('rfControlReceive', (event) => {
         mqttClient.publish(`${basePath}/${key}`, event.values[key].toString(), { retain: true });
     });
     
-    // Notify UI
+// Notify UI
+    console.log(`Debug: Emitting signal to UI:`, JSON.stringify(event));
     io.emit('signal', { ...event, uid, basePath });
 });
 
