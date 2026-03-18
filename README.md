@@ -1,67 +1,49 @@
-# 📡 Homeduino Home Assistant Add-on
+# Homeduino Home Assistant Add-on
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Add--on-blue.svg)](https://www.home-assistant.io/)
-[![Version](https://img.shields.io/badge/Version-3.2.2-green.svg)](#)
+Bridge between Homeduino (433MHz) and Home Assistant. This add-on allows you to use your 433MHz devices (switches, sensors, etc.) with Home Assistant via an Arduino running the Homeduino sketch.
 
-A modernized bridge between your **Homeduino (Arduino 433MHz Transceiver)** and **Home Assistant**. Control your legacy 433MHz devices with ease using MQTT and a sleek Web UI.
+## Features
 
----
+- **Modern Web UI**: A real-time scanner to see incoming 433MHz signals.
+- **Easy Discovery**: Add discovered devices to Home Assistant with a single click.
+- **MQTT Based**: Communicates with Home Assistant using the standard MQTT discovery protocol.
+- **Ingress Support**: Access the scanner UI directly from the Home Assistant sidebar.
+- **Hardware Support**: Handles serial connections to various USB/Serial transceivers.
 
-## 🚀 Features
+## Installation
 
-- **Ingress Support:** Integrated directly into the Home Assistant sidebar.
-- **Modern Web UI:** Real-time signal scanner and device manager.
-- **One-Click Discovery:** Identify 433MHz protocols and add them to Home Assistant instantly.
-- **MQTT Bridge:** Reliable communication with Mosquitto Broker.
-- **Protocol Support:** Powered by `rfcontroljs` for a wide range of 433MHz devices.
-- **Robust Debugging:** Detailed serial and MQTT logging to track every pulse.
+1. Add this repository to your Home Assistant Add-on Store.
+2. Install the "Homeduino Bridge" add-on.
+3. Configure your serial port and MQTT settings (if not using the default `core-mosquitto`).
+4. Start the add-on.
 
----
+## Configuration
 
-## 🛠 Installation
+Default options:
 
-1. Add this repository to your Home Assistant Add-on Store:
-   `https://github.com/gier76/homeduino-ha-addon`
-2. Install the **Homeduino Bridge** add-on.
-3. Ensure you have an **MQTT Broker** (like Mosquitto) installed and running.
-4. Configure your serial port (default: `/dev/ttyUSB0`).
-5. Start the add-on and open the Web UI!
+```yaml
+serial_port: "/dev/ttyUSB0"
+baud_rate: 115200
+mqtt_broker: "core-mosquitto"
+mqtt_port: 1883
+mqtt_user: ""
+mqtt_password: ""
+debug: false
+```
 
----
+### Serial Port
+Make sure to select the correct serial port where your Arduino is connected. You can find available ports in the add-on log if the default one fails to connect.
 
-## 📋 Configuration
+### MQTT
+If you are using the official Mosquitto broker add-on, the default settings should work. If you use an external broker, provide the necessary credentials and address.
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `serial_port` | Path to your Arduino transceiver | `/dev/ttyUSB0` |
-| `mqtt_broker` | Hostname of your MQTT broker | `core-mosquitto` |
-| `mqtt_user` | MQTT username (optional) | |
-| `mqtt_password` | MQTT password (optional) | |
-| `debug` | Enable verbose serial logging | `false` |
+## Usage
 
----
+1. Open the "Web UI" from the add-on page or the sidebar.
+2. Watch for incoming signals from your 433MHz remotes or sensors.
+3. Use the "Add to HA" button to create a corresponding device in Home Assistant.
+4. For switches, you can test the "ON" and "OFF" commands directly from the UI.
 
-## 🔌 Hardware requirements
+## Credits
 
-- **Arduino** (Nano/Uno) with Homeduino Sketch.
-- **433MHz Receiver & Transmitter** modules.
-- Connected via USB to your Home Assistant host.
-
----
-
-## 📡 MQTT Topics
-
-- **Status:** `homeduino/status` (`online` / `offline`)
-- **Received:** `homeduino/received/[protocol]`
-- **Commands:** `homeduino/command/[protocol]`
-
----
-
-## ❤️ Contributing
-
-Feel free to open issues or pull requests. Let's make 433MHz great again!
-
----
-
-*Developed with precision for the Home Assistant Community.*
+This add-on is based on the `rfcontroljs` library and inspired by various Homeduino implementations.
