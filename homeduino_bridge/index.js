@@ -8,7 +8,7 @@ const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
 
-// --- Configuration Handling ---
+// --- Configuration Handling (v3.8.7) ---
 let options = {
     serial_port: "/dev/ttyUSB0",
     baud_rate: 115200,
