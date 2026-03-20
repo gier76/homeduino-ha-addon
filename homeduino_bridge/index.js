@@ -54,7 +54,11 @@ app.get('/', (req, res) => {
 });
 
 // --- MQTT Setup ---
-const mqttClient = mqtt.connect('mqtt://core-mosquitto:1883');
+const mqttOptions = {
+    username: options.mqtt_user,
+    password: options.mqtt_password
+};
+const mqttClient = mqtt.connect(`mqtt://${options.mqtt_broker}:${options.mqtt_port}`, mqttOptions);
 mqttClient.on('connect', () => console.log('MQTT Connected'));
 mqttClient.on('error', (err) => console.error('MQTT Error:', err.message));
 
