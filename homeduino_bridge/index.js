@@ -38,13 +38,13 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { 
     path: '/socket.io',
-    cors: { origin: "*" } 
+    cors: { origin: "*" },
+    transports: ["polling", "websocket"] // Allow both, but client prefers polling now
 });
 
 const publicPath = path.join(__dirname, 'public');
 if (!fs.existsSync(publicPath)) {
     fs.mkdirSync(publicPath, { recursive: true });
-    // Fallback index.html logic omitted for brevity, assuming original is present
 }
 app.use(express.static(publicPath));
 app.get('/', (req, res) => res.sendFile(path.join(publicPath, 'index.html')));
@@ -63,10 +63,80 @@ mqttClient.on('connect', () => {
 
 mqttClient.on('error', (err) => console.error('MQTT Error:', err.message));
 
+// --- Auto-Discovery Cache ---
+const discoveredDevices = new Set();
+
+function sendDiscovery(protocol, uid, values) {
+    if (discoveredDevices.has(uid)) return;
+
+    const topicBase = `homeduino/${protocol}/${uid}`;
+    const device = {
+        identifiers: [uid],
+        name: `${protocol} ${uid}`,
+        model: protocol,
+        manufacturer: "Homeduino"
+    };
+
+    console.log(`Sending Auto-Discovery for ${uid}`);
+
+    // Temperature Sensor
+    if (values.temperature !== undefined) {
+        mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_temp/config`, JSON.stringify({
+            name: `${protocol} ${uid} Temperature`,
+            unique_id: `${uid}_temp`,
+            state_topic: `${topicBase}/temperature`,
+            device_class: "temperature",
+            unit_of_measurement: "°C",
+            value_template: "{{ value }}",
+            device: device
+        }), { retain: true });
+    }
+
+    // Humidity Sensor
+    if (values.humidity !== undefined) {
+        mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_hum/config`, JSON.stringify({
+            name: `${protocol} ${uid} Humidity`,
+            unique_id: `${uid}_hum`,
+            state_topic: `${topicBase}/humidity`,
+            device_class: "humidity",
+            unit_of_measurement: "%",
+            value_template: "{{ value }}",
+            device: device
+        }), { retain: true });
+    }
+    
+    // Battery Sensor
+    if (values.battery !== undefined) {
+         mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_bat/config`, JSON.stringify({
+            name: `${protocol} ${uid} Battery`,
+            unique_id: `${uid}_bat`,
+            state_topic: `${topicBase}/battery`,
+            device_class: "battery",
+            unit_of_measurement: "%",
+            value_template: "{{ value }}",
+            device: device
+        }), { retain: true });
+    }
+
+    // Switch
+    if (values.state !== undefined) {
+         mqttClient.publish(`homeassistant/switch/homeduino/${uid}/config`, JSON.stringify({
+            name: `${protocol} ${uid}`,
+            unique_id: uid,
+            command_topic: `homeduino/command/${protocol}/${uid}`,
+            state_topic: `${topicBase}/state`,
+            payload_on: "true",
+            payload_off: "false",
+            device: device
+        }), { retain: true });
+    }
+
+    discoveredDevices.add(uid);
+}
+
 // --- Logic ---
 serial.on('open', () => {
     console.log(`Serial connected on ${options.serial_port}`);
-    // Simple init, no blocking waits
     setTimeout(() => serial.write('\nRF receive 0\n'), 2000);
 });
 
@@ -81,14 +151,16 @@ parser.on('data', (line) => {
                 const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
                 if (results && results.length > 0) {
                     console.log('Decoded:', JSON.stringify(results));
-                    io.emit('signal', results); // Send to GUI
+                    io.emit('signal', results);
                     
                     results.forEach(res => {
-                        // Publish state to MQTT
                         const uid = `hd_${res.protocol}_${res.values.id || 'fixed'}`;
                         const topicBase = `homeduino/${res.protocol}/${uid}`;
                         
-                        // Publish individual values (temp, hum, state)
+                        // 1. Send Auto-Discovery (if new)
+                        sendDiscovery(res.protocol, uid, res.values);
+
+                        // 2. Publish State
                         Object.keys(res.values).forEach(key => {
                             mqttClient.publish(`${topicBase}/${key}`, res.values[key].toString(), { retain: true });
                         });
@@ -99,76 +171,6 @@ parser.on('data', (line) => {
             console.error('Decode Error:', e.message);
         }
     }
-});
-
-// --- GUI Actions ---
-io.on('connection', (socket) => {
-    console.log('UI Client Connected');
-    socket.emit('mqtt_status', { connected: mqttClient.connected, broker: options.mqtt_broker });
-    
-    socket.on('add_device', (data) => {
-        // Discovery Logic for HA
-        const { protocol, values, name } = data;
-        const uid = `hd_${protocol}_${values.id || 'fixed'}`;
-        const topicBase = `homeduino/${protocol}/${uid}`;
-        const device = {
-            identifiers: [uid],
-            name: name || `${protocol} Device`,
-            model: protocol,
-            manufacturer: "Homeduino"
-        };
-
-        // Temperature Sensor
-        if (values.temperature !== undefined) {
-            mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_temp/config`, JSON.stringify({
-                name: `${name} Temperature`,
-                unique_id: `${uid}_temp`,
-                state_topic: `${topicBase}/temperature`,
-                device_class: "temperature",
-                unit_of_measurement: "°C",
-                device: device
-            }), { retain: true });
-        }
-
-        // Humidity Sensor - THIS WAS MISSING BEFORE
-        if (values.humidity !== undefined) {
-            mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_hum/config`, JSON.stringify({
-                name: `${name} Humidity`,
-                unique_id: `${uid}_hum`,
-                state_topic: `${topicBase}/humidity`,
-                device_class: "humidity",
-                unit_of_measurement: "%",
-                device: device
-            }), { retain: true });
-        }
-        
-        // Battery Sensor
-        if (values.battery !== undefined) {
-             mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_bat/config`, JSON.stringify({
-                name: `${name} Battery`,
-                unique_id: `${uid}_bat`,
-                state_topic: `${topicBase}/battery`,
-                device_class: "battery",
-                unit_of_measurement: "%",
-                device: device
-            }), { retain: true });
-        }
-
-        // Switch
-        if (values.state !== undefined) {
-             mqttClient.publish(`homeassistant/switch/homeduino/${uid}/config`, JSON.stringify({
-                name: name,
-                unique_id: uid,
-                command_topic: `homeduino/command/${protocol}/${uid}`,
-                state_topic: `${topicBase}/state`,
-                payload_on: "true",
-                payload_off: "false",
-                device: device
-            }), { retain: true });
-        }
-        
-        console.log(`Discovery sent for ${name} (${uid})`);
-    });
 });
 
 server.listen(8080, '0.0.0.0', () => {
