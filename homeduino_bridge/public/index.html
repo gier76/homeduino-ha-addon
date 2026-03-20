@@ -41,7 +41,8 @@
     <script>
         const socket = io({ 
             path: window.location.pathname.replace(/\/$/, "") + "/socket.io",
-            transports: ["websocket", "polling"]
+            transports: ["polling"],
+            upgrade: false
         });
 
         const signalsList = document.getElementById('signals');
