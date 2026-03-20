@@ -8,9 +8,31 @@ const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
 
+// --- Configuration Handling ---
+// MOVED TO TOP to be available for MQTT setup
+let options = {
+    serial_port: "/dev/ttyUSB0",
+    baud_rate: 115200,
+    mqtt_broker: "core-mosquitto",
+    mqtt_port: 1883,
+    mqtt_user: "",
+    mqtt_password: "",
+    debug: false
+};
+
+if (fs.existsSync('/data/options.json')) {
+    try {
+        const userOptions = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
+        options = { ...options, ...userOptions };
+        console.log("Loaded options:", JSON.stringify(options));
+    } catch (e) {
+        console.error("Failed to parse /data/options.json", e);
+    }
+}
+
 // --- Serial Port Setup ---
-const serialPortPath = '/dev/ttyUSB0';
-const serial = new SerialPort({ path: serialPortPath, baudRate: 115200 });
+const serialPortPath = options.serial_port;
+const serial = new SerialPort({ path: serialPortPath, baudRate: parseInt(options.baud_rate) });
 const parser = serial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
 // --- Web Server Setup ---
