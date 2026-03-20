@@ -154,7 +154,15 @@ parser.on('data', (line) => {
                     io.emit('signal', results);
                     
                     results.forEach(res => {
-                        const uid = `hd_${res.protocol}_${res.values.id || 'fixed'}`;
+                        // Improved UID generation: Use id and/or channel. Fallback to a small hash of the raw sequence if no ID is found.
+                        let idSuffix = res.values.id !== undefined ? res.values.id : '';
+                        if (res.values.channel !== undefined) idSuffix += (idSuffix ? '_' : '') + 'ch' + res.values.channel;
+                        if (!idSuffix) {
+                            // Last resort: simple hash of the pulse sequence to distinguish sensors without IDs
+                            idSuffix = 'raw_' + strSeq.split(' ').slice(-1)[0].substring(0, 8); 
+                        }
+                        
+                        const uid = `hd_${res.protocol}_${idSuffix}`;
                         const topicBase = `homeduino/${res.protocol}/${uid}`;
                         
                         // 1. Send Auto-Discovery (if new)
@@ -162,7 +170,8 @@ parser.on('data', (line) => {
 
                         // 2. Publish State
                         Object.keys(res.values).forEach(key => {
-                            mqttClient.publish(`${topicBase}/${key}`, res.values[key].toString(), { retain: true });
+                            const val = res.values[key];
+                            mqttClient.publish(`${topicBase}/${key}`, val.toString(), { retain: true });
                         });
                     });
                 }
