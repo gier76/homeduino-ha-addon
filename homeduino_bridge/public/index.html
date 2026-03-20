@@ -5,179 +5,107 @@
     <style>
         body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
         .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        h1 { color: #03a9f4; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .signal-list { list-style: none; padding: 0; }
-        .signal-item { border-bottom: 1px solid #eee; padding: 10px 0; display: flex; flex-direction: column; }
-        .signal-item:last-child { border-bottom: none; }
-        .timestamp { font-size: 0.8em; color: #888; }
-        .protocol { font-weight: bold; color: #d32f2f; margin-right: 10px; }
-        .values { font-family: monospace; background: #f9f9f9; padding: 5px; border-radius: 4px; margin-top: 5px; word-break: break-all; }
-        .raw { color: #7b1fa2; font-style: italic; }
-        .status { margin-bottom: 20px; padding: 10px; border-radius: 4px; }
+        h1 { color: #333; text-align: center; }
+        .status { margin-bottom: 20px; padding: 10px; border-radius: 4px; text-align: center; font-weight: bold; }
         .status.connected { background: #e8f5e9; color: #2e7d32; }
         .status.disconnected { background: #ffebee; color: #c62828; }
-        .error-banner { background: #c62828; color: white; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
-        .actions { margin-top: 5px; display: flex; gap: 5px; }
-        button { cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; background: #fff; border-radius: 4px; }
-        button:hover { background: #eee; }
-        button.add-btn { background: #03a9f4; color: white; border-color: #0288d1; }
-        button.add-btn:hover { background: #0288d1; }
-        button.test-btn { background: #4caf50; color: white; border-color: #388e3c; }
-        button.test-btn:hover { background: #388e3c; }
-        .toast { position: fixed; bottom: 20px; right: 20px; background: #323232; color: white; padding: 10px 20px; border-radius: 4px; opacity: 0; transition: opacity 0.3s; }
-        .toast.show { opacity: 1; }
+        #signals { list-style: none; padding: 0; }
+        #signals li { background: #fff; border-bottom: 1px solid #eee; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+        #signals li:last-child { border-bottom: none; }
+        .signal-info { flex-grow: 1; }
+        .signal-protocol { font-weight: bold; color: #1976d2; }
+        .signal-values { color: #666; font-size: 0.9em; margin-top: 4px; }
+        .actions { margin-left: 10px; }
+        button { background: #1976d2; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9em; }
+        button:hover { background: #1565c0; }
+        button.test { background: #757575; margin-right: 5px; }
+        button.test:hover { background: #616161; }
+        .empty-state { text-align: center; color: #999; padding: 40px 0; font-style: italic; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Homeduino 433MHz Scanner</h1>
-        <div id="error-msg" class="error-banner"></div>
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <div id="status" class="status disconnected" style="flex: 1; margin-bottom: 0;">Disconnected from Bridge</div>
-            <div id="mqtt-status" class="status disconnected" style="flex: 1; margin-bottom: 0;">MQTT Disconnected</div>
-        </div>
+        <h1>Homeduino RF Scanner</h1>
+        <div id="status" class="status disconnected">Connecting to Bridge...</div>
         
-        <div class="controls">
-            <button onclick="clearSignals()">Clear List</button>
+        <div style="text-align: right; margin-bottom: 10px;">
+            <button onclick="clearSignals()" style="background: #ef5350;">Clear List</button>
         </div>
 
-        <ul id="signals" class="signal-list">
-            <!-- Signals will appear here -->
+        <ul id="signals">
+            <li class="empty-state">Waiting for RF signals... press a remote button!</li>
         </ul>
     </div>
-    <div id="toast" class="toast"></div>
 
-    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
     <script>
-        // Auto-detect base path for ingress
-        const path = window.location.pathname.replace(/\/$/, "");
         const socket = io({ 
-            path: path + "/socket.io",
-            transports: ["websocket"] 
+            path: window.location.pathname.replace(/\/$/, "") + "/socket.io",
+            transports: ["websocket", "polling"]
         });
+
         const signalsList = document.getElementById('signals');
         const statusDiv = document.getElementById('status');
-        const toastDiv = document.getElementById('toast');
+        let signalCount = 0;
 
         socket.on('connect', () => {
-            statusDiv.textContent = 'Connected to Bridge - Listening for signals...';
+            statusDiv.textContent = 'Connected';
             statusDiv.className = 'status connected';
+            console.log('Socket connected');
         });
 
         socket.on('disconnect', () => {
-            statusDiv.textContent = 'Disconnected from Bridge';
+            statusDiv.textContent = 'Disconnected - Reconnecting...';
             statusDiv.className = 'status disconnected';
         });
 
         socket.on('signal', (data) => {
-            addSignal(data);
-        });
-
-        socket.on('toast', (msg) => {
-            showToast(msg);
-        });
-
-        socket.on('error', (msg) => {
-            showToast('Error: ' + msg);
-        });
-
-        socket.on('mqtt_status', (data) => {
-            const mqttStatusDiv = document.getElementById('mqtt-status');
-            if (data.connected) {
-                mqttStatusDiv.textContent = 'MQTT Connected';
-                mqttStatusDiv.className = 'status connected';
-            } else {
-                mqttStatusDiv.textContent = 'MQTT Disconnected' + (data.message ? ': ' + data.message : '') + (data.error ? ': ' + data.error : '');
-                mqttStatusDiv.className = 'status disconnected';
-            }
-        });
-
-        socket.on('status', (data) => {
-            const errorMsg = document.getElementById('error-msg');
-            if (data.error) {
-                errorMsg.textContent = 'Hardware Warning: ' + data.error + '. Please check if your USB Transceiver is connected and correctly configured.';
-                errorMsg.style.display = 'block';
-            } else {
-                errorMsg.style.display = 'none';
-            }
-        });
-
-        function showToast(msg) {
-            toastDiv.textContent = msg;
-            toastDiv.className = 'toast show';
-            setTimeout(() => { toastDiv.className = 'toast'; }, 3000);
-        }
-
-        function addSignal(data) {
-            // Check if existing to avoid duplicates spamming the list? 
-            // For now, just prepend as log.
+            console.log('Signal received:', data);
             
+            // Remove empty state if present
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            // Extract relevant data
+            const protocol = data.protocol || 'Unknown';
+            const values = JSON.stringify(data.values || {});
+            const timestamp = new Date().toLocaleTimeString();
+
             const li = document.createElement('li');
-            li.className = 'signal-item';
-            
-            const time = new Date(data.timestamp).toLocaleTimeString();
-            const valuesStr = JSON.stringify(data.values, null, 2);
-            const isSwitch = data.values.state !== undefined || 
-                             ['switch1', 'switch2', 'switch3', 'switch4', 'kaku', 'elro_he', 'intertechno'].some(p => data.protocol.includes(p));
-            const isWeather = data.values.temperature !== undefined || data.values.humidity !== undefined ||
-                              ['weather', 'mandolyn', 'oregon', 'cresta'].some(p => data.protocol.includes(p));
-
-            let actionButtons = '';
-            if (isSwitch) {
-                const valuesJson = JSON.stringify(data.values).replace(/"/g, '&quot;');
-                actionButtons = `
-                    <div class="actions">
-                        <button class="test-btn" onclick="testSignal('${data.protocol}', ${valuesJson}, 'on')">Test ON</button>
-                        <button class="test-btn" onclick="testSignal('${data.protocol}', ${valuesJson}, 'off')">Test OFF</button>
-                        <button class="add-btn" onclick="addToHA('${data.protocol}', ${valuesJson}, 'switch')">Add to HA</button>
-                    </div>
-                `;
-            } else if (isWeather) {
-                const valuesJson = JSON.stringify(data.values).replace(/"/g, '&quot;');
-                actionButtons = `
-                    <div class="actions">
-                        <button class="add-btn" onclick="addToHA('${data.protocol}', ${valuesJson}, 'weather')">Add Weather to HA</button>
-                    </div>
-                `;
-            }
-
             li.innerHTML = `
-                <div>
-                    <span class="timestamp">${time}</span>
-                    <span class="protocol">[${data.protocol}]</span>
-                    <span style="font-size: 0.7em; color: #666;">UID: ${data.uid || 'N/A'}</span>
+                <div class="signal-info">
+                    <div class="signal-protocol">${protocol} <span style="color: #999; font-weight: normal;">@ ${timestamp}</span></div>
+                    <div class="signal-values">${values}</div>
                 </div>
-                <div class="values">${valuesStr}</div>
-                ${actionButtons}
+                <div class="actions">
+                    <button class="test" onclick="testSignal('${protocol}', ${values.replace(/"/g, "'")})">Test</button>
+                    <button onclick="addDevice('${protocol}', ${values.replace(/"/g, "'")})">Add to HA</button>
+                </div>
             `;
             
-            signalsList.prepend(li);
+            // Add to top
+            signalsList.insertBefore(li, signalsList.firstChild);
             
-            // Limit to 50 items
-            while (signalsList.children.length > 50) {
+            // Limit list size
+            if (signalsList.children.length > 50) {
                 signalsList.removeChild(signalsList.lastChild);
             }
-        }
-
-        function testSignal(protocol, values, state) {
-            const payload = { ...values, state: state };
-            socket.emit('send_command', { protocol, values: payload });
-        }
-
-        function addToHA(protocol, values, type) {
-            const name = prompt(`Enter a friendly name for this ${type}:`, `${type.charAt(0).toUpperCase() + type.slice(1)} ${values.id || values.channel || ''}`);
-            if (name) {
-                socket.emit('add_device', {
-                    protocol,
-                    values,
-                    type: type,
-                    name
-                });
-            }
-        }
+        });
 
         function clearSignals() {
-            signalsList.innerHTML = '';
+            signalsList.innerHTML = '<li class="empty-state">Waiting for RF signals... press a remote button!</li>';
+        }
+
+        function testSignal(protocol, values) {
+            console.log('Testing:', protocol, values);
+            // Implement test logic if backend supports sending
+            alert(`Test send for ${protocol} not yet implemented in UI.`);
+        }
+
+        function addDevice(protocol, values) {
+            console.log('Adding:', protocol, values);
+            alert(`Auto-discovery for ${protocol} will be sent to MQTT.`);
+            // Implement discovery logic
         }
     </script>
 </body>
