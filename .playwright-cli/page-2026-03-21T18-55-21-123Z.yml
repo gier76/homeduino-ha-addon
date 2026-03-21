@@ -1,0 +1,238 @@
+- generic [ref=e10]:
+  - complementary [ref=e11]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic "Seitenleiste umschalten" [ref=e16]:
+          - button "Seitenleiste umschalten" [ref=e17] [cursor=pointer]:
+            - generic [ref=e19]:
+              - img
+        - generic [ref=e20]: Home Assistant
+      - generic [ref=e21]:
+        - generic [ref=e23]:
+          - generic:
+            - listitem [ref=e25] [cursor=pointer]:
+              - generic [ref=e26]:
+                - generic [ref=e28]:
+                  - img
+                - generic [ref=e30]: Übersicht
+            - listitem [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]:
+                - generic [ref=e34]:
+                  - img
+                - generic [ref=e36]: Energie
+            - listitem [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - img
+                - generic [ref=e42]: Aktivität
+            - listitem [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]:
+                - generic [ref=e46]:
+                  - img
+                - generic [ref=e48]: Verlauf
+            - listitem [ref=e50] [cursor=pointer]:
+              - generic [ref=e51]:
+                - generic [ref=e53]:
+                  - img
+                - generic [ref=e55]: Homeduino Bridge
+            - listitem [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e59]:
+                  - img
+                - generic [ref=e61]: Medien
+            - listitem [ref=e63] [cursor=pointer]:
+              - generic [ref=e64]:
+                - generic [ref=e66]:
+                  - img
+                - generic [ref=e68]: MQTT Explorer
+            - listitem [ref=e70] [cursor=pointer]:
+              - generic [ref=e71]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: Terminal
+            - listitem [ref=e77] [cursor=pointer]:
+              - generic [ref=e78]:
+                - generic [ref=e79]:
+                  - img
+                - generic [ref=e81]: To-do-Listen
+        - generic [ref=e82]:
+          - generic:
+            - listitem [ref=e84] [cursor=pointer]:
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - img
+                - generic [ref=e88]: Einstellungen
+            - listitem [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]:
+                - generic [ref=e92]:
+                  - img
+                - generic [ref=e94]: Benachrichtigungen
+            - listitem [ref=e96] [cursor=pointer]:
+              - generic [ref=e97]:
+                - generic [ref=e99]: t
+                - generic [ref=e101]: test
+  - iframe [ref=e105]:
+    - generic [ref=f1e5]:
+      - generic [ref=f1e8]:
+        - link "Zurück" [ref=f1e9] [cursor=pointer]:
+          - /url: /hassio/dashboard
+          - generic "Zurück" [ref=f1e12]:
+            - button "Zurück" [ref=f1e13]:
+              - generic [ref=f1e15]:
+                - img
+        - generic [ref=f1e16]:
+          - link "Informationen" [ref=f1e17] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/info
+            - tab "Informationen" [ref=f1e19]:
+              - generic [ref=f1e20]: Informationen
+          - link "Konfiguration" [ref=f1e21] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/config
+            - tab "Konfiguration" [ref=f1e23]:
+              - generic [ref=f1e24]: Konfiguration
+          - link "Protokoll" [ref=f1e25] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/logs
+            - tab "Protokoll" [selected] [ref=f1e27]:
+              - generic [ref=f1e28]: Protokoll
+      - generic [ref=f1e32]:
+        - generic [ref=f1e36]:
+          - generic: Protokolle durchsuchen
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - img
+          - textbox "Protokolle durchsuchen" [ref=f1e37]:
+            - /placeholder: ""
+        - generic [ref=f1e40]:
+          - generic:
+            - generic [ref=f1e41]:
+              - heading "Homeduino Bridge" [level=1] [ref=f1e42]
+              - generic [ref=f1e43]:
+                - generic "Protokolle herunterladen" [ref=f1e45]:
+                  - button "Protokolle herunterladen" [ref=f1e46] [cursor=pointer]:
+                    - generic [ref=f1e48]:
+                      - img
+                - generic "Volle Breite" [ref=f1e50]:
+                  - button "Volle Breite" [ref=f1e51] [cursor=pointer]:
+                    - generic [ref=f1e53]:
+                      - img
+                - generic [ref=f1e54]:
+                  - button [ref=f1e57] [cursor=pointer]:
+                    - generic [ref=f1e59]:
+                      - img
+                  - generic:
+                    - generic:
+                      - generic: HAOS-Starts einblenden
+            - generic [ref=f1e62]:
+              - generic [ref=f1e63]: "Raw: RF receive 480 980 1956 3900 0 0 0 0 01020102020101020201020101010101020201020102020202020202010102020101010203"
+              - generic [ref=f1e64]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.5},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e65]: "Raw: RF receive 496 968 1956 3892 0 0 0 0 01020102020101020201020101010101020201020102020202020202010102020101010203"
+              - generic [ref=f1e66]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.5},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e67]: "Raw: RF receive 496 968 1944 3888 0 0 0 0 01020102020101020201020101010101020201020102020202020202010102020101010203"
+              - generic [ref=f1e68]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.5},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e69]: "Raw: RF receive 484 1988 1020 3980 0 0 0 0 01010102020101010202010202020202010101020202010101010101020201020101010203"
+              - generic [ref=f1e70]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e71]: "Raw: RF receive 500 1972 1000 3984 0 0 0 0 01010102020101010202010202020202010101020202010101010101020201020101010203"
+              - generic [ref=f1e72]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e73]: "Raw: RF receive 492 968 1948 3912 0 0 0 0 01020102020201010201010101010101010201010201010202020202010201010201010103"
+              - generic [ref=f1e74]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.3},\"uid\":\"hd_weather2_hash_0201010103\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010103\"}]"
+              - generic [ref=f1e75]: "Raw: RF receive 496 968 1944 3896 0 0 0 0 01020102020201010201010101010101010201010201010202020202010211010201010103"
+              - generic [ref=f1e76]: "Raw: RF receive 492 968 1944 3896 0 0 0 0 01020102020201010201010101010101010201010201010202020202010201010201010103"
+              - generic [ref=f1e77]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.3},\"uid\":\"hd_weather2_hash_0201010103\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010103\"}]"
+              - generic [ref=f1e78]: "Raw: RF receive 320 2788 1244 10696 0 0 0 0 010002000202000200020002000002000200020002000202000200020002000200020000020200020002000200000202000200000200020200000200020002000203"
+              - generic [ref=f1e79]: "Emitted enriched signals: [{\"protocol\":\"switch1\",\"values\":{\"id\":15761142,\"all\":false,\"state\":true,\"unit\":0},\"uid\":\"hd_switch1_15761142\",\"topicBase\":\"homeduino/switch1/hd_switch1_15761142\"}]"
+              - generic [ref=f1e80]: "Raw: RF receive 320 2812 1248 10688 0 0 0 0 010002000202000200020002000002000200020002000202000200020002000200020000020200020002000200000202000200000200020200000200020002000203"
+              - generic [ref=f1e81]: "Emitted enriched signals: [{\"protocol\":\"switch1\",\"values\":{\"id\":15761142,\"all\":false,\"state\":true,\"unit\":0},\"uid\":\"hd_switch1_15761142\",\"topicBase\":\"homeduino/switch1/hd_switch1_15761142\"}]"
+              - generic [ref=f1e82]: "Sent command: RF send 4 4 268 1282 2632 10168 020001000101000100010001000001000100010001000101000100010001000100010000010100010001000100000101000100000100010001000100010001000103"
+              - generic [ref=f1e83]: "Raw: ERR argument_error"
+              - generic [ref=f1e84]: "Sent command: RF send 4 4 268 1282 2632 10168 020001000101000100010001000001000100010001000101000100010001000100010000010100010001000100000101000100000100010001000100010001000103"
+              - generic [ref=f1e85]: "Raw: ERR argument_error"
+              - generic [ref=f1e86]: "Sent command: RF send 4 4 268 1282 2632 10168 020001000101000100010001000001000100010001000101000100010001000100010000010100010001000100000101000100000100010001000100010001000103"
+              - generic [ref=f1e87]: "Raw: ERR argument_error"
+              - generic [ref=f1e88]: Sending Manual Discovery for undefined as "switch1 15761142"
+              - generic [ref=f1e89]: "Raw: RF receive 496 1000 1976 3984 0 0 0 0 01010202010202010101010201010101020201020102020102020202010102020201010203"
+              - generic [ref=f1e90]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.4},\"uid\":\"hd_weather2_hash_0201010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010203\"}]"
+              - generic [ref=f1e91]: "Raw: RF receive 496 1004 1980 3980 0 0 0 0 01010202010202010101010201010101020201020102020102020202010102020201010203"
+              - generic [ref=f1e92]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.4},\"uid\":\"hd_weather2_hash_0201010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010203\"}]"
+              - generic [ref=f1e93]: "Raw: RF receive 496 964 1940 3888 0 0 0 0 01020102020102020201010201010101020201020202010202020202010102010202010203"
+              - generic [ref=f1e94]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.1},\"uid\":\"hd_weather2_hash_0202010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0202010203\"}]"
+              - generic [ref=f1e95]: "Raw: RF receive 500 964 1940 3896 0 0 0 0 01020102020102020201010201010101020201020202010202020202010102010202010203"
+              - generic [ref=f1e96]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.1},\"uid\":\"hd_weather2_hash_0202010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0202010203\"}]"
+              - generic [ref=f1e97]: UI Client connected
+              - generic [ref=f1e98]: "Raw: RF receive 320 2820 1244 10692 0 0 0 0 010002000202000200020002000002000200020002000202000200020002000200020000020200020002000200000202000200000200020002000200020002000203"
+              - generic [ref=f1e99]: "Emitted enriched signals: [{\"protocol\":\"switch1\",\"values\":{\"id\":15761142,\"all\":false,\"state\":false,\"unit\":0},\"uid\":\"hd_switch1_15761142\",\"topicBase\":\"homeduino/switch1/hd_switch1_15761142\"}]"
+              - generic [ref=f1e100]: "Raw: RF receive 320 2788 1248 10688 0 0 0 0 010002000202000200020002000002000200020002000202000200020002000200020000020200020002000200000202000200000200020002000200020002000203"
+              - generic [ref=f1e101]: "Emitted enriched signals: [{\"protocol\":\"switch1\",\"values\":{\"id\":15761142,\"all\":false,\"state\":false,\"unit\":0},\"uid\":\"hd_switch1_15761142\",\"topicBase\":\"homeduino/switch1/hd_switch1_15761142\"}]"
+              - generic [ref=f1e102]: "Raw: RF receive 492 968 1944 3896 0 0 0 0 01020102020201010201010101010101010201010201010102020202010201010201010103"
+              - generic [ref=f1e103]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.2},\"uid\":\"hd_weather2_hash_0201010103\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010103\"}]"
+              - generic [ref=f1e104]: "Raw: RF receive 492 968 1948 3896 0 0 0 0 01020102020201010201010101010101010201010201010102020202010201010201010103"
+              - generic [ref=f1e105]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.2},\"uid\":\"hd_weather2_hash_0201010103\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010103\"}]"
+              - generic [ref=f1e106]: "Raw: RF receive 316 2792 1256 10700 0 0 0 0 010002000202000200020002000002000200020002000202000200020002000200020000020200020002000200000202000200000200020200000200020002000203"
+              - generic [ref=f1e107]: "Emitted enriched signals: [{\"protocol\":\"switch1\",\"values\":{\"id\":15761142,\"all\":false,\"state\":true,\"unit\":0},\"uid\":\"hd_switch1_15761142\",\"topicBase\":\"homeduino/switch1/hd_switch1_15761142\"}]"
+              - generic [ref=f1e108]: "Raw: RF receive 320 2792 1248 10688 0 0 0 0 010002000202000200020002000002000200020002000202000200020002000200020000020200020002000200000202000200000200020200000200020002000203"
+              - generic [ref=f1e109]: "Emitted enriched signals: [{\"protocol\":\"switch1\",\"values\":{\"id\":15761142,\"all\":false,\"state\":true,\"unit\":0},\"uid\":\"hd_switch1_15761142\",\"topicBase\":\"homeduino/switch1/hd_switch1_15761142\"}]"
+              - generic [ref=f1e110]: "Raw: RF receive 480 1020 1992 3988 0 0 0 0 01010101010101010101010101010101020202010102010102020202010102020102020203"
+              - generic [ref=f1e111]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.8},\"uid\":\"hd_weather2_hash_0102020203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0102020203\"}]"
+              - generic [ref=f1e112]: "Raw: RF receive 496 1000 1980 3984 0 0 0 0 01010101010101010101010101010101020202010102010102020202010102020102020203"
+              - generic [ref=f1e113]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.8},\"uid\":\"hd_weather2_hash_0102020203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0102020203\"}]"
+              - generic [ref=f1e114]: "Raw: RF receive 480 984 1956 3896 0 0 0 0 01020102020101020201020101010101020201020102020202020202010102020101010203"
+              - generic [ref=f1e115]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.5},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e116]: "Raw: RF receive 496 968 1956 3896 0 0 0 0 01020102020101020201020101010101020201020102020202020202010102020101010203"
+              - generic [ref=f1e117]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.5},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e118]: "Raw: RF receive 496 964 1944 3908 0 0 0 0 01020102020101020201020101010101020201020102020202020202010102020101010203"
+              - generic [ref=f1e119]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.5},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e120]: "Raw: RF receive 500 1972 1000 3984 0 0 0 0 01010102020101010202010202020202010101020202010101010101020201020101010203"
+              - generic [ref=f1e121]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e122]: "Raw: RF receive 500 1000 1976 3980 0 0 0 0 01010202010202010101010201010101020201020102020102020202010102020201010203"
+              - generic [ref=f1e123]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.4},\"uid\":\"hd_weather2_hash_0201010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010203\"}]"
+              - generic [ref=f1e124]: "Raw: RF receive 496 1000 1976 3984 0 0 0 0 01010202010202010101010201010101020201020102020102020202010102020201010203"
+              - generic [ref=f1e125]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.4},\"uid\":\"hd_weather2_hash_0201010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010203\"}]"
+              - generic [ref=f1e126]: "Raw: RF receive 480 980 1956 3892 0 0 0 0 01020102020102020201010201010101020201020202010202020202010102010202010203"
+              - generic [ref=f1e127]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.1},\"uid\":\"hd_weather2_hash_0202010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0202010203\"}]"
+              - generic [ref=f1e128]: "Raw: RF receive 496 964 1952 3900 0 0 0 0 01020102020102020201010201010101020201020202010202020202010102010202010203"
+              - generic [ref=f1e129]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.1},\"uid\":\"hd_weather2_hash_0202010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0202010203\"}]"
+              - generic [ref=f1e130]: "Raw: RF receive 496 968 1940 3892 0 0 0 0 01020102020102020201010201010101020201020202010202020202010102010202010203"
+              - generic [ref=f1e131]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.1},\"uid\":\"hd_weather2_hash_0202010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0202010203\"}]"
+              - generic [ref=f1e132]: "Raw: RF receive 496 968 1944 3896 0 0 0 0 01020102020201010201010101010101010201010201010102020202010201010201010103"
+              - generic [ref=f1e133]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.2},\"uid\":\"hd_weather2_hash_0201010103\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010103\"}]"
+              - generic [ref=f1e134]: "Raw: RF receive 492 984 1948 3896 0 0 0 0 01020102020201010201010101010101010201010201010102020202010201010201010103"
+              - generic [ref=f1e135]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.2},\"uid\":\"hd_weather2_hash_0201010103\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010103\"}]"
+              - generic [ref=f1e136]: "Raw: RF receive 492 968 1944 3908 0 0 0 0 01020102020201010201010101010101010201010201010102020202010201010201010103"
+              - generic [ref=f1e137]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.2},\"uid\":\"hd_weather2_hash_0201010103\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010103\"}]"
+              - generic [ref=f1e138]: "Raw: RF receive 500 1000 1976 3980 0 0 0 0 01010101010101010101010101010101020202010102010102020202010102020102020203"
+              - generic [ref=f1e139]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.8},\"uid\":\"hd_weather2_hash_0102020203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0102020203\"}]"
+              - generic [ref=f1e140]: "Raw: RF receive 496 964 1940 3896 0 0 0 0 01020102020101020201020101010101020201020102020202020202010102020101010203"
+              - generic [ref=f1e141]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.5},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e142]: "Raw: RF receive 496 968 1944 3888 0 0 0 0 01020102020101020201020101010101020201020102020202020202010102020101010203"
+              - generic [ref=f1e143]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.5},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e144]: "Raw: RF receive 500 1972 1000 3980 0 0 0 0 01010102020101010202010202020202010101020202010101010101020201020101010203"
+              - generic [ref=f1e145]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e146]: "Raw: RF receive 500 1976 1000 3976 0 0 0 0 01010102020101010202010202020202010101020202010101010101020201020101010203"
+              - generic [ref=f1e147]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7},\"uid\":\"hd_weather2_hash_0101010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0101010203\"}]"
+              - generic [ref=f1e148]: "Raw: RF receive 492 968 1944 3912 0 0 0 0 01020102020201010201010101010101010201010201010102020202010201010201010103"
+              - generic [ref=f1e149]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.2},\"uid\":\"hd_weather2_hash_0201010103\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010103\"}]"
+              - generic [ref=f1e150]: "Raw: RF receive 492 980 1944 3896 0 0 0 0 01020102020201010201010101010101010201010201010102020202010201010201010103"
+              - generic [ref=f1e151]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.2},\"uid\":\"hd_weather2_hash_0201010103\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010103\"}]"
+              - generic [ref=f1e152]: "Raw: RF receive 492 968 1948 3908 0 0 0 0 01020102020201010201010101010101010201010201010102020202010201010201010103"
+              - generic [ref=f1e153]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.2},\"uid\":\"hd_weather2_hash_0201010103\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010103\"}]"
+              - generic [ref=f1e154]: "Raw: RF receive 496 1000 1976 3980 0 0 0 0 01010202010202010101010201010101020201020102020102020202010102020201010203"
+              - generic [ref=f1e155]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.4},\"uid\":\"hd_weather2_hash_0201010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0201010203\"}]"
+              - generic [ref=f1e156]: "Raw: RF receive 496 1000 1976 3980 0 0 0 0 01010101010101010101010101010101020202010102010102020202010102020102020203"
+              - generic [ref=f1e157]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.8},\"uid\":\"hd_weather2_hash_0102020203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0102020203\"}]"
+              - generic [ref=f1e158]: "Raw: RF receive 496 968 1940 3900 0 0 0 0 01020102020102020201010201010101020201020202010202020202010102010202010203"
+              - generic [ref=f1e159]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.1},\"uid\":\"hd_weather2_hash_0202010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0202010203\"}]"
+              - generic [ref=f1e160]: "Raw: RF receive 496 964 1944 3896 0 0 0 0 01020102020102020201010201010101020201020202010202020202010102010202010203"
+              - generic [ref=f1e161]: "Emitted enriched signals: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.1},\"uid\":\"hd_weather2_hash_0202010203\",\"topicBase\":\"homeduino/weather2/hd_weather2_hash_0202010203\"}]"
+              - generic [ref=f1e162]: Sending Manual Discovery for undefined as "Wohnzimmer Sensor"
+            - button "Neue Protokolle – Zum Scrollen klicken" [ref=f1e163] [cursor=pointer]:
+              - generic:
+                - generic:
+                  - img
+              - generic [ref=f1e164]: Neue Protokolle – Zum Scrollen klicken
+              - generic:
+                - generic:
+                  - img
+            - generic [ref=f1e165]:
+              - generic [ref=f1e166]:
+                - img
+              - text: Live

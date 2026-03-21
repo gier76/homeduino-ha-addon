@@ -1,0 +1,668 @@
+- generic [active] [ref=e2]:
+  - generic [ref=e4]:
+    - complementary [ref=e5]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - generic "Seitenleiste umschalten" [ref=e10]:
+            - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+              - generic [ref=e13]:
+                - img
+          - generic [ref=e14]: Home Assistant
+        - generic [ref=e15]:
+          - generic [ref=e17]:
+            - generic:
+              - listitem [ref=e19] [cursor=pointer]:
+                - generic [ref=e20]:
+                  - generic [ref=e22]:
+                    - img
+                  - generic [ref=e24]: Übersicht
+              - listitem [ref=e26] [cursor=pointer]:
+                - generic [ref=e27]:
+                  - generic [ref=e28]:
+                    - img
+                  - generic [ref=e30]: Energie
+              - listitem [ref=e32] [cursor=pointer]:
+                - generic [ref=e33]:
+                  - generic [ref=e34]:
+                    - img
+                  - generic [ref=e36]: Aktivität
+              - listitem [ref=e38] [cursor=pointer]:
+                - generic [ref=e39]:
+                  - generic [ref=e40]:
+                    - img
+                  - generic [ref=e42]: Verlauf
+              - listitem [ref=e44] [cursor=pointer]:
+                - generic [ref=e45]:
+                  - generic [ref=e47]:
+                    - img
+                  - generic [ref=e49]: Homeduino Bridge
+              - listitem [ref=e51] [cursor=pointer]:
+                - generic [ref=e52]:
+                  - generic [ref=e53]:
+                    - img
+                  - generic [ref=e55]: Medien
+              - listitem [ref=e57] [cursor=pointer]:
+                - generic [ref=e58]:
+                  - generic [ref=e60]:
+                    - img
+                  - generic [ref=e62]: MQTT Explorer
+              - listitem [ref=e64] [cursor=pointer]:
+                - generic [ref=e65]:
+                  - generic [ref=e67]:
+                    - img
+                  - generic [ref=e69]: Terminal
+              - listitem [ref=e71] [cursor=pointer]:
+                - generic [ref=e72]:
+                  - generic [ref=e73]:
+                    - img
+                  - generic [ref=e75]: To-do-Listen
+          - generic [ref=e76]:
+            - generic:
+              - listitem [ref=e78] [cursor=pointer]:
+                - generic [ref=e79]:
+                  - generic [ref=e80]:
+                    - img
+                  - generic [ref=e82]: Einstellungen
+              - listitem [ref=e84] [cursor=pointer]:
+                - generic [ref=e85]:
+                  - generic [ref=e86]:
+                    - img
+                  - generic [ref=e88]: Benachrichtigungen
+              - listitem [ref=e90] [cursor=pointer]:
+                - generic [ref=e91]:
+                  - generic [ref=e93]: t
+                  - generic [ref=e95]: test
+    - iframe [ref=e99]:
+      - generic [ref=f8e7]:
+        - generic [ref=f8e9]:
+          - generic "Zurück" [ref=f8e12]:
+            - button "Zurück" [ref=f8e13] [cursor=pointer]:
+              - generic [ref=f8e15]:
+                - img
+          - generic [ref=f8e17]: Add-on Store
+          - generic [ref=f8e18]:
+            - generic "Menü" [ref=f8e21]:
+              - button "Menü" [ref=f8e22] [cursor=pointer]:
+                - generic [ref=f8e24]:
+                  - img
+            - generic:
+              - generic:
+                - generic: Nach Updates suchen
+                - generic: Repositories
+                - generic: Einträge
+        - generic [ref=f8e25]:
+          - generic:
+            - generic [ref=f8e29]:
+              - generic: Durchsuchen
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img
+              - textbox "Durchsuchen" [ref=f8e30]:
+                - /placeholder: ""
+            - generic [ref=f8e32]:
+              - heading "Official apps" [level=1] [ref=f8e33]
+              - generic [ref=f8e34]:
+                - generic [ref=f8e37] [cursor=pointer]:
+                  - generic "Add-on ist nicht installiert" [ref=f8e38]:
+                    - img
+                  - generic [ref=f8e39]:
+                    - generic [ref=f8e40]: Assist Microphone
+                    - generic [ref=f8e41]: Use Assist with local microphone
+                - generic [ref=f8e44] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e45]
+                  - generic [ref=f8e46]:
+                    - generic [ref=f8e47]: CEC Scanner
+                    - generic [ref=f8e48]: Scan for HDMI CEC devices
+                - generic [ref=f8e51] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e52]
+                  - generic [ref=f8e53]:
+                    - generic [ref=f8e54]: deCONZ
+                    - generic [ref=f8e55]: Control a Zigbee network with ConBee or RaspBee by dresden elektronik
+                - generic [ref=f8e58] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e59]
+                  - generic [ref=f8e60]:
+                    - generic [ref=f8e61]: Dnsmasq
+                    - generic [ref=f8e62]: A simple DNS server
+                - generic [ref=f8e65] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e66]
+                  - generic [ref=f8e67]:
+                    - generic [ref=f8e68]: Duck DNS
+                    - generic [ref=f8e69]: Free Dynamic DNS (DynDNS or DDNS) service with Let's Encrypt support
+                - generic [ref=f8e72] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e73]
+                  - generic [ref=f8e74]:
+                    - generic [ref=f8e75]: File editor
+                    - generic [ref=f8e76]: Simple browser-based file editor for Home Assistant
+                - generic [ref=f8e79] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e80]
+                  - generic [ref=f8e81]:
+                    - generic [ref=f8e82]: Git pull
+                    - generic [ref=f8e83]: Simple git pull to update the local configuration
+                - generic [ref=f8e86] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e594]
+                  - generic [ref=f8e87]:
+                    - generic [ref=f8e88]: Let's Encrypt
+                    - generic [ref=f8e89]: Manage certificate from Let's Encrypt
+                - generic [ref=f8e92] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e93]
+                  - generic [ref=f8e94]:
+                    - generic [ref=f8e95]: MariaDB
+                    - generic [ref=f8e96]: A SQL database server
+                - generic [ref=f8e99] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e595]
+                  - generic [ref=f8e100]:
+                    - generic [ref=f8e101]: Matter Server
+                    - generic [ref=f8e102]: Matter WebSocket Server for Home Assistant Matter support.
+                - generic [ref=f8e105] [cursor=pointer]:
+                  - img "Add-on ist installiert" [ref=f8e596]
+                  - generic [ref=f8e107]:
+                    - generic [ref=f8e108]: Mosquitto broker
+                    - generic [ref=f8e109]: An Open Source MQTT broker
+                - generic [ref=f8e112] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e113]
+                  - generic [ref=f8e114]:
+                    - generic [ref=f8e115]: NGINX Home Assistant SSL proxy
+                    - generic [ref=f8e116]: An SSL/TLS proxy
+                - generic [ref=f8e119] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e597]
+                  - generic [ref=f8e120]:
+                    - generic [ref=f8e121]: OpenThread Border Router
+                    - generic [ref=f8e122]: OpenThread Border Router add-on
+                - generic [ref=f8e125] [cursor=pointer]:
+                  - generic "Add-on ist nicht installiert" [ref=f8e126]:
+                    - img
+                  - generic [ref=f8e127]:
+                    - generic [ref=f8e128]: openWakeWord
+                    - generic [ref=f8e129]: openWakeWord using the Wyoming protocol
+                - generic [ref=f8e132] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e598]
+                  - generic [ref=f8e133]:
+                    - generic [ref=f8e134]: Piper
+                    - generic [ref=f8e135]: Text-to-speech with Piper
+                - generic [ref=f8e138] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e599]
+                  - generic [ref=f8e139]:
+                    - generic [ref=f8e140]: RPC Shutdown
+                    - generic [ref=f8e141]: Shutdown Windows machines remotely
+                - generic [ref=f8e144] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e600]
+                  - generic [ref=f8e145]:
+                    - generic [ref=f8e146]: Samba share
+                    - generic [ref=f8e147]: Expose Home Assistant folders with SMB/CIFS
+                - generic [ref=f8e150] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e601]
+                  - generic [ref=f8e151]:
+                    - generic [ref=f8e152]: Silicon Labs Flasher
+                    - generic [ref=f8e153]: Silicon Labs firmware flasher add-on
+                - generic [ref=f8e156] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e602]
+                  - generic [ref=f8e157]:
+                    - generic [ref=f8e158]: Silicon Labs Multiprotocol [deprecated]
+                    - generic [ref=f8e159]: Zigbee and OpenThread multiprotocol add-on
+                - generic [ref=f8e162] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e603]
+                  - generic [ref=f8e163]:
+                    - generic [ref=f8e164]: Speech-to-Phrase
+                    - generic [ref=f8e165]: Fast and personalized local speech-to-text
+                - generic [ref=f8e168] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e604]
+                  - generic [ref=f8e169]:
+                    - generic [ref=f8e170]: Terminal & SSH
+                    - generic [ref=f8e171]: Allow logging in remotely to Home Assistant using SSH
+                - generic [ref=f8e174] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e605]
+                  - generic [ref=f8e175]:
+                    - generic [ref=f8e176]: VLC
+                    - generic [ref=f8e177]: Turn your device into a Media Player with VLC
+                - generic [ref=f8e180] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e606]
+                  - generic [ref=f8e181]:
+                    - generic [ref=f8e182]: Whisper
+                    - generic [ref=f8e183]: Speech-to-text with Whisper
+                - generic [ref=f8e186] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e607]
+                  - generic [ref=f8e187]:
+                    - generic [ref=f8e188]: Z-Wave JS
+                    - generic [ref=f8e189]: Control a Z-Wave network with Home Assistant Z-Wave JS
+            - generic [ref=f8e191]:
+              - heading "ESPHome" [level=1] [ref=f8e192]
+              - generic [ref=f8e193]:
+                - generic [ref=f8e196] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e608]
+                  - generic [ref=f8e197]:
+                    - generic [ref=f8e198]: ESPHome Device Builder
+                    - generic [ref=f8e199]: Build your own smart home devices using ESPHome, no programming experience required
+                - generic [ref=f8e202] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e609]
+                  - generic [ref=f8e203]:
+                    - generic [ref=f8e204]: ESPHome Device Builder (beta)
+                    - generic [ref=f8e205]: Beta version of ESPHome Device Builder
+                - generic [ref=f8e208] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e610]
+                  - generic [ref=f8e209]:
+                    - generic [ref=f8e210]: ESPHome Device Builder (dev)
+                    - generic [ref=f8e211]: Development version of ESPHome Device Builder
+            - generic [ref=f8e213]:
+              - heading "Gier76 Homeduino Repository" [level=1] [ref=f8e214]
+              - generic [ref=f8e218] [cursor=pointer]:
+                - generic "Add-on ist installiert" [ref=f8e220]:
+                  - img
+                - generic [ref=f8e221]:
+                  - generic [ref=f8e222]: Homeduino Bridge
+                  - generic [ref=f8e223]: Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling
+            - generic [ref=f8e225]:
+              - heading "Gollum add-on repository for Home Assistant" [level=1] [ref=f8e226]
+              - generic [ref=f8e227]:
+                - generic [ref=f8e230] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e611]
+                  - generic [ref=f8e231]:
+                    - generic [ref=f8e232]: Aldes 2 MQTT
+                    - generic [ref=f8e233]: Aldes 2 MQTT is a wrapper for send data on Aldes API to MQTT broker.
+                - generic [ref=f8e236] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e612]
+                  - generic [ref=f8e237]:
+                    - generic [ref=f8e238]: Google Find My Tools
+                    - generic [ref=f8e239]: An implementation of web version for Google Find My Tools python script..
+                - generic [ref=f8e242] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e613]
+                  - generic [ref=f8e243]:
+                    - generic [ref=f8e244]: HA Second Core
+                    - generic [ref=f8e245]: Run a second home assistante core on port 8124 by default.
+                - generic [ref=f8e248] [cursor=pointer]:
+                  - img "Add-on ist installiert" [ref=f8e614]
+                  - generic [ref=f8e250]:
+                    - generic [ref=f8e251]: MQTT Explorer
+                    - generic [ref=f8e252]: MQTT Explorer is a comprehensive MQTT client that provides a structured overview of your MQTT topics and makes working with devices/services on your broker dead-simple.
+                - generic [ref=f8e255] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e615]
+                  - generic [ref=f8e256]:
+                    - generic [ref=f8e257]: Open Media Vault 2 MQTT
+                    - generic [ref=f8e258]: Open Media Vault 2 MQTT is a wrapper for send data on Open Media Vault to MQTT broker.
+                - generic [ref=f8e261] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e616]
+                  - generic [ref=f8e262]:
+                    - generic [ref=f8e263]: OpenThread Border Router (Network device)
+                    - generic [ref=f8e264]: OpenThread Border Router add-on for network device.
+                - generic [ref=f8e267] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e617]
+                  - generic [ref=f8e268]:
+                    - generic [ref=f8e269]: Synology Download Station 2 MQTT
+                    - generic [ref=f8e270]: Synology Download Station 2 MQTT is a wrapper for send data on Synology Download Station to MQTT broker.
+            - generic [ref=f8e272]:
+              - heading "Home Assistant Community Apps" [level=1] [ref=f8e273]
+              - generic [ref=f8e274]:
+                - generic [ref=f8e277] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e618]
+                  - generic [ref=f8e278]:
+                    - generic [ref=f8e279]: AdGuard Home
+                    - generic [ref=f8e280]: Network-wide ads & trackers blocking DNS server
+                - generic [ref=f8e283] [cursor=pointer]:
+                  - img "Add-on ist installiert" [ref=f8e619]
+                  - generic [ref=f8e285]:
+                    - generic [ref=f8e286]: Advanced SSH & Web Terminal
+                    - generic [ref=f8e287]: A supercharged SSH & Web Terminal access to your Home Assistant instance
+                - generic [ref=f8e290] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e620]
+                  - generic [ref=f8e291]:
+                    - generic [ref=f8e292]: AirCast
+                    - generic [ref=f8e293]: AirPlay capabilities for your Chromecast devices.
+                - generic [ref=f8e296] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e621]
+                  - generic [ref=f8e297]:
+                    - generic [ref=f8e298]: AirSonos
+                    - generic [ref=f8e299]: AirPlay capabilities for your Sonos (and UPnP) devices.
+                - generic [ref=f8e302] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e622]
+                  - generic [ref=f8e303]:
+                    - generic [ref=f8e304]: AppDaemon
+                    - generic [ref=f8e305]: Python Apps and Dashboard using AppDaemon 4.x for Home Assistant
+                - generic [ref=f8e308] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e623]
+                  - generic [ref=f8e309]:
+                    - generic [ref=f8e310]: Bazarr
+                    - generic [ref=f8e311]: Download and manage subtitles for Sonarr and Radarr
+                - generic [ref=f8e314] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e624]
+                  - generic [ref=f8e315]:
+                    - generic [ref=f8e316]: Bookstack
+                    - generic [ref=f8e317]: Simple & Free Wiki Software
+                - generic [ref=f8e320] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e625]
+                  - generic [ref=f8e321]:
+                    - generic [ref=f8e322]: chrony
+                    - generic [ref=f8e323]: A local NTP (Network Time Protocol) server for cameras etc.
+                - generic [ref=f8e326] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e626]
+                  - generic [ref=f8e327]:
+                    - generic [ref=f8e328]: EMQX
+                    - generic [ref=f8e329]: The most scalable open-source MQTT broker for IoT. An alternative for the Mosquitto add-on
+                - generic [ref=f8e332] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e627]
+                  - generic [ref=f8e333]:
+                    - generic [ref=f8e334]: Example
+                    - generic [ref=f8e335]: Example app by Home Assistant Community Apps
+                - generic [ref=f8e338] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e628]
+                  - generic [ref=f8e339]:
+                    - generic [ref=f8e340]: Folding@home
+                    - generic [ref=f8e341]: Fighting disease with a world wide distributed super computer
+                - generic [ref=f8e344] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e629]
+                  - generic [ref=f8e345]:
+                    - generic [ref=f8e346]: FTP
+                    - generic [ref=f8e347]: A secure and fast FTP server for Home Assistant
+                - generic [ref=f8e350] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e630]
+                  - generic [ref=f8e351]:
+                    - generic [ref=f8e352]: Glances
+                    - generic [ref=f8e353]: A cross-platform system monitoring tool
+                - generic [ref=f8e356] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e631]
+                  - generic [ref=f8e357]:
+                    - generic [ref=f8e358]: Grafana
+                    - generic [ref=f8e359]: The open platform for beautiful analytics and monitoring
+                - generic [ref=f8e362] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e632]
+                  - generic [ref=f8e363]:
+                    - generic [ref=f8e364]: Grocy
+                    - generic [ref=f8e365]: ERP beyond your fridge! A groceries & household management solution for your home
+                - generic [ref=f8e368] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e633]
+                  - generic [ref=f8e369]:
+                    - generic [ref=f8e370]: InfluxDB
+                    - generic [ref=f8e371]: Scalable datastore for metrics, events, and real-time analytics
+                - generic [ref=f8e374] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e634]
+                  - generic [ref=f8e375]:
+                    - generic [ref=f8e376]: JupyterLab
+                    - generic [ref=f8e377]: Create documents containing live code, equations, visualizations, and explanatory text
+                - generic [ref=f8e380] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e635]
+                  - generic [ref=f8e381]:
+                    - generic [ref=f8e382]: Lidarr
+                    - generic [ref=f8e383]: Looks and smells like Sonarr but made for music
+                - generic [ref=f8e386] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e636]
+                  - generic [ref=f8e387]:
+                    - generic [ref=f8e388]: Log Viewer
+                    - generic [ref=f8e389]: Browser-based log utility for Home Assistant
+                - generic [ref=f8e392] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e637]
+                  - generic [ref=f8e393]:
+                    - generic [ref=f8e394]: motionEye
+                    - generic [ref=f8e395]: Simple, elegant and feature-rich CCTV/NVR for your cameras
+                - generic [ref=f8e398] [cursor=pointer]:
+                  - generic "Add-on ist nicht installiert" [ref=f8e399]:
+                    - img
+                  - generic [ref=f8e400]:
+                    - generic [ref=f8e401]: MQTT IO
+                    - generic [ref=f8e402]: Expose GPIO modules and digital sensors via MQTT for remote control and monitoring.
+                - generic [ref=f8e405] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e638]
+                  - generic [ref=f8e406]:
+                    - generic [ref=f8e407]: Network UPS Tools
+                    - generic [ref=f8e408]: Manage battery backup (UPS) devices
+                - generic [ref=f8e411] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e639]
+                  - generic [ref=f8e412]:
+                    - generic [ref=f8e413]: Nginx Proxy Manager
+                    - generic [ref=f8e414]: Manage Nginx proxy hosts with a simple, powerful interface
+                - generic [ref=f8e417] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e640]
+                  - generic [ref=f8e418]:
+                    - generic [ref=f8e419]: Node-RED
+                    - generic [ref=f8e420]: Flow-based programming for the Internet of Things
+                - generic [ref=f8e423] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e641]
+                  - generic [ref=f8e424]:
+                    - generic [ref=f8e425]: Overseerr
+                    - generic [ref=f8e426]: Request management and media discovery tool for the Plex ecosystem
+                - generic [ref=f8e429] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e642]
+                  - generic [ref=f8e430]:
+                    - generic [ref=f8e431]: phpMyAdmin
+                    - generic [ref=f8e432]: A web interface for the official MariaDB add-on
+                - generic [ref=f8e435] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e643]
+                  - generic [ref=f8e436]:
+                    - generic [ref=f8e437]: Plex Media Server
+                    - generic [ref=f8e438]: Recorded media, live TV, online news, and podcasts ready to stream.
+                - generic [ref=f8e441] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e644]
+                  - generic [ref=f8e442]:
+                    - generic [ref=f8e443]: Prowlarr
+                    - generic [ref=f8e444]: Indexer manager/proxy built on the popular arr stack to integrate with your various PVR apps
+                - generic [ref=f8e447] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e645]
+                  - generic [ref=f8e448]:
+                    - generic [ref=f8e449]: Radarr
+                    - generic [ref=f8e450]: Movie organizer/manager for usenet and torrent users
+                - generic [ref=f8e453] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e646]
+                  - generic [ref=f8e454]:
+                    - generic [ref=f8e455]: SABnzbd
+                    - generic [ref=f8e456]: Free and easy binary newsreader
+                - generic [ref=f8e459] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e647]
+                  - generic [ref=f8e460]:
+                    - generic [ref=f8e461]: Sonarr
+                    - generic [ref=f8e462]: Smart PVR for newsgroup and bittorrent users
+                - generic [ref=f8e465] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e648]
+                  - generic [ref=f8e466]:
+                    - generic [ref=f8e467]: Spotify Connect
+                    - generic [ref=f8e468]: Play Spotify music on your Home Assistant device
+                - generic [ref=f8e471] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e649]
+                  - generic [ref=f8e472]:
+                    - generic [ref=f8e473]: SQLite Web
+                    - generic [ref=f8e474]: Explore your SQLite database
+                - generic [ref=f8e477] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e650]
+                  - generic [ref=f8e478]:
+                    - generic [ref=f8e479]: Studio Code Server
+                    - generic [ref=f8e480]: Fully featured Visual Studio Code (VSCode) experience integrated in the Home Assistant frontend.
+                - generic [ref=f8e483] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e651]
+                  - generic [ref=f8e484]:
+                    - generic [ref=f8e485]: Tailscale
+                    - generic [ref=f8e486]: Zero config VPN for building secure networks
+                - generic [ref=f8e489] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e652]
+                  - generic [ref=f8e490]:
+                    - generic [ref=f8e491]: TasmoAdmin
+                    - generic [ref=f8e492]: Centrally manage all your Sonoff-Tasmota devices
+                - generic [ref=f8e495] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e653]
+                  - generic [ref=f8e496]:
+                    - generic [ref=f8e497]: Tautulli
+                    - generic [ref=f8e498]: Monitoring and tracking tool for Plex Media Server
+                - generic [ref=f8e501] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e654]
+                  - generic [ref=f8e502]:
+                    - generic [ref=f8e503]: The Lounge
+                    - generic [ref=f8e504]: A self-hosted web IRC client
+                - generic [ref=f8e507] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e655]
+                  - generic [ref=f8e508]:
+                    - generic [ref=f8e509]: Tor
+                    - generic [ref=f8e510]: Protect your privacy and access Home Assistant via Tor
+                - generic [ref=f8e513] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e656]
+                  - generic [ref=f8e514]:
+                    - generic [ref=f8e515]: Traccar
+                    - generic [ref=f8e516]: Modern GPS Tracking Platform
+                - generic [ref=f8e519] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e657]
+                  - generic [ref=f8e520]:
+                    - generic [ref=f8e521]: UniFi Network Application
+                    - generic [ref=f8e522]: Manage your UniFi network using a web browser
+                - generic [ref=f8e525] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e658]
+                  - generic [ref=f8e526]:
+                    - generic [ref=f8e527]: Uptime Kuma
+                    - generic [ref=f8e528]: It is a self-hosted monitoring tool like "Uptime Robot"
+                - generic [ref=f8e531] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e659]
+                  - generic [ref=f8e532]:
+                    - generic [ref=f8e533]: Vaultwarden
+                    - generic [ref=f8e534]: Open source password management solution
+                - generic [ref=f8e537] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e660]
+                  - generic [ref=f8e538]:
+                    - generic [ref=f8e539]: Whisparr
+                    - generic [ref=f8e540]: Whisparr is an adult video collection manager for Usenet and BitTorrent users
+                - generic [ref=f8e543] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e661]
+                  - generic [ref=f8e544]:
+                    - generic [ref=f8e545]: WireGuard
+                    - generic [ref=f8e546]: Fast, modern, secure VPN tunnel
+                - generic [ref=f8e549] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e662]
+                  - generic [ref=f8e550]:
+                    - generic [ref=f8e551]: Z-Wave JS UI
+                    - generic [ref=f8e552]: Fully configurable Z-Wave JS gateway and control panel
+                - generic [ref=f8e555] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e663]
+                  - generic [ref=f8e556]:
+                    - generic [ref=f8e557]: ZeroTier One
+                    - generic [ref=f8e558]: Radically simplify your network with a virtual networking layer that works the same everywhere
+            - generic [ref=f8e560]:
+              - heading "Music Assistant" [level=1] [ref=f8e561]
+              - generic [ref=f8e562]:
+                - generic [ref=f8e565] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e664]
+                  - generic [ref=f8e566]:
+                    - generic [ref=f8e567]: Music Assistant
+                    - generic [ref=f8e568]: The Music Assistant server is a free, opensource Media library manager that connects to your streaming services and a wide range of connected speakers.
+                - generic [ref=f8e571] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e665]
+                  - generic [ref=f8e572]:
+                    - generic [ref=f8e573]: Music Assistant (BETA)
+                    - generic [ref=f8e574]: BETA version of the Music Assistant Server.
+                - generic [ref=f8e577] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e666]
+                  - generic [ref=f8e578]:
+                    - generic [ref=f8e579]: Music Assistant (NIGHTLY)
+                    - generic [ref=f8e580]: NIGHTLY version of Music Assistant. Install this version if you want to keep up with the latest bleeding edge development of Music Assistant! Use it at your own risk, it might not be recommended for daily/production use because it can be unstable.
+                - generic [ref=f8e583] [cursor=pointer]:
+                  - img "Add-on ist nicht installiert" [ref=f8e667]
+                  - generic [ref=f8e584]:
+                    - generic [ref=f8e585]: Music Assistant DEV SERVER
+                    - generic [ref=f8e586]: Development add-on for Music Assistant. For developers only.
+                - generic [ref=f8e589] [cursor=pointer]:
+                  - generic "Add-on ist nicht installiert" [ref=f8e590]:
+                    - img
+                  - generic [ref=f8e591]:
+                    - generic [ref=f8e592]: YT Music PO Token Generator
+                    - generic [ref=f8e593]: A HA addon wrapper for the BgUtils POT Provider that can generate PO tokens for Youtube Music.
+  - generic:
+    - generic "Home Assistant durchsuchen":
+      - dialog [ref=e100]:
+        - generic [ref=e106]:
+          - generic [ref=e108]:
+            - generic: Home Assistant durchsuchen
+            - textbox "Home Assistant durchsuchen" [ref=e109]:
+              - /placeholder: ""
+          - generic [ref=e110]:
+            - generic:
+              - button "Navigation" [ref=e113] [cursor=pointer]:
+                - generic [ref=e115]: Navigation
+              - button "Befehle" [ref=e120] [cursor=pointer]:
+                - generic [ref=e122]: Befehle
+              - button "Entitäten" [ref=e127] [cursor=pointer]:
+                - generic [ref=e129]: Entitäten
+              - button "Geräte" [pressed] [ref=e133] [cursor=pointer]:
+                - img [ref=e136]
+                - generic [ref=e139]: Geräte
+              - button "Bereiche" [ref=e143] [cursor=pointer]:
+                - generic [ref=e145]: Bereiche
+          - generic [ref=e147]: Geräte
+          - generic [ref=e149]:
+            - listitem [ref=e152] [cursor=pointer]:
+              - generic [ref=e153]:
+                - generic [ref=e156]: Advanced SSH & Web Terminal
+                - generic [ref=e157]: Home Assistant Supervisor
+            - listitem [ref=e160] [cursor=pointer]:
+              - generic [ref=e161]:
+                - generic [ref=e164]: Backup
+                - generic [ref=e165]: Backup
+            - listitem [ref=e168] [cursor=pointer]:
+              - generic [ref=e169]:
+                - generic [ref=e172]: Google Übersetzer en com
+                - generic [ref=e173]: Google Translate text-to-speech
+            - listitem [ref=e176] [cursor=pointer]:
+              - generic [ref=e177]:
+                - generic [ref=e180]: Home Assistant Core
+                - generic [ref=e181]: Home Assistant Supervisor
+            - listitem [ref=e184] [cursor=pointer]:
+              - generic [ref=e185]:
+                - generic [ref=e188]: Home Assistant Host
+                - generic [ref=e189]: Home Assistant Supervisor
+            - listitem [ref=e192] [cursor=pointer]:
+              - generic [ref=e193]:
+                - generic [ref=e196]: Home Assistant Operating System
+                - generic [ref=e197]: Home Assistant Supervisor
+            - listitem [ref=e200] [cursor=pointer]:
+              - generic [ref=e201]:
+                - generic [ref=e204]: Home Assistant Supervisor
+                - generic [ref=e205]: Home Assistant Supervisor
+            - listitem [ref=e208] [cursor=pointer]:
+              - generic [ref=e209]:
+                - generic [ref=e212]: Homeduino Bridge
+                - generic [ref=e213]: Home Assistant Supervisor
+            - listitem [ref=e216] [cursor=pointer]:
+              - generic [ref=e217]:
+                - generic [ref=e220]: Mosquitto broker
+                - generic [ref=e221]: Home Assistant Supervisor
+            - listitem [ref=e224] [cursor=pointer]:
+              - generic [ref=e225]:
+                - generic [ref=e228]: MQTT Explorer
+                - generic [ref=e229]: Home Assistant Supervisor
+            - listitem [ref=e232] [cursor=pointer]:
+              - generic [ref=e233]:
+                - generic [ref=e235]:
+                  - img
+                - generic [ref=e237]: Sun
+                - generic [ref=e238]: Sonne
+        - contentinfo
+  - status [ref=e105]: Kein passender My Link für /hassio/store gefunden
+  - dialog [ref=e240]:
+    - generic [ref=e241]:
+      - generic:
+        - banner [ref=e243]:
+          - generic [ref=e244]:
+            - generic "Schließen" [ref=e247]:
+              - button "Schließen" [ref=e248] [cursor=pointer]:
+                - generic [ref=e250]:
+                  - img
+            - generic [ref=e253]:
+              - text: Assist
+              - generic [ref=e254]:
+                - generic:
+                  - button "Home Assistant" [ref=e256] [cursor=pointer]:
+                    - generic [ref=e257]: Home Assistant
+                    - generic:
+                      - generic:
+                        - img
+                  - generic:
+                    - generic: Home Assistant
+                    - generic: Assistenten verwalten
+            - generic "Hilfe" [ref=e260]:
+              - link "Hilfe" [ref=e261] [cursor=pointer]:
+                - /url: https://www.home-assistant.io/docs/assist/
+                - generic [ref=e263]:
+                  - img
+        - generic [ref=e266]:
+          - paragraph [ref=e271]: Wie kann ich behilflich sein?
+          - generic [ref=e274]:
+            - generic: Gib eine Anfrage ein
+            - textbox "Gib eine Anfrage ein" [ref=e275]:
+              - /placeholder: ""
+            - generic "Text senden" [ref=e279] [cursor=pointer]:
+              - button "Text senden" [ref=e280]:
+                - generic [ref=e282]:
+                  - img
+    - contentinfo

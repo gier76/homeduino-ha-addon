@@ -1,0 +1,238 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic "Seitenleiste umschalten" [ref=e10]:
+          - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+            - generic [ref=e13]:
+              - img
+        - generic [ref=e14]: Home Assistant
+      - generic [ref=e15]:
+        - generic [ref=e17]:
+          - generic:
+            - listitem [ref=e19] [cursor=pointer]:
+              - generic [ref=e20]:
+                - generic [ref=e22]:
+                  - img
+                - generic [ref=e24]: Übersicht
+            - listitem [ref=e26] [cursor=pointer]:
+              - generic [ref=e27]:
+                - generic [ref=e28]:
+                  - img
+                - generic [ref=e30]: Energie
+            - listitem [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]:
+                - generic [ref=e34]:
+                  - img
+                - generic [ref=e36]: Aktivität
+            - listitem [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - img
+                - generic [ref=e42]: Verlauf
+            - listitem [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]:
+                - generic [ref=e47]:
+                  - img
+                - generic [ref=e49]: Homeduino Bridge
+            - listitem [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]:
+                - generic [ref=e53]:
+                  - img
+                - generic [ref=e55]: Medien
+            - listitem [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: MQTT Explorer
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: Terminal
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: To-do-Listen
+        - generic [ref=e76]:
+          - generic:
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e80]:
+                  - img
+                - generic [ref=e82]: Einstellungen
+            - listitem [ref=e84] [cursor=pointer]:
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - img
+                - generic [ref=e88]: Benachrichtigungen
+            - listitem [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]:
+                - generic [ref=e93]: t
+                - generic [ref=e95]: test
+  - iframe [ref=e99]:
+    - generic [ref=f4e17]:
+      - generic [ref=f4e20]:
+        - link "Zurück" [ref=f4e21] [cursor=pointer]:
+          - /url: /hassio/dashboard
+          - generic "Zurück" [ref=f4e24]:
+            - button "Zurück" [ref=f4e25]:
+              - generic [ref=f4e27]:
+                - img
+        - generic [ref=f4e28]:
+          - link "Informationen" [ref=f4e29] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/info
+            - tab "Informationen" [ref=f4e31]:
+              - generic [ref=f4e32]: Informationen
+          - link "Konfiguration" [ref=f4e33] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/config
+            - tab "Konfiguration" [ref=f4e35]:
+              - generic [ref=f4e36]: Konfiguration
+          - link "Protokoll" [ref=f4e37] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/logs
+            - tab "Protokoll" [selected] [ref=f4e39]:
+              - generic [ref=f4e40]: Protokoll
+      - generic [ref=f4e180]:
+        - generic [ref=f4e184]:
+          - generic: Protokolle durchsuchen
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - img
+          - textbox "Protokolle durchsuchen" [ref=f4e185]:
+            - /placeholder: ""
+        - generic [ref=f4e188]:
+          - generic:
+            - generic [ref=f4e189]:
+              - heading "Homeduino Bridge" [level=1] [ref=f4e190]
+              - generic [ref=f4e191]:
+                - generic "Protokolle herunterladen" [ref=f4e193]:
+                  - button "Protokolle herunterladen" [ref=f4e194] [cursor=pointer]:
+                    - generic [ref=f4e196]:
+                      - img
+                - generic "Volle Breite" [ref=f4e198]:
+                  - button "Volle Breite" [ref=f4e199] [cursor=pointer]:
+                    - generic [ref=f4e201]:
+                      - img
+                - generic [ref=f4e202]:
+                  - button [ref=f4e205] [cursor=pointer]:
+                    - generic [ref=f4e207]:
+                      - img
+                  - generic:
+                    - generic:
+                      - generic: HAOS-Starts einblenden
+            - generic [ref=f4e210]:
+              - generic [ref=f4e211]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.8}}]"
+              - generic [ref=f4e212]: "Raw: RF receive 496 964 1940 3888 0 0 0 0 01020102020102020201010201010101020202010102010102020202010102010202010103"
+              - generic [ref=f4e213]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.8}}]"
+              - generic [ref=f4e214]: "Raw: RF receive 496 1000 1976 3976 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e215]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+              - generic [ref=f4e216]: "Raw: RF receive 500 1000 1976 3980 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e217]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+              - generic [ref=f4e218]: "Raw: RF receive 496 964 1944 3904 0 0 0 0 01020102020101020201020101010101020201020202020102020202010102010202020103"
+              - generic [ref=f4e219]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.2}}]"
+              - generic [ref=f4e220]: "Raw: RF receive 496 964 1940 3888 0 0 0 0 01020102020101020201020101010101020201020202020102020202010102010202020103"
+              - generic [ref=f4e221]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.2}}]"
+              - generic [ref=f4e222]: "Raw: RF receive 500 1976 996 3980 0 0 0 0 01010102020101010202010202020202010101020202020101010101020201020102010103"
+              - generic [ref=f4e223]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.5}}]"
+              - generic [ref=f4e224]: "Raw: RF receive 500 1976 1000 3980 0 0 0 0 01010102020101010202010202020202010101020202020101010101020201020102010103"
+              - generic [ref=f4e225]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.5}}]"
+              - generic [ref=f4e226]: "Raw: RF receive 492 968 1948 3908 0 0 0 0 01020102020201010201010101010101010201010202010202020202010201010102010103"
+              - generic [ref=f4e227]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.7}}]"
+              - generic [ref=f4e228]: "Raw: RF receive 492 968 1944 3896 0 0 0 0 01020102020201010201010101010101010201010202010202020202010201010102010103"
+              - generic [ref=f4e229]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.7}}]"
+              - generic [ref=f4e230]: "Raw: RF receive 304 2972 1184 10192 0 0 0 0 010002000202000200020002000002000200020002000202000200020002000200020000020200020002000002020002000002000200020002000200020002000203"
+              - generic [ref=f4e231]: "Decoded: [{\"protocol\":\"switch1\",\"values\":{\"id\":15761132,\"all\":false,\"state\":false,\"unit\":0}}]"
+              - generic [ref=f4e232]: Sending Auto-Discovery for hd_switch1_15761132
+              - generic [ref=f4e233]: "Raw: RF receive 304 2968 1188 10188 0 0 0 0 010002000202000200020002000002000200020002000202000200020002000200020000020200020002000002020002000002000200020002000200020002000203"
+              - generic [ref=f4e234]: "Decoded: [{\"protocol\":\"switch1\",\"values\":{\"id\":15761132,\"all\":false,\"state\":false,\"unit\":0}}]"
+              - generic [ref=f4e235]: "Raw: RF receive 500 996 1972 3984 0 0 0 0 01010202010202010101010201010101020201020102010202020202010102020101020203"
+              - generic [ref=f4e236]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.3}}]"
+              - generic [ref=f4e237]: "Raw: RF receive 492 1000 1980 3984 0 0 0 0 01010202010202010101010201010101020201020102010202020202010102020101020203"
+              - generic [ref=f4e238]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.3}}]"
+              - generic [ref=f4e239]: "Raw: RF receive 500 964 1964 3892 0 0 0 0 01020102020102020201010201010101020202010102010102020202010102010202010103"
+              - generic [ref=f4e240]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.8}}]"
+              - generic [ref=f4e241]: "Raw: RF receive 500 960 1940 3908 0 0 0 0 01020102020102020201010201010101020202010102010102020202010102010202010103"
+              - generic [ref=f4e242]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.8}}]"
+              - generic [ref=f4e243]: "Raw: RF receive 496 1000 1976 3976 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e244]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+              - generic [ref=f4e245]: "Raw: RF receive 500 996 1976 3980 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e246]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+              - generic [ref=f4e247]: "Raw: RF receive 488 976 1952 3896 0 0 0 0 01020102020201010201010101010101010201010202010202020202010201010102010103"
+              - generic [ref=f4e248]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.7}}]"
+              - generic [ref=f4e249]: "Raw: RF receive 492 968 1944 3892 0 0 0 0 01020102020201010201010101010101010201010202010202020202010201010102010103"
+              - generic [ref=f4e250]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.7}}]"
+              - generic [ref=f4e251]: "Raw: RF receive 496 968 1940 3888 0 0 0 0 01020102020101020201020101010101020201020202020102020202010102010202020103"
+              - generic [ref=f4e252]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.2}}]"
+              - generic [ref=f4e253]: "Raw: RF receive 496 964 1940 3892 0 0 0 0 01020102020101020201020101010101020201020202020102020202010102010202020103"
+              - generic [ref=f4e254]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.2}}]"
+              - generic [ref=f4e255]: "Raw: RF receive 500 1976 1000 3980 0 0 0 0 01010102020101010202010202020202010101020202020101010101020201020102010103"
+              - generic [ref=f4e256]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.5}}]"
+              - generic [ref=f4e257]: "Raw: RF receive 500 1976 1000 3976 0 0 0 0 01010102020101010202010202020202010101020202020101010101020201020102010103"
+              - generic [ref=f4e258]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.5}}]"
+              - generic [ref=f4e259]: "Raw: RF receive 496 996 1976 3984 0 0 0 0 01010202010202010101010201010101020201020102010202020202010102020101020203"
+              - generic [ref=f4e260]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.3}}]"
+              - generic [ref=f4e261]: "Raw: RF receive 496 1000 1980 3980 0 0 0 0 01010202010202010101010201010101020201020102010202020202010102020101020203"
+              - generic [ref=f4e262]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.3}}]"
+              - generic [ref=f4e263]: "Raw: RF receive 480 1024 1992 3980 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e264]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+              - generic [ref=f4e265]: "Raw: RF receive 500 1000 1976 3976 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e266]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+              - generic [ref=f4e267]: "Raw: RF receive 480 980 1956 3904 0 0 0 0 01020102020102020201010201010101020202010101020202020202010102010202010103"
+              - generic [ref=f4e268]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7}}]"
+              - generic [ref=f4e269]: "Raw: RF receive 504 964 1956 3896 0 0 0 0 01020102020102020201010201010101020202010101020202020202010102010202010103"
+              - generic [ref=f4e270]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7}}]"
+              - generic [ref=f4e271]: "Raw: RF receive 496 968 1940 3892 0 0 0 0 01020102020102020201010201010101020202010101020202020202010102010202010103"
+              - generic [ref=f4e272]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7}}]"
+              - generic [ref=f4e273]: "Raw: RF receive 492 972 1948 3912 0 0 0 0 01020102020201010201010101010101010201010202010202020202010201010102010103"
+              - generic [ref=f4e274]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.7}}]"
+              - generic [ref=f4e275]: "Raw: RF receive 492 968 1944 3908 0 0 0 0 01020102020201010201010101010101010201010202010202020202010201010102010103"
+              - generic [ref=f4e276]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.7}}]"
+              - generic [ref=f4e277]: "Raw: RF receive 480 980 1960 3908 0 0 0 0 01020102020101020201020101010101020201020202020102020202010102010202020103"
+              - generic [ref=f4e278]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.2}}]"
+              - generic [ref=f4e279]: "Raw: RF receive 496 964 1940 3888 0 0 0 0 01020102020101020201020101010101020201020202020102020202010102010202020103"
+              - generic [ref=f4e280]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.2}}]"
+              - generic [ref=f4e281]: "Raw: RF receive 500 1976 996 3980 0 0 0 0 01010102020101010202010202020202010101020202020101010101020201020102010103"
+              - generic [ref=f4e282]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.5}}]"
+              - generic [ref=f4e283]: "Raw: RF receive 500 1000 1976 3980 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e284]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+              - generic [ref=f4e285]: "Raw: RF receive 500 996 1976 3980 0 0 0 0 01010202010202010101010201010101020201020102010202020202010102020101020203"
+              - generic [ref=f4e286]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.3}}]"
+              - generic [ref=f4e287]: "Raw: RF receive 496 1000 1976 3984 0 0 0 0 01010202010202010101010201010101020201020102010202020202010102020101020203"
+              - generic [ref=f4e288]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":21.3}}]"
+              - generic [ref=f4e289]: "Raw: RF receive 496 964 1940 3896 0 0 0 0 01020102020102020201010201010101020202010101020202020202010102010202010103"
+              - generic [ref=f4e290]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7}}]"
+              - generic [ref=f4e291]: "Raw: RF receive 496 964 1940 3892 0 0 0 0 01020102020102020201010201010101020202010101020202020202010102010202010103"
+              - generic [ref=f4e292]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7}}]"
+              - generic [ref=f4e293]: "Raw: RF receive 488 976 1952 3908 0 0 0 0 01020102020201010201010101010101010201010202010202020202010201010102010103"
+              - generic [ref=f4e294]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.7}}]"
+              - generic [ref=f4e295]: "Raw: RF receive 492 968 1944 3904 0 0 0 0 01020102020201010201010101010101010201010202010202020202010201010102010103"
+              - generic [ref=f4e296]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.7}}]"
+              - generic [ref=f4e297]: "Raw: RF receive 500 1000 1976 3976 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e298]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+              - generic [ref=f4e299]: "Raw: RF receive 500 1000 1976 3980 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e300]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+              - generic [ref=f4e301]: "Raw: RF receive 496 964 1940 3892 0 0 0 0 01020102020102020201010201010101020202010101020202020202010102010202010103"
+              - generic [ref=f4e302]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.7}}]"
+              - generic [ref=f4e303]: "Raw: RF receive 492 968 1948 3912 0 0 0 0 01020102020201010201010101010101010201010202010202020202010201010102010103"
+              - generic [ref=f4e304]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.7}}]"
+              - generic [ref=f4e305]: "Raw: RF receive 496 968 1944 3904 0 0 0 0 01020102020201010201010101010101010201010202010202020202010201010102010103"
+              - generic [ref=f4e306]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":7.7}}]"
+              - generic [ref=f4e307]: "Raw: RF receive 476 1024 1992 3988 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e308]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+              - generic [ref=f4e309]: "Raw: RF receive 500 1000 1976 3980 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102010202010203"
+              - generic [ref=f4e310]: "Decoded: [{\"protocol\":\"weather2\",\"values\":{\"temperature\":22.3}}]"
+            - button "Neue Protokolle – Zum Scrollen klicken" [ref=f4e311] [cursor=pointer]:
+              - generic:
+                - generic:
+                  - img
+              - generic [ref=f4e312]: Neue Protokolle – Zum Scrollen klicken
+              - generic:
+                - generic:
+                  - img
+            - generic [ref=f4e313]:
+              - generic [ref=f4e314]:
+                - img
+              - text: Live

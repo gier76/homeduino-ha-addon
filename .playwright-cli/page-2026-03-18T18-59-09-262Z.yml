@@ -1,0 +1,201 @@
+- generic [ref=e18]:
+  - complementary [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic "Seitenleiste umschalten" [ref=e24]:
+          - button "Seitenleiste umschalten" [ref=e25] [cursor=pointer]:
+            - generic [ref=e27]:
+              - img
+        - generic [ref=e28]: Home Assistant
+      - generic [ref=e29]:
+        - generic [ref=e31]:
+          - generic:
+            - listitem [ref=e33] [cursor=pointer]:
+              - generic [ref=e34]:
+                - generic [ref=e36]:
+                  - img
+                - generic [ref=e38]: Übersicht
+            - listitem [ref=e40] [cursor=pointer]:
+              - generic [ref=e41]:
+                - generic [ref=e42]:
+                  - img
+                - generic [ref=e44]: Energie
+            - listitem [ref=e46] [cursor=pointer]:
+              - generic [ref=e47]:
+                - generic [ref=e48]:
+                  - img
+                - generic [ref=e50]: Aktivität
+            - listitem [ref=e52] [cursor=pointer]:
+              - generic [ref=e53]:
+                - generic [ref=e54]:
+                  - img
+                - generic [ref=e56]: Verlauf
+            - listitem [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]:
+                - generic [ref=e61]:
+                  - img
+                - generic [ref=e63]: Homeduino Bridge
+            - listitem [ref=e65] [cursor=pointer]:
+              - generic [ref=e66]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: Medien
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e74]:
+                  - img
+                - generic [ref=e76]: MQTT Explorer
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e81]:
+                  - img
+                - generic [ref=e83]: Terminal
+            - listitem [ref=e85] [cursor=pointer]:
+              - generic [ref=e86]:
+                - generic [ref=e87]:
+                  - img
+                - generic [ref=e89]: To-do-Listen
+        - generic [ref=e90]:
+          - generic:
+            - listitem [ref=e92] [cursor=pointer]:
+              - generic [ref=e93]:
+                - generic [ref=e94]:
+                  - img
+                - generic [ref=e96]: Einstellungen
+            - listitem [ref=e98] [cursor=pointer]:
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - img
+                - generic [ref=e102]: Benachrichtigungen
+            - listitem [ref=e104] [cursor=pointer]:
+              - generic [ref=e105]:
+                - generic [ref=e107]: t
+                - generic [ref=e109]: test
+  - iframe [ref=e113]:
+    - generic [ref=f5e5]:
+      - generic [ref=f5e8]:
+        - link "Zurück" [ref=f5e9] [cursor=pointer]:
+          - /url: /hassio/dashboard
+          - generic "Zurück" [ref=f5e12]:
+            - button "Zurück" [ref=f5e13]:
+              - generic [ref=f5e15]:
+                - img
+        - generic [ref=f5e16]:
+          - link "Informationen" [ref=f5e17] [cursor=pointer]:
+            - /url: /hassio/addon/a0d7b954_ssh/info
+            - tab "Informationen" [ref=f5e19]:
+              - generic [ref=f5e20]: Informationen
+          - link "Dokumentation" [ref=f5e21] [cursor=pointer]:
+            - /url: /hassio/addon/a0d7b954_ssh/documentation
+            - tab "Dokumentation" [ref=f5e23]:
+              - generic [ref=f5e24]: Dokumentation
+          - link "Konfiguration" [ref=f5e25] [cursor=pointer]:
+            - /url: /hassio/addon/a0d7b954_ssh/config
+            - tab "Konfiguration" [selected] [ref=f5e27]:
+              - generic [ref=f5e28]: Konfiguration
+          - link "Protokoll" [ref=f5e29] [cursor=pointer]:
+            - /url: /hassio/addon/a0d7b954_ssh/logs
+            - tab "Protokoll" [ref=f5e31]:
+              - generic [ref=f5e32]: Protokoll
+      - generic [ref=f5e37]:
+        - generic [ref=f5e38]:
+          - heading "Advanced SSH & Web Terminal" [level=1] [ref=f5e39]
+          - generic [ref=f5e40]:
+            - generic:
+              - generic [ref=f5e41]:
+                - heading "Optionen" [level=2] [ref=f5e42]
+                - generic [ref=f5e44]:
+                  - generic "Menü" [ref=f5e47]:
+                    - button "Menü" [ref=f5e48] [cursor=pointer]:
+                      - generic [ref=f5e50]:
+                        - img
+                  - menu [ref=f5e156]:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - menuitem "In YAML bearbeiten" [ref=f5e157] [cursor=pointer]:
+                            - generic [ref=f5e158]:
+                              - generic: In YAML bearbeiten
+                          - menuitem "Auf Standardwerte zurücksetzen" [ref=f5e159] [cursor=pointer]:
+                            - generic [ref=f5e160]:
+                              - generic: Auf Standardwerte zurücksetzen
+              - generic [ref=f5e53]:
+                - generic [ref=f5e55]:
+                  - text: "* * *"
+                  - button "ssh" [ref=f5e57] [cursor=pointer]:
+                    - heading "ssh" [level=3] [ref=f5e58]
+                    - generic [ref=f5e59]:
+                      - img
+                - generic [ref=f5e63]:
+                  - switch "zsh" [checked] [ref=f5e68] [cursor=pointer]
+                  - paragraph [ref=f5e71]: zsh
+                - generic [ref=f5e75]:
+                  - switch "share_sessions" [ref=f5e80] [cursor=pointer]
+                  - paragraph [ref=f5e83]: share_sessions
+                - generic [ref=f5e87]:
+                  - generic:
+                    - generic [ref=f5e89]:
+                      - generic: packages*
+                      - textbox "packages*" [ref=f5e90]:
+                        - /placeholder: ""
+                    - button "packages" [ref=f5e92] [cursor=pointer]:
+                      - img
+                - generic [ref=f5e96]:
+                  - generic:
+                    - generic [ref=f5e98]:
+                      - generic: init_commands*
+                      - textbox "init_commands*" [ref=f5e99]:
+                        - /placeholder: ""
+                    - button "init_commands" [ref=f5e101] [cursor=pointer]:
+                      - img
+              - generic [ref=f5e103]:
+                - switch "Nicht verwendete optionale Konfigurationsoptionen einblenden" [ref=f5e108] [cursor=pointer]
+                - generic [ref=f5e110]: Nicht verwendete optionale Konfigurationsoptionen einblenden
+              - button "Speichern" [disabled] [ref=f5e114]:
+                - generic:
+                  - generic: Speichern
+        - generic [ref=f5e116]:
+          - heading "Netzwerk" [level=1] [ref=f5e117]
+          - generic:
+            - generic [ref=f5e118]:
+              - paragraph [ref=f5e119]: Die vom Add-on auf deinem Host geöffneten Ports anpassen
+              - generic [ref=f5e125]:
+                - generic [ref=f5e126]:
+                  - spinbutton "22/tcp" [ref=f5e127]: "22"
+                  - generic [ref=f5e128]: 22/tcp
+                - generic [ref=f5e130]: SSH server port (make empty to disable)
+            - generic [ref=f5e131]:
+              - button "Auf Standardwerte zurücksetzen" [ref=f5e134] [cursor=pointer]:
+                - generic [ref=f5e135]:
+                  - generic: Auf Standardwerte zurücksetzen
+              - button "Speichern" [disabled] [ref=f5e138]:
+                - generic:
+                  - generic: Speichern
+        - generic [ref=f5e140]:
+          - heading "Audio" [level=1] [ref=f5e141]
+          - generic:
+            - generic [ref=f5e142]:
+              - generic [ref=f5e144]:
+                - combobox "Eingang" [ref=f5e145] [cursor=pointer]:
+                  - generic: Eingang
+                  - generic:
+                    - generic: Standard
+                  - generic:
+                    - img
+                - generic:
+                  - generic:
+                    - generic: Standard
+              - generic [ref=f5e147]:
+                - combobox "Ausgang" [ref=f5e148] [cursor=pointer]:
+                  - generic: Ausgang
+                  - generic:
+                    - generic: Standard
+                  - generic:
+                    - img
+                - generic:
+                  - generic:
+                    - generic: Standard
+                    - generic: Dummy Output
+            - button "Speichern" [ref=f5e152] [cursor=pointer]:
+              - generic [ref=f5e153]:
+                - generic: Speichern

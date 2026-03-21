@@ -1,0 +1,233 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic "Seitenleiste umschalten" [ref=e10]:
+          - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+            - generic [ref=e13]:
+              - img
+        - generic [ref=e14]: Home Assistant
+      - generic [ref=e15]:
+        - generic [ref=e17]:
+          - generic:
+            - listitem [ref=e19] [cursor=pointer]:
+              - generic [ref=e20]:
+                - generic [ref=e22]:
+                  - img
+                - generic [ref=e24]: Übersicht
+            - listitem [ref=e26] [cursor=pointer]:
+              - generic [ref=e27]:
+                - generic [ref=e28]:
+                  - img
+                - generic [ref=e30]: Energie
+            - listitem [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]:
+                - generic [ref=e34]:
+                  - img
+                - generic [ref=e36]: Aktivität
+            - listitem [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - img
+                - generic [ref=e42]: Verlauf
+            - listitem [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]:
+                - generic [ref=e47]:
+                  - img
+                - generic [ref=e49]: Homeduino Bridge
+            - listitem [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]:
+                - generic [ref=e53]:
+                  - img
+                - generic [ref=e55]: Medien
+            - listitem [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: MQTT Explorer
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: Terminal
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: To-do-Listen
+        - generic [ref=e76]:
+          - generic:
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e80]:
+                  - img
+                - generic [ref=e82]: Einstellungen
+            - listitem [ref=e84] [cursor=pointer]:
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - img
+                - generic [ref=e88]: Benachrichtigungen
+            - listitem [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]:
+                - generic [ref=e93]: t
+                - generic [ref=e95]: test
+  - iframe [ref=e159]:
+    - generic [ref=f3e1]:
+      - generic [ref=f3e4]:
+        - banner [ref=f3e6]:
+          - generic [ref=f3e7]:
+            - button [ref=f3e8] [cursor=pointer]:
+              - img [ref=f3e10]
+            - heading [level=6] [ref=f3e12]: MQTT Explorer
+            - generic [ref=f3e13]:
+              - generic:
+                - img
+              - textbox [ref=f3e15]:
+                - /placeholder: Search…
+            - button [ref=f3e18] [cursor=pointer]:
+              - img [ref=f3e21]
+            - button [ref=f3e23] [cursor=pointer]:
+              - generic [ref=f3e24]:
+                - text: Disconnect
+                - img [ref=f3e25]
+        - generic [ref=f3e29]:
+          - generic [ref=f3e31]:
+            - text: •••
+            - generic [ref=f3e37]:
+              - heading [level=2] [ref=f3e38]: No charts selected
+              - paragraph [ref=f3e39]: Select a numeric values from the value preview.
+              - paragraph [ref=f3e40]:
+                - text: Click on
+                - img [ref=f3e41]
+                - text: to add a topic / value to this panel.
+          - text: •••
+          - generic [ref=f3e47]:
+            - generic [ref=f3e48]:
+              - button [disabled] [expanded]:
+                - generic:
+                  - paragraph: Topic
+                - generic:
+                  - generic:
+                    - img
+              - region [ref=f3e52]
+            - generic [ref=f3e54]:
+              - button [expanded] [ref=f3e55] [cursor=pointer]:
+                - paragraph [ref=f3e57]: Value
+                - img [ref=f3e60]
+              - region [ref=f3e65]
+            - generic [ref=f3e67]:
+              - button [expanded] [ref=f3e68] [cursor=pointer]:
+                - paragraph [ref=f3e70]: Publish
+                - img [ref=f3e73]
+              - region [ref=f3e78]:
+                - generic [ref=f3e80]:
+                  - generic [ref=f3e82]:
+                    - generic [ref=f3e83]: Topic
+                    - textbox [ref=f3e85]:
+                      - /placeholder: example/topic
+                  - generic [ref=f3e86]:
+                    - generic [ref=f3e88]:
+                      - radiogroup [ref=f3e89]:
+                        - generic [ref=f3e90] [cursor=pointer]:
+                          - generic [ref=f3e92]:
+                            - radio [ref=f3e93]
+                            - img [ref=f3e95]
+                          - generic [ref=f3e97]: raw
+                        - generic [ref=f3e98] [cursor=pointer]:
+                          - generic [ref=f3e100]:
+                            - radio [ref=f3e101]
+                            - img [ref=f3e103]
+                          - generic [ref=f3e105]: xml
+                        - generic [ref=f3e106] [cursor=pointer]:
+                          - generic [ref=f3e108]:
+                            - radio [checked] [ref=f3e109]
+                            - generic [ref=f3e110]:
+                              - img [ref=f3e111]
+                              - img [ref=f3e113]
+                          - generic [ref=f3e115]: json
+                      - button [ref=f3e116] [cursor=pointer]:
+                        - img [ref=f3e118]
+                      - button [ref=f3e121] [cursor=pointer]:
+                        - generic [ref=f3e122]:
+                          - img [ref=f3e123]
+                          - text: Publish
+                    - textbox [ref=f3e126]
+                    - generic [ref=f3e133]:
+                      - generic [ref=f3e134] [cursor=pointer]:
+                        - generic [ref=f3e136]:
+                          - button [ref=f3e137]:
+                            - generic [ref=f3e138]: "0"
+                          - img
+                        - generic [ref=f3e139]: QoS
+                      - generic [ref=f3e140] [cursor=pointer]:
+                        - generic [ref=f3e142]:
+                          - checkbox [ref=f3e143]
+                          - img [ref=f3e144]
+                        - generic [ref=f3e146]: retain
+                  - generic [ref=f3e152] [cursor=pointer]: ▶ History
+            - button [expanded] [ref=f3e154] [cursor=pointer]:
+              - paragraph [ref=f3e156]: Stats
+              - img [ref=f3e159]
+      - generic [ref=f3e162]:
+        - navigation [ref=f3e164]:
+          - generic [ref=f3e165]:
+            - button "Add" [ref=f3e167] [cursor=pointer]:
+              - img [ref=f3e169]
+            - text: Connections
+          - button "homeassistant mqtt://core-mosquitto.local.hass.io:1883/" [ref=f3e172] [cursor=pointer]:
+            - paragraph [ref=f3e173]: homeassistant
+            - paragraph [ref=f3e174]: mqtt://core-mosquitto.local.hass.io:1883/
+        - generic [ref=f3e175]:
+          - generic [ref=f3e176]:
+            - heading "MQTT Connection" [level=6] [ref=f3e177]
+            - paragraph [ref=f3e178]: mqtt://core-mosquitto.local.hass.io:1883/
+          - generic [ref=f3e184]:
+            - generic [ref=f3e185]:
+              - generic [ref=f3e187]:
+                - generic [ref=f3e188]: Name
+                - textbox [active] [ref=f3e190]: homeassistant
+              - generic [ref=f3e193] [cursor=pointer]:
+                - checkbox "Validate certificate" [checked] [ref=f3e197]
+                - generic [ref=f3e200]: Validate certificate
+              - generic [ref=f3e203] [cursor=pointer]:
+                - checkbox "Encryption (tls)" [ref=f3e207]
+                - generic [ref=f3e210]: Encryption (tls)
+              - generic [ref=f3e212]:
+                - generic [ref=f3e213]: Protocol
+                - generic [ref=f3e214]:
+                  - button "mqtt://" [ref=f3e215] [cursor=pointer]
+                  - img
+              - generic [ref=f3e217]:
+                - generic [ref=f3e218]: Host
+                - textbox [ref=f3e220]: core-mosquitto.local.hass.io
+              - generic [ref=f3e222]:
+                - generic [ref=f3e223]: Port
+                - textbox [ref=f3e225]: "1883"
+              - generic [ref=f3e227]:
+                - generic [ref=f3e228]: Username
+                - textbox [ref=f3e230]: test
+              - generic [ref=f3e232]:
+                - generic [ref=f3e233]: Password
+                - generic [ref=f3e234]:
+                  - textbox "Password" [ref=f3e235]: HomeAssistant2026!
+                  - button "Toggle password visibility" [ref=f3e237] [cursor=pointer]:
+                    - img [ref=f3e239]
+            - generic:
+              - generic [ref=f3e241]:
+                - button "Delete" [ref=f3e242] [cursor=pointer]:
+                  - generic [ref=f3e243]:
+                    - text: Delete
+                    - img [ref=f3e244]
+                - button "Advanced" [ref=f3e246] [cursor=pointer]:
+                  - generic [ref=f3e247]:
+                    - img [ref=f3e248]
+                    - text: Advanced
+              - generic [ref=f3e250]:
+                - button "Save" [ref=f3e251] [cursor=pointer]:
+                  - generic [ref=f3e252]:
+                    - img [ref=f3e253]
+                    - text: Save
+                - button "Connect" [ref=f3e255] [cursor=pointer]:
+                  - generic [ref=f3e256]:
+                    - img [ref=f3e257]
+                    - text: Connect

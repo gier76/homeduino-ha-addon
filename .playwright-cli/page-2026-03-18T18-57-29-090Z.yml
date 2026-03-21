@@ -1,0 +1,127 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic "Seitenleiste umschalten" [ref=e10]:
+          - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+            - generic [ref=e13]:
+              - img
+        - generic [ref=e14]: Home Assistant
+      - generic [ref=e15]:
+        - generic [ref=e17]:
+          - generic:
+            - listitem [ref=e19] [cursor=pointer]:
+              - generic [ref=e20]:
+                - generic [ref=e22]:
+                  - img
+                - generic [ref=e24]: Übersicht
+            - listitem [ref=e26] [cursor=pointer]:
+              - generic [ref=e27]:
+                - generic [ref=e28]:
+                  - img
+                - generic [ref=e30]: Energie
+            - listitem [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]:
+                - generic [ref=e34]:
+                  - img
+                - generic [ref=e36]: Aktivität
+            - listitem [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - img
+                - generic [ref=e42]: Verlauf
+            - listitem [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]:
+                - generic [ref=e47]:
+                  - img
+                - generic [ref=e49]: Homeduino Bridge
+            - listitem [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]:
+                - generic [ref=e53]:
+                  - img
+                - generic [ref=e55]: Medien
+            - listitem [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: MQTT Explorer
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: Terminal
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: To-do-Listen
+        - generic [ref=e76]:
+          - generic:
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e80]:
+                  - img
+                - generic [ref=e82]: Einstellungen
+            - listitem [ref=e84] [cursor=pointer]:
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - img
+                - generic [ref=e88]: Benachrichtigungen
+            - listitem [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]:
+                - generic [ref=e93]: t
+                - generic [ref=e95]: test
+  - iframe [ref=e99]:
+    - generic [ref=f4e7]:
+      - generic [ref=f4e9]:
+        - link "Zurück" [ref=f4e10] [cursor=pointer]:
+          - /url: /config
+          - generic "Zurück" [ref=f4e13]:
+            - button "Zurück" [ref=f4e14]:
+              - generic [ref=f4e16]:
+                - img
+        - generic [ref=f4e18]: Add-ons
+        - generic "Nach Updates suchen" [ref=f4e20]:
+          - button "Nach Updates suchen" [ref=f4e21] [cursor=pointer]:
+            - generic [ref=f4e23]:
+              - img
+      - generic [ref=f4e24]:
+        - generic:
+          - generic [ref=f4e25]:
+            - generic [ref=f4e29]:
+              - generic: Add-ons durchsuchen
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img
+              - textbox "Add-ons durchsuchen" [ref=f4e30]:
+                - /placeholder: ""
+            - generic [ref=f4e33]:
+              - generic [ref=f4e36] [cursor=pointer]:
+                - img "Add-on wird ausgeführt" [ref=f4e37]
+                - generic [ref=f4e38]:
+                  - generic [ref=f4e39]: Advanced SSH & Web Terminal
+                  - generic [ref=f4e40]: A supercharged SSH & Web Terminal access to your Home Assistant instance
+              - generic [ref=f4e43] [cursor=pointer]:
+                - generic "Add-on wird ausgeführt" [ref=f4e44]:
+                  - img
+                - generic [ref=f4e45]:
+                  - generic [ref=f4e46]: Homeduino Bridge
+                  - generic [ref=f4e47]: Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling
+              - generic [ref=f4e50] [cursor=pointer]:
+                - img "Add-on wird ausgeführt" [ref=f4e51]
+                - generic [ref=f4e52]:
+                  - generic [ref=f4e53]: Mosquitto broker
+                  - generic [ref=f4e54]: An Open Source MQTT broker
+              - generic [ref=f4e57] [cursor=pointer]:
+                - img "Add-on wird ausgeführt" [ref=f4e58]
+                - generic [ref=f4e59]:
+                  - generic [ref=f4e60]: MQTT Explorer
+                  - generic [ref=f4e61]: MQTT Explorer is a comprehensive MQTT client that provides a structured overview of your MQTT topics and makes working with devices/services on your broker dead-simple.
+          - link "Add-on Store":
+            - /url: /hassio/store
+            - button "Add-on Store" [ref=f4e63] [cursor=pointer]:
+              - generic [ref=f4e65]:
+                - img
+              - generic [ref=f4e66]: Add-on Store

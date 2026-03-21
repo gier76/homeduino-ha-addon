@@ -1,0 +1,160 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic "Seitenleiste umschalten" [ref=e10]:
+          - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+            - generic [ref=e13]:
+              - img
+        - generic [ref=e14]: Home Assistant
+      - generic [ref=e15]:
+        - generic [ref=e17]:
+          - generic:
+            - listitem [ref=e19] [cursor=pointer]:
+              - generic [ref=e20]:
+                - generic [ref=e22]:
+                  - img
+                - generic [ref=e24]: Übersicht
+            - listitem [ref=e26] [cursor=pointer]:
+              - generic [ref=e27]:
+                - generic [ref=e28]:
+                  - img
+                - generic [ref=e30]: Energie
+            - listitem [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]:
+                - generic [ref=e34]:
+                  - img
+                - generic [ref=e36]: Aktivität
+            - listitem [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - img
+                - generic [ref=e42]: Verlauf
+            - listitem [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]:
+                - generic [ref=e46]:
+                  - img
+                - generic [ref=e48]: Medien
+            - listitem [ref=e50] [cursor=pointer]:
+              - generic [ref=e51]:
+                - generic [ref=e53]:
+                  - img
+                - generic [ref=e55]: MQTT Explorer
+            - listitem [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: Terminal
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e66]:
+                  - img
+                - generic [ref=e68]: To-do-Listen
+        - generic [ref=e69]:
+          - generic:
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: Einstellungen
+            - listitem [ref=e77] [cursor=pointer]:
+              - generic [ref=e78]:
+                - generic [ref=e79]:
+                  - img
+                - generic [ref=e81]: Benachrichtigungen
+            - listitem [ref=e83] [cursor=pointer]:
+              - generic [ref=e84]:
+                - generic [ref=e86]: t
+                - generic [ref=e88]: test
+  - iframe [ref=e92]:
+    - generic [ref=f29e5]:
+      - generic [ref=f29e8]:
+        - link "Zurück" [ref=f29e9] [cursor=pointer]:
+          - /url: /hassio/dashboard
+          - generic "Zurück" [ref=f29e12]:
+            - button "Zurück" [ref=f29e13]:
+              - generic [ref=f29e15]:
+                - img
+        - generic [ref=f29e16]:
+          - link "Informationen" [ref=f29e17] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/info
+            - tab "Informationen" [selected] [ref=f29e19]:
+              - generic [ref=f29e20]: Informationen
+          - link "Konfiguration" [ref=f29e21] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/config
+            - tab "Konfiguration" [ref=f29e23]:
+              - generic [ref=f29e24]: Konfiguration
+          - link "Protokoll" [ref=f29e25] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/logs
+            - tab "Protokoll" [ref=f29e27]:
+              - generic [ref=f29e28]: Protokoll
+      - generic [ref=f29e35]:
+        - generic:
+          - generic [ref=f29e36]:
+            - generic [ref=f29e37]:
+              - text: Homeduino Bridge
+              - generic "Add-on ist gestoppt" [ref=f29e39]:
+                - img
+            - generic [ref=f29e40]:
+              - text: "Aktuelle Version: 3.8.1"
+              - generic [ref=f29e41]:
+                - text: (
+                - generic [ref=f29e42] [cursor=pointer]: Änderungsprotokoll
+                - text: )
+            - generic [ref=f29e43]:
+              - generic:
+                - button "Bewertung" [ref=f29e46] [cursor=pointer]:
+                  - generic [ref=f29e48]:
+                    - img
+                  - generic [ref=f29e49]: Bewertung
+                - button "Ingress" [ref=f29e53] [cursor=pointer]:
+                  - generic [ref=f29e55]:
+                    - img
+                  - generic [ref=f29e56]: Ingress
+            - generic [ref=f29e58]:
+              - text: Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling.
+              - text: Weitere Informationen findest du auf der Seite
+              - link "Homeduino Bridge" [ref=f29e59] [cursor=pointer]:
+                - /url: https://github.com/gier76/homeduino-ha-addon
+              - text: .
+            - generic [ref=f29e62]:
+              - generic [ref=f29e63]:
+                - generic [ref=f29e65]:
+                  - generic [ref=f29e66]: Beim Booten starten
+                  - generic [ref=f29e68]: Das Add-on beim Systemstart ebenfalls starten
+                - switch [ref=f29e74] [cursor=pointer]
+              - generic [ref=f29e75]:
+                - generic [ref=f29e77]:
+                  - generic [ref=f29e78]: Watchdog
+                  - generic [ref=f29e80]: Dies startet das Add-on neu, falls es abstürzen sollte
+                - switch [ref=f29e86] [cursor=pointer]
+              - generic [ref=f29e87]:
+                - generic [ref=f29e89]:
+                  - generic [ref=f29e90]: Automatische Updates
+                  - generic [ref=f29e92]: Das Add-on automatisch aktualisieren, sobald eine neue Version verfügbar ist
+                - switch [ref=f29e98] [cursor=pointer]
+              - generic [ref=f29e99]:
+                - generic [ref=f29e101]:
+                  - generic [ref=f29e102]: Zur Seitenleiste hinzufügen
+                  - generic [ref=f29e104]: Ermöglicht es Benutzern, das Add-on ein- oder auszublenden
+                - switch [ref=f29e110] [cursor=pointer]
+          - generic [ref=f29e111]:
+            - generic [ref=f29e112]:
+              - generic:
+                - generic:
+                  - button "Starten":
+                    - generic:
+                      - generic: Starten
+                    - generic:
+                      - progressbar "Loading"
+            - generic [ref=f29e117]:
+              - button "Deinstallieren" [ref=f29e120] [cursor=pointer]:
+                - generic [ref=f29e121]:
+                  - generic: Deinstallieren
+              - generic:
+                - generic:
+                  - button "Neu aufbauen":
+                    - generic:
+                      - generic: Neu aufbauen
+                    - generic:
+                      - progressbar "Loading"

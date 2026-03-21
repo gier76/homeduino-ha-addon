@@ -1,0 +1,232 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic "Seitenleiste umschalten" [ref=e10]:
+          - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+            - generic [ref=e13]:
+              - img
+        - generic [ref=e14]: Home Assistant
+      - generic [ref=e15]:
+        - generic [ref=e17]:
+          - generic:
+            - listitem [ref=e19] [cursor=pointer]:
+              - generic [ref=e20]:
+                - generic [ref=e22]:
+                  - img
+                - generic [ref=e24]: Übersicht
+            - listitem [ref=e26] [cursor=pointer]:
+              - generic [ref=e27]:
+                - generic [ref=e28]:
+                  - img
+                - generic [ref=e30]: Energie
+            - listitem [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]:
+                - generic [ref=e34]:
+                  - img
+                - generic [ref=e36]: Aktivität
+            - listitem [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - img
+                - generic [ref=e42]: Verlauf
+            - listitem [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]:
+                - generic [ref=e47]:
+                  - img
+                - generic [ref=e49]: Homeduino Bridge
+            - listitem [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]:
+                - generic [ref=e53]:
+                  - img
+                - generic [ref=e55]: Medien
+            - listitem [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: MQTT Explorer
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: Terminal
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: To-do-Listen
+        - generic [ref=e76]:
+          - generic:
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e80]:
+                  - img
+                - generic [ref=e82]: Einstellungen
+            - listitem [ref=e84] [cursor=pointer]:
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - img
+                - generic [ref=e88]: Benachrichtigungen
+            - listitem [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]:
+                - generic [ref=e93]: t
+                - generic [ref=e95]: test
+  - iframe [ref=e99]:
+    - generic [ref=f5e5]:
+      - generic [ref=f5e7]:
+        - generic "Zurück" [ref=f5e10]:
+          - button "Zurück" [ref=f5e11] [cursor=pointer]:
+            - generic [ref=f5e13]:
+              - img
+        - generic [ref=f5e15]: Homeduino Bridge
+      - iframe [ref=f5e17]:
+        - generic [active] [ref=f6e1]:
+          - banner [ref=f6e2]:
+            - heading "HOMEDUINO BRIDGE" [level=1] [ref=f6e4]
+            - generic [ref=f6e5]:
+              - generic [ref=f6e6]: "Serial: Bereit"
+              - generic [ref=f6e7]: "MQTT: Verbunden"
+          - main [ref=f6e8]:
+            - generic [ref=f6e9]:
+              - generic [ref=f6e10]:
+                - generic [ref=f6e11]: Entdeckte Signale
+                - button "Liste leeren" [ref=f6e12] [cursor=pointer]
+              - generic [ref=f6e13]:
+                - generic [ref=f6e24]:
+                  - generic [ref=f6e25]:
+                    - generic [ref=f6e26]: weather2
+                    - generic [ref=f6e27]: 19:50:30
+                  - generic [ref=f6e28]: "UID: hash_0101010203"
+                  - generic [ref=f6e30]:
+                    - generic [ref=f6e31]: temperature
+                    - text: "22.7"
+                  - button "➕ In HA hinzufügen" [ref=f6e33] [cursor=pointer]:
+                    - generic [ref=f6e34]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e35]:
+                  - generic [ref=f6e36]:
+                    - generic [ref=f6e37]: weather2
+                    - generic [ref=f6e38]: 19:50:26
+                  - generic [ref=f6e39]: "UID: hash_0101010203"
+                  - generic [ref=f6e41]:
+                    - generic [ref=f6e42]: temperature
+                    - text: "21.5"
+                  - button "➕ In HA hinzufügen" [ref=f6e44] [cursor=pointer]:
+                    - generic [ref=f6e45]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e46]:
+                  - generic [ref=f6e47]:
+                    - generic [ref=f6e48]: weather2
+                    - generic [ref=f6e49]: 19:50:26
+                  - generic [ref=f6e50]: "UID: hash_0101010203"
+                  - generic [ref=f6e52]:
+                    - generic [ref=f6e53]: temperature
+                    - text: "21.5"
+                  - button "➕ In HA hinzufügen" [ref=f6e55] [cursor=pointer]:
+                    - generic [ref=f6e56]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e57]:
+                  - generic [ref=f6e58]:
+                    - generic [ref=f6e59]: weather2
+                    - generic [ref=f6e60]: 19:50:26
+                  - generic [ref=f6e61]: "UID: hash_0101010203"
+                  - generic [ref=f6e63]:
+                    - generic [ref=f6e64]: temperature
+                    - text: "21.5"
+                  - button "➕ In HA hinzufügen" [ref=f6e66] [cursor=pointer]:
+                    - generic [ref=f6e67]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e68]:
+                  - generic [ref=f6e69]:
+                    - generic [ref=f6e70]: weather2
+                    - generic [ref=f6e71]: 19:50:18
+                  - generic [ref=f6e72]: "UID: hash_0202010203"
+                  - generic [ref=f6e74]:
+                    - generic [ref=f6e75]: temperature
+                    - text: "22.2"
+                  - button "➕ In HA hinzufügen" [ref=f6e77] [cursor=pointer]:
+                    - generic [ref=f6e78]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e79]:
+                  - generic [ref=f6e80]:
+                    - generic [ref=f6e81]: weather2
+                    - generic [ref=f6e82]: 19:50:18
+                  - generic [ref=f6e83]: "UID: hash_0202010203"
+                  - generic [ref=f6e85]:
+                    - generic [ref=f6e86]: temperature
+                    - text: "22.2"
+                  - button "➕ In HA hinzufügen" [ref=f6e88] [cursor=pointer]:
+                    - generic [ref=f6e89]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e90]:
+                  - generic [ref=f6e91]:
+                    - generic [ref=f6e92]: weather2
+                    - generic [ref=f6e93]: 19:50:18
+                  - generic [ref=f6e94]: "UID: hash_0202010203"
+                  - generic [ref=f6e96]:
+                    - generic [ref=f6e97]: temperature
+                    - text: "22.2"
+                  - button "➕ In HA hinzufügen" [ref=f6e99] [cursor=pointer]:
+                    - generic [ref=f6e100]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e101]:
+                  - generic [ref=f6e102]:
+                    - generic [ref=f6e103]: weather2
+                    - generic [ref=f6e104]: 19:50:14
+                  - generic [ref=f6e105]: "UID: hash_0201010203"
+                  - generic [ref=f6e107]:
+                    - generic [ref=f6e108]: temperature
+                    - text: "21.4"
+                  - button "➕ In HA hinzufügen" [ref=f6e110] [cursor=pointer]:
+                    - generic [ref=f6e111]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e112]:
+                  - generic [ref=f6e113]:
+                    - generic [ref=f6e114]: weather2
+                    - generic [ref=f6e115]: 19:49:59
+                  - generic [ref=f6e116]: "UID: hash_0102020203"
+                  - generic [ref=f6e118]:
+                    - generic [ref=f6e119]: temperature
+                    - text: "22.8"
+                  - button "➕ In HA hinzufügen" [ref=f6e121] [cursor=pointer]:
+                    - generic [ref=f6e122]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e123]:
+                  - generic [ref=f6e124]:
+                    - generic [ref=f6e125]: weather2
+                    - generic [ref=f6e126]: 19:49:59
+                  - generic [ref=f6e127]: "UID: hash_0102020203"
+                  - generic [ref=f6e129]:
+                    - generic [ref=f6e130]: temperature
+                    - text: "22.8"
+                  - button "➕ In HA hinzufügen" [ref=f6e132] [cursor=pointer]:
+                    - generic [ref=f6e133]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e134]:
+                  - generic [ref=f6e135]:
+                    - generic [ref=f6e136]: weather2
+                    - generic [ref=f6e137]: 19:49:56
+                  - generic [ref=f6e138]: "UID: hash_0201010103"
+                  - generic [ref=f6e140]:
+                    - generic [ref=f6e141]: temperature
+                    - text: "7.3"
+                  - button "➕ In HA hinzufügen" [ref=f6e143] [cursor=pointer]:
+                    - generic [ref=f6e144]: ➕
+                    - text: In HA hinzufügen
+                - generic [ref=f6e145]:
+                  - generic [ref=f6e146]:
+                    - generic [ref=f6e147]: weather2
+                    - generic [ref=f6e148]: 19:49:55
+                  - generic [ref=f6e149]: "UID: hash_0201010103"
+                  - generic [ref=f6e151]:
+                    - generic [ref=f6e152]: temperature
+                    - text: "7.3"
+                  - button "➕ In HA hinzufügen" [ref=f6e154] [cursor=pointer]:
+                    - generic [ref=f6e155]: ➕
+                    - text: In HA hinzufügen
+            - generic [ref=f6e17]:
+              - generic [ref=f6e19]: System Protokoll
+              - generic [ref=f6e20]:
+                - generic [ref=f6e21]: Initialisiere Bridge UI...
+                - generic [ref=f6e22]: "[19:49:28] INFO Mit Bridge-Server verbunden"
+                - generic [ref=f6e23]: "[19:49:28] INFO MQTT Status: Verbunden (core-mosquitto)"

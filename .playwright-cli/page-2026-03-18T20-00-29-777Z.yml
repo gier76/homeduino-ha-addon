@@ -1,0 +1,177 @@
+- generic [ref=e18]:
+  - complementary [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic "Seitenleiste umschalten" [ref=e24]:
+          - button "Seitenleiste umschalten" [ref=e25] [cursor=pointer]:
+            - generic [ref=e27]:
+              - img
+        - generic [ref=e28]: Home Assistant
+      - generic [ref=e29]:
+        - generic [ref=e31]:
+          - generic:
+            - listitem [ref=e33] [cursor=pointer]:
+              - generic [ref=e34]:
+                - generic [ref=e36]:
+                  - img
+                - generic [ref=e38]: Übersicht
+            - listitem [ref=e40] [cursor=pointer]:
+              - generic [ref=e41]:
+                - generic [ref=e42]:
+                  - img
+                - generic [ref=e44]: Energie
+            - listitem [ref=e46] [cursor=pointer]:
+              - generic [ref=e47]:
+                - generic [ref=e48]:
+                  - img
+                - generic [ref=e50]: Aktivität
+            - listitem [ref=e52] [cursor=pointer]:
+              - generic [ref=e53]:
+                - generic [ref=e54]:
+                  - img
+                - generic [ref=e56]: Verlauf
+            - listitem [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]:
+                - generic [ref=e61]:
+                  - img
+                - generic [ref=e63]: Homeduino Bridge
+            - listitem [ref=e65] [cursor=pointer]:
+              - generic [ref=e66]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: Medien
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e74]:
+                  - img
+                - generic [ref=e76]: MQTT Explorer
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e81]:
+                  - img
+                - generic [ref=e83]: Terminal
+            - listitem [ref=e85] [cursor=pointer]:
+              - generic [ref=e86]:
+                - generic [ref=e87]:
+                  - img
+                - generic [ref=e89]: To-do-Listen
+        - generic [ref=e90]:
+          - generic:
+            - listitem [ref=e92] [cursor=pointer]:
+              - generic [ref=e93]:
+                - generic [ref=e94]:
+                  - img
+                - generic [ref=e96]: Einstellungen
+            - listitem [ref=e98] [cursor=pointer]:
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - img
+                - generic [ref=e102]: Benachrichtigungen
+            - listitem [ref=e104] [cursor=pointer]:
+              - generic [ref=e105]:
+                - generic [ref=e107]: t
+                - generic [ref=e109]: test
+  - iframe [ref=e113]:
+    - generic [ref=f23e669]:
+      - generic [ref=f23e672]:
+        - link "Zurück" [ref=f23e673] [cursor=pointer]:
+          - /url: /hassio/store
+          - generic "Zurück" [ref=f23e676]:
+            - button "Zurück" [ref=f23e677]:
+              - generic [ref=f23e679]:
+                - img
+        - generic [ref=f23e680]:
+          - link "Informationen" [ref=f23e681] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/info
+            - tab "Informationen" [selected] [ref=f23e683]:
+              - generic [ref=f23e684]: Informationen
+          - link "Konfiguration" [ref=f23e685] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/config
+            - tab "Konfiguration" [ref=f23e687]:
+              - generic [ref=f23e688]: Konfiguration
+          - link "Protokoll" [ref=f23e689] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/logs
+            - tab "Protokoll" [ref=f23e691]:
+              - generic [ref=f23e692]: Protokoll
+      - generic [ref=f23e699]:
+        - generic:
+          - generic [ref=f23e700]:
+            - generic [ref=f23e701]:
+              - text: Homeduino Bridge
+              - generic "Add-on wird ausgeführt" [ref=f23e703]:
+                - img
+            - generic [ref=f23e704]:
+              - text: "Aktuelle Version: 3.8.1"
+              - generic [ref=f23e705]:
+                - text: (
+                - generic [ref=f23e706] [cursor=pointer]: Änderungsprotokoll
+                - text: )
+            - generic [ref=f23e707]:
+              - generic:
+                - button "Bewertung" [ref=f23e710] [cursor=pointer]:
+                  - generic [ref=f23e712]:
+                    - img
+                  - generic [ref=f23e713]: Bewertung
+                - button "Ingress" [ref=f23e717] [cursor=pointer]:
+                  - generic [ref=f23e719]:
+                    - img
+                  - generic [ref=f23e720]: Ingress
+            - generic [ref=f23e722]:
+              - text: Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling.
+              - text: Weitere Informationen findest du auf der Seite
+              - link "Homeduino Bridge" [ref=f23e723] [cursor=pointer]:
+                - /url: https://github.com/gier76/homeduino-ha-addon
+              - text: .
+            - generic [ref=f23e724]:
+              - generic [ref=f23e726]:
+                - generic [ref=f23e727]:
+                  - generic [ref=f23e729]:
+                    - generic [ref=f23e730]: Beim Booten starten
+                    - generic [ref=f23e732]: Das Add-on beim Systemstart ebenfalls starten
+                  - switch [checked] [ref=f23e738] [cursor=pointer]
+                - generic [ref=f23e739]:
+                  - generic [ref=f23e741]:
+                    - generic [ref=f23e742]: Watchdog
+                    - generic [ref=f23e744]: Dies startet das Add-on neu, falls es abstürzen sollte
+                  - switch [checked] [ref=f23e750] [cursor=pointer]
+                - generic [ref=f23e751]:
+                  - generic [ref=f23e753]:
+                    - generic [ref=f23e754]: Automatische Updates
+                    - generic [ref=f23e756]: Das Add-on automatisch aktualisieren, sobald eine neue Version verfügbar ist
+                  - switch [checked] [ref=f23e762] [cursor=pointer]
+                - generic [ref=f23e763]:
+                  - generic [ref=f23e765]:
+                    - generic [ref=f23e766]: Zur Seitenleiste hinzufügen
+                    - generic [ref=f23e768]: Ermöglicht es Benutzern, das Add-on ein- oder auszublenden
+                  - switch [checked] [ref=f23e774] [cursor=pointer]
+              - generic [ref=f23e775]:
+                - generic [ref=f23e778]:
+                  - generic [ref=f23e779]: Hostname
+                  - code [ref=f23e781]: 1afe71df-homeduino-bridge
+                - generic [ref=f23e786]:
+                  - generic [ref=f23e787]: CPU-Nutzung des Add-ons
+                  - generic [ref=f23e789]:
+                    - generic [ref=f23e790]: 0 %
+                    - img [ref=f23e792]
+                - generic [ref=f23e799]:
+                  - generic [ref=f23e800]: RAM-Nutzung des Add-ons
+                  - generic "25.25 MB/1.93 GB" [ref=f23e802]:
+                    - generic [ref=f23e803]: 1.3 %
+                    - img [ref=f23e805]
+          - generic [ref=f23e810]:
+            - generic [ref=f23e811]:
+              - button "Stoppen" [ref=f23e814] [cursor=pointer]:
+                - generic [ref=f23e815]:
+                  - generic: Stoppen
+              - button "Neu starten" [ref=f23e818] [cursor=pointer]:
+                - generic [ref=f23e819]:
+                  - generic: Neu starten
+            - generic [ref=f23e820]:
+              - button "Deinstallieren" [ref=f23e823] [cursor=pointer]:
+                - generic [ref=f23e824]:
+                  - generic: Deinstallieren
+              - button "Neu aufbauen" [ref=f23e827] [cursor=pointer]:
+                - generic [ref=f23e828]:
+                  - generic: Neu aufbauen
+              - button "Benutzeroberfläche öffnen" [ref=f23e830] [cursor=pointer]:
+                - generic [ref=f23e831]: Benutzeroberfläche öffnen

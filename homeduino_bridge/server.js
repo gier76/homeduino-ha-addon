@@ -13,11 +13,6 @@ if (fs.existsSync('/data/options.json')) {
     try { options = { ...options, ...JSON.parse(fs.readFileSync('/data/options.json', 'utf8')) }; } catch (e) { console.error(e); }
 }
 
-let serial;
-try {
-    serial = new SerialPort({ path: options.serial_port, baudRate: parseInt(options.baud_rate) });
-} catch (err) { console.error(err); }
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { path: '/socket.io', cors: { origin: "*" }, transports: ["polling", "websocket"] });
@@ -25,50 +20,41 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const mqttClient = mqtt.connect(`mqtt://${options.mqtt_broker}:${options.mqtt_port}`, { username: options.mqtt_user, password: options.mqtt_password });
 
-// --- Humidity Decoder (v4.8.2) ---
-function extractHumidity(bits) {
-    if (!bits || bits.length < 50) return null;
-    try {
-        const humBits = bits.substring(40, 48).replace(/2/g, '1');
-        const hum = parseInt(humBits, 2);
-        return (hum > 0 && hum <= 100) ? hum : null;
-    } catch(e) { return null; }
-}
+// --- Robust Signal Buffer ---
+let serial;
+try {
+    serial = new SerialPort({ path: options.serial_port, baudRate: parseInt(options.baud_rate) });
+} catch (err) { console.error(err); }
 
-// --- Serial Handler ---
 if (serial) {
     serial.on('open', () => { 
         setInterval(() => serial.write('RF receive 0\n'), 5000); 
     });
     
+    let buffer = '';
     serial.on('data', (data) => {
-        const ascii = data.toString('ascii');
-        // Simple line buffering
-        if (ascii.includes('RF receive')) {
-             // ... parsing logic here
+        buffer += data.toString();
+        let lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (let line of lines) {
+            line = line.trim();
+            if (line.includes('RF receive ') || line.match(/^[012\s]+$/)) {
+                processSignal(line);
+            }
         }
-    });
-
-    serial.on('error', (err) => {
-        console.error('Serial Error:', err.message);
     });
 }
 
 function processSignal(line) {
     try {
-        const parts = line.split(' ');
-        const strSeq = parts.slice(2).join(' ');
+        if (!line.startsWith('RF receive ')) return;
+        const strSeq = line.split(' ').slice(2).join(' ');
         const info = rfcontrol.prepareCompressedPulses(strSeq);
         if (info) {
             const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
             if (results && results.length > 0) {
                 const enriched = results.map(res => {
-                    const bitStream = strSeq.split(' ').pop();
-                    res.values.raw = bitStream;
-                    if (res.protocol === 'weather2' && res.values.humidity === undefined) {
-                        const hum = extractHumidity(bitStream);
-                        if (hum) res.values.humidity = hum;
-                    }
+                    res.values.raw = strSeq.split(' ').pop();
                     const uid = 'hd_' + res.protocol + '_' + (res.values.id || 'fixed');
                     Object.keys(res.values).forEach(k => {
                         if (k !== 'raw') mqttClient.publish(`homeduino/${res.protocol}/${uid}/${k}`, res.values[k].toString(), { retain: true });
@@ -81,4 +67,4 @@ function processSignal(line) {
     } catch (e) { console.error('Parse Error:', e); }
 }
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v4.8.2 (MQTT Fixed)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.0 (Entry point changed)'));

@@ -1,0 +1,170 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic "Seitenleiste umschalten" [ref=e11]:
+          - button "Seitenleiste umschalten" [ref=e12] [cursor=pointer]:
+            - generic [ref=e14]:
+              - img
+        - generic [ref=e15]: Home Assistant
+      - generic [ref=e16]:
+        - generic [ref=e18]:
+          - generic:
+            - listitem [ref=e20] [cursor=pointer]:
+              - generic [ref=e21]:
+                - generic [ref=e23]:
+                  - img
+                - generic [ref=e25]: Übersicht
+            - listitem [ref=e27] [cursor=pointer]:
+              - generic [ref=e28]:
+                - generic [ref=e29]:
+                  - img
+                - generic [ref=e31]: Energie
+            - listitem [ref=e33] [cursor=pointer]:
+              - generic [ref=e34]:
+                - generic [ref=e35]:
+                  - img
+                - generic [ref=e37]: Aktivität
+            - listitem [ref=e39] [cursor=pointer]:
+              - generic [ref=e40]:
+                - generic [ref=e41]:
+                  - img
+                - generic [ref=e43]: Verlauf
+            - listitem [ref=e45] [cursor=pointer]:
+              - generic [ref=e46]:
+                - generic [ref=e48]:
+                  - img
+                - generic [ref=e50]: Homeduino Bridge
+            - listitem [ref=e52] [cursor=pointer]:
+              - generic [ref=e53]:
+                - generic [ref=e54]:
+                  - img
+                - generic [ref=e56]: Medien
+            - listitem [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]:
+                - generic [ref=e61]:
+                  - img
+                - generic [ref=e63]: MQTT Explorer
+            - listitem [ref=e65] [cursor=pointer]:
+              - generic [ref=e66]:
+                - generic [ref=e68]:
+                  - img
+                - generic [ref=e70]: Terminal
+            - listitem [ref=e72] [cursor=pointer]:
+              - generic [ref=e73]:
+                - generic [ref=e74]:
+                  - img
+                - generic [ref=e76]: To-do-Listen
+        - generic [ref=e77]:
+          - generic:
+            - listitem [ref=e79] [cursor=pointer]:
+              - generic [ref=e80]:
+                - generic [ref=e81]:
+                  - img
+                - generic [ref=e83]: Einstellungen
+            - listitem [ref=e85] [cursor=pointer]:
+              - generic [ref=e86]:
+                - generic [ref=e87]:
+                  - img
+                - generic [ref=e89]: Benachrichtigungen
+            - listitem [ref=e91] [cursor=pointer]:
+              - generic [ref=e92]:
+                - generic [ref=e94]: t
+                - generic [ref=e96]: test
+  - generic [ref=e260]:
+    - generic [ref=e262]:
+      - generic "Zurück" [ref=e265]:
+        - button "Zurück" [ref=e266] [cursor=pointer]:
+          - generic [ref=e268]:
+            - img
+      - generic [ref=e270]: weather2 hd_weather2_fixed
+      - generic:
+        - generic "Einstellungen bearbeiten" [ref=e272]:
+          - button "Einstellungen bearbeiten" [ref=e273] [cursor=pointer]:
+            - generic [ref=e275]:
+              - img
+        - generic [ref=e276]:
+          - generic:
+            - generic "Menü" [ref=e278]:
+              - button "Menü" [ref=e279] [cursor=pointer]:
+                - generic [ref=e281]:
+                  - img
+            - generic:
+              - generic: 1 Entität
+              - generic: Entitäts-IDs neu erstellen
+    - generic [ref=e283]:
+      - img "MQTT" [ref=e286]
+      - generic [ref=e287]:
+        - generic [ref=e289]:
+          - heading "Geräte-Informationen" [level=1] [ref=e290]
+          - generic:
+            - generic [ref=e291]:
+              - generic [ref=e292]: weather2
+              - generic [ref=e293]: von Homeduino
+            - generic:
+              - link "MQTT MQTT" [ref=e294] [cursor=pointer]:
+                - /url: /config/integrations/integration/mqtt#config_entry=01KKSHC5GW7117W61SBKYD2VQ2
+                - generic [ref=e295]:
+                  - img "MQTT" [ref=e297]
+                  - generic [ref=e298]:
+                    - generic: MQTT
+                  - generic [ref=e300]:
+                    - img
+              - generic [ref=e301]:
+                - button "MQTT Info" [ref=e303] [cursor=pointer]:
+                  - generic:
+                    - generic:
+                      - img
+                  - generic [ref=e304]: MQTT Info
+                - generic [ref=e305]:
+                  - generic:
+                    - generic "Menü" [ref=e307]:
+                      - button "Menü" [ref=e308] [cursor=pointer]:
+                        - generic [ref=e310]:
+                          - img
+                    - generic:
+                      - generic: Diagnosedaten herunterladen
+                      - generic: Löschen
+        - generic [ref=e311]:
+          - generic:
+            - heading "Automationen Automation mit Gerät erstellen" [level=1] [ref=e312]:
+              - text: Automationen
+              - generic "Automation mit Gerät erstellen" [ref=e314]:
+                - button "Automation mit Gerät erstellen" [ref=e315] [cursor=pointer]:
+                  - generic [ref=e317]:
+                    - img
+            - generic [ref=e318]: Mit diesem Gerät wurden noch keine Automationen erstellt. Zum Hinzufügen oben den + Knopf drücken.
+        - generic [ref=e319]:
+          - generic:
+            - heading "Szenen Szene mit Gerät erstellen" [level=1] [ref=e320]:
+              - text: Szenen
+              - generic "Szene mit Gerät erstellen" [ref=e322]:
+                - button "Szene mit Gerät erstellen" [ref=e323] [cursor=pointer]:
+                  - generic [ref=e325]:
+                    - img
+            - generic [ref=e326]: Mit diesem Gerät wurden noch keine Szenen erstellt. Zum Hinzufügen oben den + Knopf drücken.
+        - generic [ref=e327]:
+          - generic:
+            - heading "Skripte Skript mit Gerät erstellen" [level=1] [ref=e328]:
+              - text: Skripte
+              - generic "Skript mit Gerät erstellen" [ref=e330]:
+                - button "Skript mit Gerät erstellen" [ref=e331] [cursor=pointer]:
+                  - generic [ref=e333]:
+                    - img
+            - generic [ref=e334]: Mit diesem Gerät wurden noch keine Skripte erstellt. Zum Hinzufügen oben den + Knopf drücken.
+      - generic [ref=e337]:
+        - heading "Sensoren" [level=1] [ref=e338]
+        - generic:
+          - list [ref=e341]:
+            - generic [ref=e364] [cursor=pointer]:
+              - generic [ref=e368]:
+                - img
+              - generic "Temperature" [ref=e369]
+              - generic [ref=e371]:
+                - generic: 22,3 °C
+          - button "Zu Dashboard hinzufügen" [ref=e355] [cursor=pointer]:
+            - generic [ref=e356]: Zu Dashboard hinzufügen
+      - generic [ref=e358]:
+        - generic:
+          - heading "Aktivität" [level=1] [ref=e359]
+          - generic [ref=e361]: Keine Aktivität gefunden.

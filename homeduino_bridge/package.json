@@ -1,10 +1,10 @@
 {
   "name": "homeduino-ha-addon",
-  "version": "4.0.2",
-  "description": "Bridge between Homeduino (433MHz) and Home Assistant with modern dependencies",
-  "main": "index.js",
+  "version": "5.0.0",
+  "description": "Bridge between Homeduino (433MHz) and Home Assistant",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "serialport": "^12.0.0",

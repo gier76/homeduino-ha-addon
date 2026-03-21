@@ -1,0 +1,102 @@
+- generic [ref=e18]:
+  - complementary [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic "Seitenleiste umschalten" [ref=e24]:
+          - button "Seitenleiste umschalten" [ref=e25] [cursor=pointer]:
+            - generic [ref=e27]:
+              - img
+        - generic [ref=e28]: Home Assistant
+      - generic [ref=e58]:
+        - generic [ref=e60]:
+          - generic:
+            - listitem [ref=e62] [cursor=pointer]:
+              - generic [ref=e63]:
+                - generic [ref=e65]:
+                  - img
+                - generic [ref=e67]: Übersicht
+            - listitem [ref=e69] [cursor=pointer]:
+              - generic [ref=e70]:
+                - generic [ref=e71]:
+                  - img
+                - generic [ref=e73]: Energie
+            - listitem [ref=e75] [cursor=pointer]:
+              - generic [ref=e76]:
+                - generic [ref=e77]:
+                  - img
+                - generic [ref=e79]: Aktivität
+            - listitem [ref=e81] [cursor=pointer]:
+              - generic [ref=e82]:
+                - generic [ref=e83]:
+                  - img
+                - generic [ref=e85]: Verlauf
+            - listitem [ref=e87] [cursor=pointer]:
+              - generic [ref=e88]:
+                - generic [ref=e90]:
+                  - img
+                - generic [ref=e92]: Homeduino Bridge
+            - listitem [ref=e94] [cursor=pointer]:
+              - generic [ref=e95]:
+                - generic [ref=e96]:
+                  - img
+                - generic [ref=e98]: Medien
+            - listitem [ref=e100] [cursor=pointer]:
+              - generic [ref=e101]:
+                - generic [ref=e103]:
+                  - img
+                - generic [ref=e105]: MQTT Explorer
+            - listitem [ref=e107] [cursor=pointer]:
+              - generic [ref=e108]:
+                - generic [ref=e110]:
+                  - img
+                - generic [ref=e112]: Terminal
+            - listitem [ref=e114] [cursor=pointer]:
+              - generic [ref=e115]:
+                - generic [ref=e116]:
+                  - img
+                - generic [ref=e118]: To-do-Listen
+        - generic [ref=e119]:
+          - generic:
+            - listitem [ref=e121] [cursor=pointer]:
+              - generic [ref=e122]:
+                - generic [ref=e123]:
+                  - img
+                - generic [ref=e125]: Einstellungen
+            - listitem [ref=e127] [cursor=pointer]:
+              - generic [ref=e128]:
+                - generic [ref=e129]:
+                  - img
+                - generic [ref=e131]: Benachrichtigungen
+            - listitem [ref=e133] [cursor=pointer]:
+              - generic [ref=e134]:
+                - generic [ref=e136]: t
+                - generic [ref=e138]: test
+  - iframe [ref=e57]:
+    - generic [ref=f6e170]:
+      - generic [ref=f6e172]:
+        - generic "Zurück" [ref=f6e175]:
+          - button "Zurück" [ref=f6e176] [cursor=pointer]:
+            - generic [ref=f6e178]:
+              - img
+        - generic [ref=f6e180]: Homeduino Bridge
+      - iframe [ref=f6e182]:
+        - generic [active] [ref=f7e1]:
+          - banner [ref=f7e2]:
+            - heading "HOMEDUINO BRIDGE" [level=1] [ref=f7e4]
+            - generic [ref=f7e5]:
+              - generic [ref=f7e6]: "Serial: Bereit"
+              - generic [ref=f7e7]: "MQTT: Verbunden"
+          - main [ref=f7e8]:
+            - generic [ref=f7e9]:
+              - generic [ref=f7e10]:
+                - generic [ref=f7e11]: Entdeckte Signale
+                - button "Liste leeren" [ref=f7e12] [cursor=pointer]
+              - generic [ref=f7e14]:
+                - generic [ref=f7e15]: 📡
+                - paragraph [ref=f7e16]: Warten auf 433MHz Signale...
+            - generic [ref=f7e17]:
+              - generic [ref=f7e19]: System Protokoll
+              - generic [ref=f7e20]:
+                - generic [ref=f7e21]: Initialisiere Bridge UI...
+                - generic [ref=f7e22]: "[20:11:36] INFO Mit Bridge-Server verbunden (v3.9.0)"
+                - generic [ref=f7e23]: "[20:11:36] INFO MQTT Status: Verbunden"

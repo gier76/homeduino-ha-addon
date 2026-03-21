@@ -1,0 +1,217 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic "Seitenleiste umschalten" [ref=e11]:
+          - button "Seitenleiste umschalten" [ref=e12] [cursor=pointer]:
+            - generic [ref=e14]:
+              - img
+        - generic [ref=e15]: Home Assistant
+      - generic [ref=e16]:
+        - generic [ref=e18]:
+          - generic:
+            - listitem [ref=e20] [cursor=pointer]:
+              - generic [ref=e21]:
+                - generic [ref=e23]:
+                  - img
+                - generic [ref=e25]: Übersicht
+            - listitem [ref=e27] [cursor=pointer]:
+              - generic [ref=e28]:
+                - generic [ref=e29]:
+                  - img
+                - generic [ref=e31]: Energie
+            - listitem [ref=e33] [cursor=pointer]:
+              - generic [ref=e34]:
+                - generic [ref=e35]:
+                  - img
+                - generic [ref=e37]: Aktivität
+            - listitem [ref=e39] [cursor=pointer]:
+              - generic [ref=e40]:
+                - generic [ref=e41]:
+                  - img
+                - generic [ref=e43]: Verlauf
+            - listitem [ref=e45] [cursor=pointer]:
+              - generic [ref=e46]:
+                - generic [ref=e48]:
+                  - img
+                - generic [ref=e50]: Homeduino Bridge
+            - listitem [ref=e52] [cursor=pointer]:
+              - generic [ref=e53]:
+                - generic [ref=e54]:
+                  - img
+                - generic [ref=e56]: Medien
+            - listitem [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]:
+                - generic [ref=e61]:
+                  - img
+                - generic [ref=e63]: MQTT Explorer
+            - listitem [ref=e65] [cursor=pointer]:
+              - generic [ref=e66]:
+                - generic [ref=e68]:
+                  - img
+                - generic [ref=e70]: Terminal
+            - listitem [ref=e72] [cursor=pointer]:
+              - generic [ref=e73]:
+                - generic [ref=e74]:
+                  - img
+                - generic [ref=e76]: To-do-Listen
+        - generic [ref=e77]:
+          - generic:
+            - listitem [ref=e79] [cursor=pointer]:
+              - generic [ref=e80]:
+                - generic [ref=e81]:
+                  - img
+                - generic [ref=e83]: Einstellungen
+            - listitem [ref=e85] [cursor=pointer]:
+              - generic [ref=e86]:
+                - generic [ref=e87]:
+                  - img
+                - generic [ref=e89]: Benachrichtigungen
+            - listitem [ref=e91] [cursor=pointer]:
+              - generic [ref=e92]:
+                - generic [ref=e94]: t
+                - generic [ref=e96]: test
+  - generic [ref=e101]:
+    - generic [ref=e104]:
+      - generic "Zurück" [ref=e107]:
+        - link "Zurück" [ref=e108] [cursor=pointer]:
+          - /url: /config
+          - generic [ref=e110]:
+            - img
+      - generic [ref=e111]:
+        - link "Integrationen" [ref=e112] [cursor=pointer]:
+          - /url: /config/integrations
+          - tab "Integrationen" [selected] [ref=e114]:
+            - generic [ref=e115]:
+              - img
+            - generic [ref=e116]: Integrationen
+        - link "Geräte" [ref=e117] [cursor=pointer]:
+          - /url: /config/devices
+          - tab "Geräte" [ref=e119]:
+            - generic [ref=e120]:
+              - img
+            - generic [ref=e121]: Geräte
+        - link "Entitäten" [ref=e122] [cursor=pointer]:
+          - /url: /config/entities
+          - tab "Entitäten" [ref=e124]:
+            - generic [ref=e125]:
+              - img
+            - generic [ref=e126]: Entitäten
+        - link "Helfer" [ref=e127] [cursor=pointer]:
+          - /url: /config/helpers
+          - tab "Helfer" [ref=e129]:
+            - generic [ref=e130]:
+              - img
+            - generic [ref=e131]: Helfer
+      - generic [ref=e134]:
+        - generic:
+          - generic "Menü" [ref=e136]:
+            - button "Menü" [ref=e137] [cursor=pointer]:
+              - generic [ref=e139]:
+                - img
+          - generic:
+            - generic: OAuth-Anmeldedaten
+    - generic [ref=e141]:
+      - generic:
+        - generic [ref=e142]:
+          - generic [ref=e149]:
+            - generic [ref=e153]:
+              - img
+            - textbox "Durchsuchen" [ref=e157]
+          - generic [ref=e161]:
+            - generic:
+              - generic "Menü" [ref=e163]:
+                - button "Menü" [ref=e164] [cursor=pointer]:
+                  - generic [ref=e166]:
+                    - img
+              - generic:
+                - generic: Ignorierte Integrationen einblenden
+                - generic: Deaktivierte Integrationen einblenden
+        - generic [ref=e167]:
+          - generic [ref=e169]:
+            - generic:
+              - link "Backup" [ref=e170] [cursor=pointer]:
+                - /url: /config/integrations/integration/backup
+                - generic [ref=e171]:
+                  - heading "Backup" [level=1] [ref=e173]
+                  - generic [ref=e174]:
+                    - img
+              - link "1 Dienst" [ref=e177] [cursor=pointer]:
+                - /url: /config/devices/device/4f32cdc8137316d59581c12512ac5cb7
+                - generic [ref=e178]: 1 Dienst
+          - generic [ref=e180]:
+            - generic:
+              - link "Einkaufsliste" [ref=e181] [cursor=pointer]:
+                - /url: /config/integrations/integration/shopping_list
+                - generic [ref=e182]:
+                  - heading "Einkaufsliste" [level=1] [ref=e184]
+                  - generic [ref=e185]:
+                    - img
+              - link "1 Entität" [ref=e188] [cursor=pointer]:
+                - /url: /config/entities?historyBack=1&domain=shopping_list
+                - generic [ref=e189]: 1 Entität
+          - generic [ref=e191]:
+            - generic:
+              - link "Google Translate text-to-speech" [ref=e192] [cursor=pointer]:
+                - /url: /config/integrations/integration/google_translate
+                - generic [ref=e193]:
+                  - heading "Google Translate text-to-speech" [level=1] [ref=e195]
+                  - generic [ref=e196]:
+                    - img
+              - generic [ref=e197]:
+                - link "1 Dienst" [ref=e199] [cursor=pointer]:
+                  - /url: /config/devices/device/44ba23b4fa32574e4cadbea02489bebd
+                  - generic [ref=e200]: 1 Dienst
+                - generic [ref=e203]:
+                  - img
+          - generic [ref=e205]:
+            - generic:
+              - link "Home Assistant Supervisor" [ref=e206] [cursor=pointer]:
+                - /url: /config/integrations/integration/hassio
+                - generic [ref=e207]:
+                  - heading "Home Assistant Supervisor" [level=1] [ref=e209]
+                  - generic [ref=e210]:
+                    - img
+              - link "8 Dienste" [ref=e213] [cursor=pointer]:
+                - /url: /config/devices/dashboard?historyBack=1&domain=hassio
+                - generic [ref=e214]: 8 Dienste
+          - generic [ref=e216]:
+            - generic:
+              - link "MQTT" [ref=e217] [cursor=pointer]:
+                - /url: /config/integrations/integration/mqtt
+                - generic [ref=e218]:
+                  - heading "MQTT" [level=1] [ref=e220]
+                  - generic [ref=e221]:
+                    - img
+              - link "1 Gerät" [ref=e224] [cursor=pointer]:
+                - /url: /config/devices/device/d090e81d7d29b0ffb1fca8402974ee38
+                - generic [ref=e225]: 1 Gerät
+          - generic [ref=e227]:
+            - generic:
+              - link "Radio Browser" [ref=e228] [cursor=pointer]:
+                - /url: /config/integrations/integration/radio_browser
+                - generic [ref=e229]:
+                  - heading "Radio Browser" [level=1] [ref=e231]
+                  - generic [ref=e232]:
+                    - img
+              - generic [ref=e233]:
+                - link "1 Eintrag" [ref=e235] [cursor=pointer]:
+                  - /url: /config/integrations/integration/radio_browser
+                  - generic [ref=e236]: 1 Eintrag
+                - generic [ref=e239]:
+                  - img
+          - generic [ref=e241]:
+            - generic:
+              - link "Sonne" [ref=e242] [cursor=pointer]:
+                - /url: /config/integrations/integration/sun
+                - generic [ref=e243]:
+                  - heading "Sonne" [level=1] [ref=e245]
+                  - generic [ref=e246]:
+                    - img
+              - link "1 Dienst" [ref=e249] [cursor=pointer]:
+                - /url: /config/devices/device/2d5c88ff78362177bfc56db4da8040d9
+                - generic [ref=e250]: 1 Dienst
+    - button "Integration hinzufügen" [ref=e254] [cursor=pointer]:
+      - generic [ref=e256]:
+        - img
+      - generic [ref=e257]: Integration hinzufügen

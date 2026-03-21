@@ -1,0 +1,177 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic "Seitenleiste umschalten" [ref=e10]:
+          - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+            - generic [ref=e13]:
+              - img
+        - generic [ref=e14]: Home Assistant
+      - generic [ref=e15]:
+        - generic [ref=e17]:
+          - generic:
+            - listitem [ref=e19] [cursor=pointer]:
+              - generic [ref=e20]:
+                - generic [ref=e22]:
+                  - img
+                - generic [ref=e24]: Übersicht
+            - listitem [ref=e26] [cursor=pointer]:
+              - generic [ref=e27]:
+                - generic [ref=e28]:
+                  - img
+                - generic [ref=e30]: Energie
+            - listitem [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]:
+                - generic [ref=e34]:
+                  - img
+                - generic [ref=e36]: Aktivität
+            - listitem [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - img
+                - generic [ref=e42]: Verlauf
+            - listitem [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]:
+                - generic [ref=e47]:
+                  - img
+                - generic [ref=e49]: Homeduino Bridge
+            - listitem [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]:
+                - generic [ref=e53]:
+                  - img
+                - generic [ref=e55]: Medien
+            - listitem [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: MQTT Explorer
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: Terminal
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: To-do-Listen
+        - generic [ref=e76]:
+          - generic:
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e80]:
+                  - img
+                - generic [ref=e82]: Einstellungen
+            - listitem [ref=e84] [cursor=pointer]:
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - img
+                - generic [ref=e88]: Benachrichtigungen
+            - listitem [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]:
+                - generic [ref=e93]: t
+                - generic [ref=e95]: test
+  - iframe [ref=e99]:
+    - generic [ref=f17e17]:
+      - generic [ref=f17e20]:
+        - link "Zurück" [ref=f17e21] [cursor=pointer]:
+          - /url: /hassio/dashboard
+          - generic "Zurück" [ref=f17e24]:
+            - button "Zurück" [ref=f17e25]:
+              - generic [ref=f17e27]:
+                - img
+        - generic [ref=f17e28]:
+          - link "Informationen" [ref=f17e29] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/info
+            - tab "Informationen" [selected] [ref=f17e31]:
+              - generic [ref=f17e32]: Informationen
+          - link "Konfiguration" [ref=f17e33] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/config
+            - tab "Konfiguration" [ref=f17e35]:
+              - generic [ref=f17e36]: Konfiguration
+          - link "Protokoll" [ref=f17e37] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/logs
+            - tab "Protokoll" [ref=f17e39]:
+              - generic [ref=f17e40]: Protokoll
+      - generic [ref=f17e47]:
+        - generic:
+          - generic [ref=f17e48]:
+            - generic [ref=f17e49]:
+              - text: Homeduino Bridge
+              - generic "Add-on wird ausgeführt" [ref=f17e51]:
+                - img
+            - generic [ref=f17e52]:
+              - text: "Aktuelle Version: 3.8.1"
+              - generic [ref=f17e53]:
+                - text: (
+                - generic [ref=f17e54] [cursor=pointer]: Änderungsprotokoll
+                - text: )
+            - generic [ref=f17e55]:
+              - generic:
+                - button "Bewertung" [ref=f17e58] [cursor=pointer]:
+                  - generic [ref=f17e60]:
+                    - img
+                  - generic [ref=f17e61]: Bewertung
+                - button "Ingress" [ref=f17e65] [cursor=pointer]:
+                  - generic [ref=f17e67]:
+                    - img
+                  - generic [ref=f17e68]: Ingress
+            - generic [ref=f17e70]:
+              - text: Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling.
+              - text: Weitere Informationen findest du auf der Seite
+              - link "Homeduino Bridge" [ref=f17e71] [cursor=pointer]:
+                - /url: https://github.com/gier76/homeduino-ha-addon
+              - text: .
+            - generic [ref=f17e72]:
+              - generic [ref=f17e74]:
+                - generic [ref=f17e75]:
+                  - generic [ref=f17e77]:
+                    - generic [ref=f17e78]: Beim Booten starten
+                    - generic [ref=f17e80]: Das Add-on beim Systemstart ebenfalls starten
+                  - switch [checked] [ref=f17e86] [cursor=pointer]
+                - generic [ref=f17e87]:
+                  - generic [ref=f17e89]:
+                    - generic [ref=f17e90]: Watchdog
+                    - generic [ref=f17e92]: Dies startet das Add-on neu, falls es abstürzen sollte
+                  - switch [checked] [ref=f17e98] [cursor=pointer]
+                - generic [ref=f17e99]:
+                  - generic [ref=f17e101]:
+                    - generic [ref=f17e102]: Automatische Updates
+                    - generic [ref=f17e104]: Das Add-on automatisch aktualisieren, sobald eine neue Version verfügbar ist
+                  - switch [checked] [ref=f17e110] [cursor=pointer]
+                - generic [ref=f17e111]:
+                  - generic [ref=f17e113]:
+                    - generic [ref=f17e114]: Zur Seitenleiste hinzufügen
+                    - generic [ref=f17e116]: Ermöglicht es Benutzern, das Add-on ein- oder auszublenden
+                  - switch [checked] [ref=f17e122] [cursor=pointer]
+              - generic [ref=f17e123]:
+                - generic [ref=f17e126]:
+                  - generic [ref=f17e127]: Hostname
+                  - code [ref=f17e129]: 1afe71df-homeduino-bridge
+                - generic [ref=f17e134]:
+                  - generic [ref=f17e135]: CPU-Nutzung des Add-ons
+                  - generic [ref=f17e137]:
+                    - generic [ref=f17e138]: 0 %
+                    - img [ref=f17e140]
+                - generic [ref=f17e147]:
+                  - generic [ref=f17e148]: RAM-Nutzung des Add-ons
+                  - generic "0 Bytes/0 Bytes" [ref=f17e150]:
+                    - generic [ref=f17e151]: 0 %
+                    - img [ref=f17e153]
+          - generic [ref=f17e157]:
+            - generic [ref=f17e158]:
+              - button "Stoppen" [ref=f17e161] [cursor=pointer]:
+                - generic [ref=f17e162]:
+                  - generic: Stoppen
+              - button "Neu starten" [ref=f17e165] [cursor=pointer]:
+                - generic [ref=f17e166]:
+                  - generic: Neu starten
+            - generic [ref=f17e167]:
+              - button "Deinstallieren" [ref=f17e170] [cursor=pointer]:
+                - generic [ref=f17e171]:
+                  - generic: Deinstallieren
+              - button "Neu aufbauen" [ref=f17e174] [cursor=pointer]:
+                - generic [ref=f17e175]:
+                  - generic: Neu aufbauen
+              - button "Benutzeroberfläche öffnen" [ref=f17e177] [cursor=pointer]:
+                - generic [ref=f17e178]: Benutzeroberfläche öffnen

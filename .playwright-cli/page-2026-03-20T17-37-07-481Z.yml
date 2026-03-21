@@ -1,0 +1,236 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic "Seitenleiste umschalten" [ref=e10]:
+          - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+            - generic [ref=e13]:
+              - img
+        - generic [ref=e14]: Home Assistant
+      - generic [ref=e15]:
+        - generic [ref=e17]:
+          - generic:
+            - listitem [ref=e19] [cursor=pointer]:
+              - generic [ref=e20]:
+                - generic [ref=e22]:
+                  - img
+                - generic [ref=e24]: Übersicht
+            - listitem [ref=e26] [cursor=pointer]:
+              - generic [ref=e27]:
+                - generic [ref=e28]:
+                  - img
+                - generic [ref=e30]: Energie
+            - listitem [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]:
+                - generic [ref=e34]:
+                  - img
+                - generic [ref=e36]: Aktivität
+            - listitem [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - img
+                - generic [ref=e42]: Verlauf
+            - listitem [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]:
+                - generic [ref=e47]:
+                  - img
+                - generic [ref=e49]: Homeduino Bridge
+            - listitem [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]:
+                - generic [ref=e53]:
+                  - img
+                - generic [ref=e55]: Medien
+            - listitem [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: MQTT Explorer
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: Terminal
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: To-do-Listen
+        - generic [ref=e76]:
+          - generic:
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e80]:
+                  - img
+                - generic [ref=e82]: Einstellungen
+            - listitem [ref=e84] [cursor=pointer]:
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - img
+                - generic [ref=e88]: Benachrichtigungen
+            - listitem [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]:
+                - generic [ref=e93]: t
+                - generic [ref=e95]: test
+  - iframe [ref=e99]:
+    - generic [ref=f1e5]:
+      - generic [ref=f1e8]:
+        - link "Zurück" [ref=f1e9] [cursor=pointer]:
+          - /url: /hassio/dashboard
+          - generic "Zurück" [ref=f1e12]:
+            - button "Zurück" [ref=f1e13]:
+              - generic [ref=f1e15]:
+                - img
+        - generic [ref=f1e16]:
+          - link "Informationen" [ref=f1e17] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/info
+            - tab "Informationen" [ref=f1e19]:
+              - generic [ref=f1e20]: Informationen
+          - link "Konfiguration" [ref=f1e21] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/config
+            - tab "Konfiguration" [ref=f1e23]:
+              - generic [ref=f1e24]: Konfiguration
+          - link "Protokoll" [ref=f1e25] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/logs
+            - tab "Protokoll" [selected] [ref=f1e27]:
+              - generic [ref=f1e28]: Protokoll
+      - generic [ref=f1e167]:
+        - generic [ref=f1e171]:
+          - generic: Protokolle durchsuchen
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - img
+          - textbox "Protokolle durchsuchen" [ref=f1e172]:
+            - /placeholder: ""
+        - generic [ref=f1e175]:
+          - generic:
+            - generic [ref=f1e176]:
+              - heading "Homeduino Bridge" [level=1] [ref=f1e177]
+              - generic [ref=f1e178]:
+                - generic "Protokolle herunterladen" [ref=f1e180]:
+                  - button "Protokolle herunterladen" [ref=f1e181] [cursor=pointer]:
+                    - generic [ref=f1e183]:
+                      - img
+                - generic "Volle Breite" [ref=f1e185]:
+                  - button "Volle Breite" [ref=f1e186] [cursor=pointer]:
+                    - generic [ref=f1e188]:
+                      - img
+                - generic [ref=f1e189]:
+                  - button [ref=f1e192] [cursor=pointer]:
+                    - generic [ref=f1e194]:
+                      - img
+                  - generic:
+                    - generic:
+                      - generic: HAOS-Starts einblenden
+            - generic [ref=f1e197]:
+              - generic [ref=f1e198]: "[2026-03-18T19:59:12.236Z] Connecting to serial port: /dev/ttyUSB0 at 115200 baud"
+              - generic [ref=f1e199]: "[2026-03-18T19:59:12.253Z] Bridge Server listening on port 8080"
+              - generic [ref=f1e200]: "[2026-03-18T19:59:12.281Z] Serial Port Opened"
+              - generic [ref=f1e201]: "[2026-03-18T19:59:12.288Z] DEBUG: Serial Out: RF receive 0"
+              - generic [ref=f1e202]: "[2026-03-18T19:59:12.313Z] MQTT Connected"
+              - generic [ref=f1e203]: "[2026-03-18T19:59:13.717Z] DEBUG: Serial In: ready"
+              - generic [ref=f1e204]: "[2026-03-18T19:59:13.717Z] Homeduino ready"
+              - generic [ref=f1e205]: "[2026-03-18T19:59:13.717Z] DEBUG: Serial Out: RF receive 0"
+              - generic [ref=f1e206]: "[2026-03-18T19:59:13.724Z] DEBUG: Serial In: ACK"
+              - generic [ref=f1e207]: "[2026-03-18T19:59:28.809Z] DEBUG: Serial In: RF receive 496 964 1940 3892 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e208]: "[2026-03-18T19:59:29.101Z] DEBUG: Serial In: RF receive 492 968 1964 3896 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e209]: "[2026-03-18T19:59:29.391Z] DEBUG: Serial In: RF receive 492 968 1944 3896 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e210]: "[2026-03-18T19:59:38.559Z] DEBUG: UI Client Connected"
+              - generic [ref=f1e211]: "[2026-03-18T19:59:47.010Z] DEBUG: Serial In: RF receive 500 1000 1972 3976 0 0 0 0 01010101010101010101010101010101020201020202020102020202010102020101020103"
+              - generic [ref=f1e212]: "[2026-03-18T19:59:47.295Z] DEBUG: Serial In: RF receive 500 1000 1972 3976 0 0 0 0 01010101010101010101010101010101020201020202020102020202010102020101020103"
+              - generic [ref=f1e213]: "[2026-03-18T20:00:16.906Z] DEBUG: Serial In: RF receive 496 1000 1976 3980 0 0 0 0 01010202010202010101010201010101020201020101020102020202010102020201010103"
+              - generic [ref=f1e214]: "[2026-03-18T20:00:17.203Z] DEBUG: Serial In: RF receive 496 1004 1976 3984 0 0 0 0 01010202010202010101010201010101020201020101020102020202010102020201010103"
+              - generic [ref=f1e215]: "[2026-03-18T20:00:18.611Z] DEBUG: Serial In: RF receive 484 976 1956 3900 0 0 0 0 01020102020102020201010201010101020201020201020102020202010102010201020203"
+              - generic [ref=f1e216]: "[2026-03-18T20:00:18.972Z] DEBUG: Serial In: RF receive 500 960 1940 3904 0 0 0 0 01020102020101020201020101010101020201020102010202020202010102010202010203"
+              - generic [ref=f1e217]: "[2026-03-18T20:00:19.276Z] DEBUG: Serial In: RF receive 500 964 1952 3900 0 0 0 0 01020102020101020201020101010101020201020102010202020202010102010202010203"
+              - generic [ref=f1e218]: "[2026-03-18T20:00:19.579Z] DEBUG: Serial In: RF receive 496 968 1940 3908 0 0 0 0 01020102020101020201020101010101020201020102010202020202010102010202010203"
+              - generic [ref=f1e219]: "[2026-03-18T20:00:20.583Z] DEBUG: Serial In: RF receive 500 1976 1000 3984 0 0 0 0 01010102020101010202010202020202010101020202020201010101020201020102020203"
+              - generic [ref=f1e220]: "[2026-03-18T20:00:20.879Z] DEBUG: Serial In: RF receive 500 1976 1000 3980 0 0 0 0 01010102020101010202010202020202010101020202020201010101020201020102020203"
+              - generic [ref=f1e221]: "[2026-03-18T20:00:25.822Z] DEBUG: Serial In: RF receive 496 964 1940 3892 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e222]: "[2026-03-18T20:00:26.113Z] DEBUG: Serial In: RF receive 492 968 1960 3896 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e223]: "[2026-03-18T20:00:26.404Z] DEBUG: Serial In: RF receive 492 968 1944 3892 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e224]: "[2026-03-18T20:00:44.009Z] DEBUG: Serial In: RF receive 500 1000 1976 3984 0 0 0 0 01010101010101010101010101010101020201020202020102020202010102020101010203"
+              - generic [ref=f1e225]: "[2026-03-18T20:00:44.293Z] DEBUG: Serial In: RF receive 500 1000 1976 3980 0 0 0 0 01010101010101010101010101010101020201020202020102020202010102020101010203"
+              - generic [ref=f1e226]: "[2026-03-18T20:01:22.836Z] DEBUG: Serial In: RF receive 496 964 1940 3892 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e227]: "[2026-03-18T20:01:23.128Z] DEBUG: Serial In: RF receive 492 972 1964 3912 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e228]: "[2026-03-18T20:01:23.418Z] DEBUG: Serial In: RF receive 492 968 1944 3896 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e229]: "[2026-03-18T20:01:24.275Z] DEBUG: Serial In: RF receive 496 1000 1980 3988 0 0 0 0 01010202010202010101010201010101020201020101020102020202010102020201010103"
+              - generic [ref=f1e230]: "[2026-03-18T20:01:25.763Z] DEBUG: Serial In: RF receive 500 964 1940 3896 0 0 0 0 01020102020102020201010201010101020201020201020102020202010102010201020203"
+              - generic [ref=f1e231]: "[2026-03-18T20:01:26.071Z] DEBUG: Serial In: RF receive 500 964 1940 3896 0 0 0 0 01020102020102020201010201010101020201020201020102020202010102010201020203"
+              - generic [ref=f1e232]: "[2026-03-18T20:01:37.971Z] DEBUG: Serial In: RF receive 492 972 1948 3904 0 0 0 0 01020102020101020201020101010101020201020102010202020202010102010202010203"
+              - generic [ref=f1e233]: "[2026-03-18T20:01:38.273Z] DEBUG: Serial In: RF receive 496 968 1956 3896 0 0 0 0 01020102020101020201020101010101020201020102010202020202010102010202010203"
+              - generic [ref=f1e234]: "[2026-03-18T20:01:38.576Z] DEBUG: Serial In: RF receive 496 968 1944 3908 0 0 0 0 01020102020101020201020101010101020201020102010202020202010102010202010203"
+              - generic [ref=f1e235]: "[2026-03-18T20:01:39.582Z] DEBUG: Serial In: RF receive 496 1972 1000 3988 0 0 0 0 01010102020101010202010202020202010101020202020201010101020201020102020203"
+              - generic [ref=f1e236]: "[2026-03-18T20:01:39.878Z] DEBUG: Serial In: RF receive 500 1972 1000 3980 0 0 0 0 01010102020101010202010202020202010101020202020201010101020201020102020203"
+              - generic [ref=f1e237]: "[2026-03-18T20:01:41.149Z] DEBUG: Serial In: RF receive 500 1000 1972 3976 0 0 0 0 01010101010101010101010101010101020201020202020102020202010102020101010203"
+              - generic [ref=f1e238]: "[2026-03-18T20:02:18.041Z] DEBUG: Serial In: RF receive 304 2968 1184 10192 0 0 0 0 010002000202000200020002000002000200020002000202000200020002000200020000020200020002000002020002000002000200020002000200020002000203"
+              - generic [ref=f1e239]: "[2026-03-18T20:02:18.366Z] DEBUG: Serial In: RF receive 304 2968 1188 10164 0 0 0 0 010002000202000200020002000002000200020002000202000200020002000200020000020200020002000002020002000002000200020002000200020002000203"
+              - generic [ref=f1e240]: "[2026-03-18T20:02:20.067Z] DEBUG: Serial In: RF receive 492 972 1948 3896 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e241]: "[2026-03-18T20:02:20.359Z] DEBUG: Serial In: RF receive 492 968 1944 3892 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e242]: "[2026-03-18T20:02:31.131Z] DEBUG: Serial In: RF receive 488 1008 1984 3988 0 0 0 0 01010202010202010101010201010101020201020101020102020202010102020201010203"
+              - generic [ref=f1e243]: "[2026-03-18T20:02:32.609Z] DEBUG: Serial In: RF receive 484 980 1952 3884 0 0 0 0 01020102020102020201010201010101020201020201020102020202010102010201020203"
+              - generic [ref=f1e244]: "[2026-03-18T20:02:33.223Z] DEBUG: Serial In: RF receive 496 968 1940 3888 0 0 0 0 01020102020102020201010201010101020201020201020102020202010102010201020203"
+              - generic [ref=f1e245]: "[2026-03-18T20:02:37.935Z] DEBUG: Serial In: RF receive 484 1020 1976 3984 0 0 0 0 01010101010101010101010101010101020201020202020102020202010102020101020103"
+              - generic [ref=f1e246]: "[2026-03-18T20:02:38.219Z] DEBUG: Serial In: RF receive 500 1000 1976 3984 0 0 0 0 01010101010101010101010101010101020201020202020102020202010102020101020103"
+              - generic [ref=f1e247]: "[2026-03-18T20:02:57.196Z] DEBUG: Serial In: RF receive 496 964 1944 3896 0 0 0 0 01020102020101020201020101010101020201020102010202020202010102010202010203"
+              - generic [ref=f1e248]: "[2026-03-18T20:02:57.499Z] DEBUG: Serial In: RF receive 496 960 1944 3892 0 0 0 0 01020102020101020201020101010101020201020102010202020202010102010202010203"
+              - generic [ref=f1e249]: "[2026-03-18T20:02:58.507Z] DEBUG: Serial In: RF receive 500 1976 1000 3976 0 0 0 0 01010102020101010202010202020202010101020202020201010101020201020102020203"
+              - generic [ref=f1e250]: "[2026-03-18T20:02:58.803Z] DEBUG: Serial In: RF receive 500 1976 1000 3984 0 0 0 0 01010102020101010202010202020202010101020202020201010101020201020102020203"
+              - generic [ref=f1e251]: "[2026-03-18T20:03:17.006Z] DEBUG: Serial In: RF receive 488 972 1948 3904 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e252]: "[2026-03-18T20:03:17.298Z] DEBUG: Serial In: RF receive 496 968 1944 3892 0 0 0 0 01020102020201010201010101010101010201020201010102020202010102020201020103"
+              - generic [ref=f1e253]: "[2026-03-18T20:03:35.152Z] DEBUG: Serial In: RF receive 500 1000 1976 3984 0 0 0 0 01010101010101010101010101010101020201020202020202020202010102020101020103"
+              - generic [ref=f1e254]: "[2026-03-18T20:03:37.904Z] DEBUG: Serial In: RF receive 496 1000 1976 3984 0 0 0 0 01010202010202010101010201010101020201020101020102020202010102020201010203"
+              - generic [ref=f1e255]: "[2026-03-18T20:03:38.204Z] DEBUG: Serial In: RF receive 496 1000 1980 3980 0 0 0 0 01010202010202010101010201010101020201020101020102020202010102020201010203"
+              - generic [ref=f1e256]: "[2026-03-18T20:03:39.608Z] DEBUG: Serial In: RF receive 484 980 1956 3900 0 0 0 0 01020102020102020201010201010101020201020201010202020202010102010201020203"
+              - generic [ref=f1e257]: "[2026-03-18T20:03:40.222Z] DEBUG: Serial In: RF receive 496 964 1944 3888 0 0 0 0 01020102020102020201010201010101020201020201010202020202010102010201020203"
+              - generic [ref=f1e258]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e259]: Loaded options from /data/options.json
+              - generic [ref=f1e260]: "[2026-03-18T20:04:19.296Z] Connecting to MQTT: mqtt://core-mosquitto:1883"
+              - generic [ref=f1e261]: "[2026-03-18T20:04:19.429Z] Connecting to serial port: /dev/ttyUSB0 at 115200 baud"
+              - generic [ref=f1e262]: "[2026-03-18T20:04:19.445Z] Bridge Server listening on port 8080"
+              - generic [ref=f1e263]: "[2026-03-18T20:04:19.452Z] Serial Port Opened"
+              - generic [ref=f1e264]: "[2026-03-18T20:04:19.550Z] MQTT Connected"
+              - generic [ref=f1e265]: "[2026-03-18T20:04:20.910Z] Homeduino ready"
+              - generic [ref=f1e266]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e267]: Loaded options from /data/options.json
+              - generic [ref=f1e268]: "[2026-03-18T20:28:01.757Z] Connecting to MQTT: mqtt://core-mosquitto:1883"
+              - generic [ref=f1e269]: "[2026-03-18T20:28:01.904Z] Connecting to serial port: /dev/ttyUSB0 at 115200 baud"
+              - generic [ref=f1e270]: "[2026-03-18T20:28:01.919Z] Bridge Server listening on port 8080"
+              - generic [ref=f1e271]: "[2026-03-18T20:28:01.938Z] Serial Port Opened. Waiting for Arduino..."
+              - generic [ref=f1e272]: "[2026-03-18T20:28:02.037Z] MQTT Connected"
+              - generic [ref=f1e273]: "[2026-03-18T20:28:03.387Z] Homeduino ready"
+              - generic [ref=f1e274]: "[2026-03-18T20:28:04.942Z] Sending init signal (RF receive 0)..."
+              - generic [ref=f1e275]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e276]: node:internal/process/promises:391
+              - generic [ref=f1e277]: triggerUncaughtException(err, true /* fromPromise */);
+              - generic [ref=f1e278]: ^
+              - generic [ref=f1e279]: "Error: Error: No such file or directory, cannot open /dev/ttyUSB0"
+              - generic [ref=f1e280]: "Emitted 'error' event on SerialPort instance at:"
+              - generic [ref=f1e281]: at SerialPort._error (/app/node_modules/@serialport/stream/dist/index.js:85:18)
+              - generic [ref=f1e282]: at /app/node_modules/@serialport/stream/dist/index.js:118:18
+              - generic [ref=f1e283]: Node.js v20.20.1
+              - generic [ref=f1e284]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e285]: Serial connected. Flushing buffer...
+              - generic [ref=f1e286]: "Raw: ready"
+              - generic [ref=f1e287]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e288]: Serial connected. Flushing buffer...
+              - generic [ref=f1e289]: "Raw: ready"
+              - generic [ref=f1e290]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e291]: Serial connected. Flushing buffer...
+              - generic [ref=f1e292]: "Raw: ready"
+              - generic [ref=f1e293]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e294]: Serial connected. Flushing buffer...
+              - generic [ref=f1e295]: "Raw: ready"
+            - button "Neue Protokolle – Zum Scrollen klicken" [ref=f1e296] [cursor=pointer]:
+              - generic:
+                - generic:
+                  - img
+              - generic [ref=f1e297]: Neue Protokolle – Zum Scrollen klicken
+              - generic:
+                - generic:
+                  - img
+            - generic [ref=f1e298]:
+              - generic [ref=f1e299]:
+                - img
+              - text: Live
