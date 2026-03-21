@@ -109,7 +109,6 @@
             padding: 1rem;
         }
 
-        /* Signal Cards */
         .signal-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -216,10 +215,6 @@
             border-color: var(--accent-color);
         }
 
-        button.primary:hover {
-            filter: brightness(1.1);
-        }
-
         .empty-state {
             display: flex;
             flex-direction: column;
@@ -236,7 +231,6 @@
             opacity: 0.2;
         }
 
-        /* Console Style */
         .console {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
@@ -251,9 +245,7 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 
-        /* Animations */
         @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.05); opacity: 0.8; }
@@ -291,7 +283,7 @@
             <div id="signals-list" class="scroll-area">
                 <div class="empty-state">
                     <div class="empty-icon">📡</div>
-                    <p>Warten auf 433MHz Signale...<br><small>Vergewissere dich, dass dein Arduino verbunden ist.</small></p>
+                    <p>Warten auf 433MHz Signale...</p>
                 </div>
             </div>
         </div>
@@ -329,13 +321,13 @@
         }
 
         socket.on('connect', () => {
-            log('Mit Bridge-Server verbunden');
+            log('Mit Bridge-Server verbunden (v3.9.0)');
         });
 
         socket.on('mqtt_status', (data) => {
             mqttStatus.className = `badge ${data.connected ? 'online' : 'offline'}`;
             mqttStatus.textContent = `MQTT: ${data.connected ? 'Verbunden' : 'Getrennt'}`;
-            log(`MQTT Status: ${data.connected ? 'Verbunden' : 'Getrennt'} (${data.broker || 'N/A'})`);
+            log(`MQTT Status: ${data.connected ? 'Verbunden' : 'Getrennt'}`);
         });
 
         socket.on('status', (data) => {
@@ -367,10 +359,9 @@
             const card = document.createElement('div');
             card.className = 'signal-card';
             
-            // Create data grid
             let dataHtml = '';
             for (const [key, value] of Object.entries(res.values)) {
-                if (key === 'id' || key === 'channel') continue;
+                if (key === 'id' || key === 'channel' || key === 'state' || key === 'all' || key === 'unit') continue;
                 dataHtml += `
                     <div class="data-item">
                         <span class="data-label">${key}</span>
@@ -379,8 +370,6 @@
                 `;
             }
 
-            const id = res.values.id !== undefined ? res.values.id : 'N/A';
-            const ch = res.values.channel !== undefined ? res.values.channel : '';
             const uidDisplay = res.uid.replace(`hd_${res.protocol}_`, '');
 
             card.innerHTML = `
@@ -407,17 +396,18 @@
 
             signalsList.insertBefore(card, signalsList.firstChild);
             
-            // Limit cards
             if (signalsList.children.length > 30) {
                 signalsList.removeChild(signalsList.lastChild);
             }
         }
 
-        function addToHA(protocol, values) {
-            const name = prompt("Gib einen Namen für das Gerät in Home Assistant ein:", `${protocol} ${values.id || ''}`);
+        function addToHA(protocol, values, uid) {
+            const name = prompt("Gib einen Namen für das Gerät in Home Assistant ein:", `${protocol} ${uid.split('_').pop()}`);
             if (name) {
-                socket.emit('add_device', { protocol, values, name });
-                log(`Discovery-Befehl für "${name}" gesendet`);
+                const payload = { protocol, values, name, uid };
+                console.log("Emitting add_device:", payload);
+                socket.emit('add_device', payload);
+                log(`Discovery-Befehl für "${name}" (${uid}) gesendet`);
             }
         }
 

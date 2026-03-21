@@ -8,7 +8,7 @@ const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
 
-// --- Configuration Handling (v3.8.9) ---
+// --- Configuration Handling (v3.9.0) ---
 let options = {
     serial_port: "/dev/ttyUSB0",
     baud_rate: 115200,
@@ -70,16 +70,20 @@ mqttClient.on('error', (err) => {
 
 // --- Manual Discovery Logic ---
 function sendDiscovery(protocol, uid, values, friendlyName) {
+    if (!uid) {
+        console.error("Error: Cannot send discovery without UID!");
+        return;
+    }
     const topicBase = `homeduino/${protocol}/${uid}`;
     const device = {
         identifiers: [uid],
         name: friendlyName || `${protocol} ${uid}`,
         model: protocol,
         manufacturer: "Homeduino",
-        sw_version: "3.8.9"
+        sw_version: "3.9.0"
     };
 
-    console.log(`Sending Manual Discovery for ${uid} as "${friendlyName}"`);
+    console.log(`[DISCOVERY] Registering ${uid} as "${friendlyName}"`);
 
     // Temperature Sensor
     if (values.temperature !== undefined) {
@@ -144,7 +148,15 @@ io.on('connection', (socket) => {
     }
 
     socket.on('add_device', (data) => {
-        const { protocol, values, name, uid } = data;
+        console.log('Received add_device event:', JSON.stringify(data));
+        let { protocol, values, name, uid } = data;
+        
+        // Fallback: If UID is missing from UI, generate it here
+        if (!uid) {
+            let idSuffix = values.id !== undefined ? values.id : (values.channel !== undefined ? 'ch'+values.channel : 'fixed');
+            uid = `hd_${protocol}_${idSuffix}`;
+        }
+        
         sendDiscovery(protocol, uid, values, name);
     });
 
@@ -184,11 +196,9 @@ if (serial) {
                     const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
                     if (results && results.length > 0) {
                         const enrichedResults = results.map(res => {
-                            // Improved UID generation: Use id and/or channel. Fallback to hash of pulses.
                             let idSuffix = res.values.id !== undefined ? res.values.id : '';
                             if (res.values.channel !== undefined) idSuffix += (idSuffix ? '_' : '') + 'ch' + res.values.channel;
                             if (!idSuffix) {
-                                // Extract meaningful bits from the pulse sequence for the hash
                                 const pulseData = strSeq.split(' ').slice(-1)[0];
                                 idSuffix = 'hash_' + pulseData.substring(pulseData.length - 10); 
                             }
@@ -204,9 +214,7 @@ if (serial) {
                             return { ...res, uid, topicBase };
                         });
 
-                        // Stream to UI
                         io.emit('signal', enrichedResults);
-                        console.log('Emitted enriched signals:', JSON.stringify(enrichedResults));
                     }
                 }
             } catch (e) {
@@ -222,5 +230,5 @@ if (serial) {
 }
 
 server.listen(8080, '0.0.0.0', () => {
-    console.log('Bridge Server listening on port 8080 (v3.8.9)');
+    console.log('Bridge Server listening on port 8080 (v3.9.0)');
 });
