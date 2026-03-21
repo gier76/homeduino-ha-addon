@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
     socket.on('add_device', (data) => {
         let { protocol, values, name, uid } = data;
         const topicBase = `homeduino/${protocol}/${uid}`;
-        const device = { identifiers: [uid], name: name, model: protocol, manufacturer: "Homeduino", sw_version: "4.0.3" };
+        const device = { identifiers: [uid], name: name, model: protocol, manufacturer: "Homeduino", sw_version: "4.0.4" };
         if (values.temperature !== undefined) mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_temp/config`, JSON.stringify({ name: `${name} Temp`, unique_id: `${uid}_temp`, state_topic: `${topicBase}/temperature`, device_class: "temperature", unit_of_measurement: "°C", device }), { retain: true });
         if (values.humidity !== undefined) mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_hum/config`, JSON.stringify({ name: `${name} Hum`, unique_id: `${uid}_hum`, state_topic: `${topicBase}/humidity`, device_class: "humidity", unit_of_measurement: "%", device }), { retain: true });
         if (values.state !== undefined) mqttClient.publish(`homeassistant/switch/homeduino/${uid}/config`, JSON.stringify({ name: name, unique_id: uid, command_topic: `homeduino/command/${protocol}/${uid}`, state_topic: `${topicBase}/state`, device }), { retain: true });
@@ -60,10 +60,13 @@ if (serial) {
         if (!line.startsWith('RF receive ')) return;
         try {
             const strSeq = line.split(' ').slice(2).join(' ');
+            // --- DEBUG LOGGING ---
+            console.log(`[DEBUG] Raw Signal: ${strSeq}`);
             const info = rfcontrol.prepareCompressedPulses(strSeq);
             if (info) {
                 const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
                 if (results && results.length > 0) {
+                    console.log(`[DEBUG] Decoded: ${JSON.stringify(results)}`);
                     const enriched = results.map(res => {
                         res.values.raw = strSeq.split(' ').pop();
                         const identity = constructDeviceIdentity(res.protocol, res.values);
@@ -75,8 +78,8 @@ if (serial) {
                     io.emit('signal_group', enriched);
                 }
             }
-        } catch (e) {}
+        } catch (e) { console.error(e); }
     });
 }
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v4.0.3'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v4.0.4'));
