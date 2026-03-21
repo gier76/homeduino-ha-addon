@@ -8,7 +8,7 @@ const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
 
-// --- Configuration Handling (v3.8.7) ---
+// --- Configuration Handling (v3.8.8) ---
 let options = {
     serial_port: "/dev/ttyUSB0",
     baud_rate: 115200,
@@ -30,8 +30,13 @@ if (fs.existsSync('/data/options.json')) {
 }
 
 // --- Serial Port Setup ---
-const serial = new SerialPort({ path: options.serial_port, baudRate: parseInt(options.baud_rate) });
-const parser = serial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+let serial, parser;
+try {
+    serial = new SerialPort({ path: options.serial_port, baudRate: parseInt(options.baud_rate) });
+    parser = serial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+} catch (err) {
+    console.error("Serial Port Error:", err.message);
+}
 
 // --- Web Server Setup ---
 const app = express();
@@ -39,13 +44,10 @@ const server = http.createServer(app);
 const io = new Server(server, { 
     path: '/socket.io',
     cors: { origin: "*" },
-    transports: ["polling", "websocket"] // Allow both, but client prefers polling now
+    transports: ["polling", "websocket"]
 });
 
 const publicPath = path.join(__dirname, 'public');
-if (!fs.existsSync(publicPath)) {
-    fs.mkdirSync(publicPath, { recursive: true });
-}
 app.use(express.static(publicPath));
 app.get('/', (req, res) => res.sendFile(path.join(publicPath, 'index.html')));
 
@@ -61,28 +63,28 @@ mqttClient.on('connect', () => {
     io.emit('mqtt_status', { connected: true, broker: options.mqtt_broker });
 });
 
-mqttClient.on('error', (err) => console.error('MQTT Error:', err.message));
+mqttClient.on('error', (err) => {
+    console.error('MQTT Error:', err.message);
+    io.emit('mqtt_status', { connected: false, error: err.message });
+});
 
-// --- Auto-Discovery Cache ---
-const discoveredDevices = new Set();
-
-function sendDiscovery(protocol, uid, values) {
-    if (discoveredDevices.has(uid)) return;
-
+// --- Manual Discovery Logic ---
+function sendDiscovery(protocol, uid, values, friendlyName) {
     const topicBase = `homeduino/${protocol}/${uid}`;
     const device = {
         identifiers: [uid],
-        name: `${protocol} ${uid}`,
+        name: friendlyName || `${protocol} ${uid}`,
         model: protocol,
-        manufacturer: "Homeduino"
+        manufacturer: "Homeduino",
+        sw_version: "3.8.8"
     };
 
-    console.log(`Sending Auto-Discovery for ${uid}`);
+    console.log(`Sending Manual Discovery for ${uid} as "${friendlyName}"`);
 
     // Temperature Sensor
     if (values.temperature !== undefined) {
         mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_temp/config`, JSON.stringify({
-            name: `${protocol} ${uid} Temperature`,
+            name: `${device.name} Temperature`,
             unique_id: `${uid}_temp`,
             state_topic: `${topicBase}/temperature`,
             device_class: "temperature",
@@ -95,7 +97,7 @@ function sendDiscovery(protocol, uid, values) {
     // Humidity Sensor
     if (values.humidity !== undefined) {
         mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_hum/config`, JSON.stringify({
-            name: `${protocol} ${uid} Humidity`,
+            name: `${device.name} Humidity`,
             unique_id: `${uid}_hum`,
             state_topic: `${topicBase}/humidity`,
             device_class: "humidity",
@@ -108,7 +110,7 @@ function sendDiscovery(protocol, uid, values) {
     // Battery Sensor
     if (values.battery !== undefined) {
          mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_bat/config`, JSON.stringify({
-            name: `${protocol} ${uid} Battery`,
+            name: `${device.name} Battery`,
             unique_id: `${uid}_bat`,
             state_topic: `${topicBase}/battery`,
             device_class: "battery",
@@ -121,7 +123,7 @@ function sendDiscovery(protocol, uid, values) {
     // Switch
     if (values.state !== undefined) {
          mqttClient.publish(`homeassistant/switch/homeduino/${uid}/config`, JSON.stringify({
-            name: `${protocol} ${uid}`,
+            name: device.name,
             unique_id: uid,
             command_topic: `homeduino/command/${protocol}/${uid}`,
             state_topic: `${topicBase}/state`,
@@ -130,58 +132,94 @@ function sendDiscovery(protocol, uid, values) {
             device: device
         }), { retain: true });
     }
-
-    discoveredDevices.add(uid);
 }
 
-// --- Logic ---
-serial.on('open', () => {
-    console.log(`Serial connected on ${options.serial_port}`);
-    setTimeout(() => serial.write('\nRF receive 0\n'), 2000);
-});
+// --- Socket.IO Interaction ---
+io.on('connection', (socket) => {
+    console.log('UI Client connected');
+    socket.emit('mqtt_status', { connected: mqttClient.connected, broker: options.mqtt_broker });
+    
+    if (serial && serial.isOpen) {
+        socket.emit('status', { connected: true });
+    }
 
-parser.on('data', (line) => {
-    if (options.debug) console.log('Raw:', line);
-    if (line.startsWith('RF receive ')) {
+    socket.on('add_device', (data) => {
+        const { protocol, values, name } = data;
+        // Generate UID the same way we do for states
+        let idSuffix = values.id !== undefined ? values.id : (values.channel !== undefined ? 'ch'+values.channel : 'fixed');
+        const uid = `hd_${protocol}_${idSuffix}`;
+        
+        sendDiscovery(protocol, uid, values, name);
+    });
+
+    socket.on('send_command', (data) => {
+        const { protocol, values } = data;
         try {
-            const parts = line.split(' ');
-            const strSeq = parts.slice(2).join(' ');
-            const info = rfcontrol.prepareCompressedPulses(strSeq);
-            if (info) {
-                const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
-                if (results && results.length > 0) {
-                    console.log('Decoded:', JSON.stringify(results));
-                    io.emit('signal', results);
-                    
-                    results.forEach(res => {
-                        // Improved UID generation: Use id and/or channel. Fallback to a small hash of the raw sequence if no ID is found.
-                        let idSuffix = res.values.id !== undefined ? res.values.id : '';
-                        if (res.values.channel !== undefined) idSuffix += (idSuffix ? '_' : '') + 'ch' + res.values.channel;
-                        if (!idSuffix) {
-                            // Last resort: simple hash of the pulse sequence to distinguish sensors without IDs
-                            idSuffix = 'raw_' + strSeq.split(' ').slice(-1)[0].substring(0, 8); 
-                        }
-                        
-                        const uid = `hd_${res.protocol}_${idSuffix}`;
-                        const topicBase = `homeduino/${res.protocol}/${uid}`;
-                        
-                        // 1. Send Auto-Discovery (if new)
-                        sendDiscovery(res.protocol, uid, res.values);
-
-                        // 2. Publish State
-                        Object.keys(res.values).forEach(key => {
-                            const val = res.values[key];
-                            mqttClient.publish(`${topicBase}/${key}`, val.toString(), { retain: true });
-                        });
-                    });
-                }
+            const result = rfcontrol.encodeMessage(protocol, values);
+            if (result && serial && serial.isOpen) {
+                const cmd = `RF send 4 ${result.pulseLengths.length} ${result.pulseLengths.join(' ')} ${result.pulses}`;
+                serial.write(cmd + '\n');
+                console.log('Sent command:', cmd);
             }
         } catch (e) {
-            console.error('Decode Error:', e.message);
+            console.error('Encode Error:', e.message);
         }
-    }
+    });
 });
 
+// --- Logic ---
+if (serial) {
+    serial.on('open', () => {
+        console.log(`Serial connected on ${options.serial_port}`);
+        io.emit('status', { connected: true });
+        setTimeout(() => serial.write('\nRF receive 0\n'), 2000);
+    });
+
+    parser.on('data', (line) => {
+        line = line.trim();
+        if (options.debug) console.log('Raw:', line);
+        
+        if (line.startsWith('RF receive ')) {
+            try {
+                const parts = line.split(' ');
+                const strSeq = parts.slice(2).join(' ');
+                const info = rfcontrol.prepareCompressedPulses(strSeq);
+                if (info) {
+                    const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
+                    if (results && results.length > 0) {
+                        console.log('Decoded:', JSON.stringify(results));
+                        
+                        // Stream to UI only (No auto-discovery anymore!)
+                        io.emit('signal', results);
+                        
+                        results.forEach(res => {
+                            // Helper for UID
+                            let idSuffix = res.values.id !== undefined ? res.values.id : '';
+                            if (res.values.channel !== undefined) idSuffix += (idSuffix ? '_' : '') + 'ch' + res.values.channel;
+                            if (!idSuffix) idSuffix = 'raw_' + strSeq.split(' ').slice(-1)[0].substring(0, 8); 
+                            
+                            const uid = `hd_${res.protocol}_${idSuffix}`;
+                            const topicBase = `homeduino/${res.protocol}/${uid}`;
+
+                            // Publish State (Discovery is now manual via UI)
+                            Object.keys(res.values).forEach(key => {
+                                mqttClient.publish(`${topicBase}/${key}`, res.values[key].toString(), { retain: true });
+                            });
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error('Decode Error:', e.message);
+            }
+        }
+    });
+
+    serial.on('error', (err) => {
+        console.error('Serial Error:', err.message);
+        io.emit('status', { error: err.message });
+    });
+}
+
 server.listen(8080, '0.0.0.0', () => {
-    console.log('Bridge Server listening on port 8080');
+    console.log('Bridge Server listening on port 8080 (v3.8.8)');
 });
