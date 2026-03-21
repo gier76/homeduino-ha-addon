@@ -34,8 +34,7 @@ if (fs.existsSync('/data/options.json')) {
 let serial, parser;
 try {
     serial = new SerialPort({ path: options.serial_port, baudRate: parseInt(options.baud_rate) });
-    parser = serial.pipe(new ReadlineParser({ delimiter: '
-' }));
+    parser = serial.pipe(new ReadlineParser({ delimiter: '\\r\\n' }));
 } catch (err) {
     console.error("Serial Port Error:", err.message);
 }
@@ -239,5 +238,5 @@ RF receive 0
 }
 
 server.listen(8080, '0.0.0.0', () => {
-    console.log('Bridge Server listening on port 8080 (v4.0.1)');
+    console.log('Bridge Server listening on port 8080 (v4.0.2)');
 });
