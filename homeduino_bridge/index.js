@@ -23,13 +23,15 @@ if (serial) {
     serial.on('open', () => { 
         console.log('--- SERIAL PORT OPENED ---');
         io.emit('log', 'Serial Port Opened');
+        // Sende Befehl alle 5 Sekunden
+        setInterval(() => {
+            serial.write('RF receive 0\n');
+        }, 5000);
     });
     
-    // Maximale Transparenz: Alles loggen
     serial.on('data', (data) => {
-        const raw = data.toString('hex');
         const ascii = data.toString('ascii');
-        console.log(`[DEBUG RAW] HEX: ${raw} | ASCII: ${ascii}`);
+        console.log(`[DEBUG RAW]: ${ascii}`);
         io.emit('log', `RAW: ${ascii}`);
     });
 
@@ -39,4 +41,4 @@ if (serial) {
     });
 }
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v4.7.0 (Diagnostic Mode)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v4.7.1 (Cyclic Trigger)'));
