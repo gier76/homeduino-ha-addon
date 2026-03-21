@@ -1,4 +1,5 @@
 const { SerialPort } = require('serialport');
+const { ReadlineParser } = require('@serialport/parser-readline');
 const rfcontrol = require('rfcontroljs');
 const mqtt = require('mqtt');
 const express = require('express');
@@ -12,9 +13,10 @@ if (fs.existsSync('/data/options.json')) {
     try { options = { ...options, ...JSON.parse(fs.readFileSync('/data/options.json', 'utf8')) }; } catch (e) { console.error(e); }
 }
 
-let serial;
+let serial, parser;
 try {
     serial = new SerialPort({ path: options.serial_port, baudRate: parseInt(options.baud_rate) });
+    parser = serial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 } catch (err) { console.error(err); }
 
 const app = express();
@@ -23,46 +25,37 @@ const io = new Server(server, { path: '/socket.io', cors: { origin: "*" }, trans
 app.use(express.static(path.join(__dirname, 'public')));
 const mqttClient = mqtt.connect(`mqtt://${options.mqtt_broker}:${options.mqtt_port}`, { username: options.mqtt_user, password: options.mqtt_password });
 
-// --- Robust Serial Buffer ---
+// --- Robust Buffer ---
 let buffer = '';
 if (serial) {
-    serial.on('open', () => { setTimeout(() => serial.write('\nRF receive 0\n'), 2000); });
-    serial.on('data', (data) => {
-        buffer += data.toString();
-        let lines = buffer.split('\n');
-        buffer = lines.pop(); // Keep incomplete line in buffer
+    serial.on('open', () => { 
+        console.log('Serial Port Open');
+        setTimeout(() => serial.write('\nRF receive 0\n'), 2000); 
+    });
+    
+    parser.on('data', (line) => {
+        line = line.trim();
+        if (!line) return;
+        
+        // Puffer-Logik
+        if (line.startsWith('RF receive')) {
+            buffer = line;
+        } else if (buffer.startsWith('RF receive')) {
+            buffer += line;
+        }
 
-        for (let line of lines) {
-            line = line.trim();
-            if (!line) continue;
-            
-            // Reconstruct fragmented RF receive lines
-            if (line.includes('RF receive ') || line.match(/^[012\s]+$/)) {
-                // If it's a pulse sequence part
-                handleLine(line);
-            }
+        // Wenn das Paket vollständig ist (endet auf '03' bei weather2)
+        if (buffer.startsWith('RF receive') && buffer.endsWith('03')) {
+            processSignal(buffer);
+            buffer = '';
         }
     });
 }
 
-// Full line reconstruction
-let currentRFLine = '';
-function handleLine(line) {
-    if (line.startsWith('RF receive ')) {
-        currentRFLine = line;
-    } else if (currentRFLine) {
-        currentRFLine += line;
-        // Check if sequence looks complete (ends with '03')
-        if (currentRFLine.endsWith('03')) {
-            processSignal(currentRFLine);
-            currentRFLine = '';
-        }
-    }
-}
-
 function processSignal(line) {
     try {
-        const strSeq = line.split(' ').slice(2).join(' ');
+        const parts = line.split(' ');
+        const strSeq = parts.slice(2).join(' ');
         const info = rfcontrol.prepareCompressedPulses(strSeq);
         if (info) {
             const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
@@ -77,4 +70,4 @@ function processSignal(line) {
     } catch (e) { console.error('Parse Error:', e); }
 }
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v4.5.0 (Robust Buffer)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v4.6.2 (Buffer Fix)'));
