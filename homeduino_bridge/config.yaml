@@ -1,5 +1,5 @@
 name: "Homeduino Bridge"
-version: "3.9.5"
+version: "4.0.0"
 slug: "homeduino_bridge"
 description: "Bridge for 433MHz devices. Now with improved device detection and Glow UI."
 url: "https://github.com/gier76/homeduino-ha-addon"
