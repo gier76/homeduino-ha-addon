@@ -9,7 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-// --- Configuration Handling (v3.9.1) ---
+// --- Configuration Handling (v3.9.3) ---
 let options = {
     serial_port: "/dev/ttyUSB0",
     baud_rate: 115200,
@@ -69,16 +69,66 @@ mqttClient.on('error', (err) => {
     io.emit('mqtt_status', { connected: false, error: err.message });
 });
 
+mqttClient.on('message', (topic, message) => {
+    // Handle incoming MQTT commands for switches
+    // Topic: homeduino/command/protocol/uid
+    if (topic.startsWith('homeduino/command/')) {
+        const parts = topic.split('/');
+        if (parts.length >= 4) {
+            const protocol = parts[2];
+            // We assume the payload contains the values needed to switch
+            // But usually HA sends "ON" or "OFF" as payload
+            // We need to reconstruct the full values object from what we stored or infer it
+            console.log(`MQTT Command received: ${topic} -> ${message.toString()}`);
+            // TODO: Implement robust MQTT command handling back to RF
+        }
+    }
+});
+
+// --- Helper for Robust Hash ---
+function generateSecureHash(str) {
+    return crypto.createHash('md5').update(str).digest('hex').substring(0, 10);
+}
+
+// --- Helper to construct a better name/ID ---
+function constructDeviceIdentity(protocol, values, rawHash) {
+    let parts = [];
+    
+    // ID / Address
+    if (values.id !== undefined) parts.push(`id-${values.id}`);
+    if (values.address !== undefined) parts.push(`addr-${values.address}`);
+    
+    // System / Unit / Channel
+    if (values.systemcode !== undefined) parts.push(`sys-${values.systemcode}`);
+    if (values.unitcode !== undefined) parts.push(`unit-${values.unitcode}`);
+    if (values.unit !== undefined) parts.push(`unit-${values.unit}`);
+    if (values.channel !== undefined) parts.push(`ch-${values.channel}`);
+    if (values.house !== undefined) parts.push(`house-${values.house}`);
+    if (values.group !== undefined) parts.push(`grp-${values.group}`);
+
+    let idSuffix = parts.join('_');
+    
+    // Fallback if no identifiers found
+    if (!idSuffix) {
+        idSuffix = 'raw_' + rawHash;
+    }
+
+    const uid = `hd_${protocol}_${idSuffix}`.replace(/[^a-z0-9_-]/gi, '_').toLowerCase();
+    const name = `${protocol} ${parts.join(' ')}`.trim() || `${protocol} Unknown`;
+
+    return { uid, name, idSuffix };
+}
+
 // --- Manual Discovery Logic ---
 function sendDiscovery(protocol, uid, values, friendlyName) {
     if (!uid) return;
     const topicBase = `homeduino/${protocol}/${uid}`;
     const device = {
         identifiers: [uid],
-        name: friendlyName || `${protocol} ${uid.split('_').pop()}`,
+        name: friendlyName,
         model: protocol,
         manufacturer: "Homeduino",
-        sw_version: "3.9.1"
+        sw_version: "3.9.3"
     };
 
     console.log(`[DISCOVERY] Registering ${uid} as "${device.name}"`);
@@ -96,7 +146,8 @@ function sendDiscovery(protocol, uid, values, friendlyName) {
         }), { retain: true });
     }
 
-    // Humidity Sensor
+    // Humidity Sensor (Even if currently undefined, we register it if protocol supports it usually)
+    // For now only if present to avoid empty entities
     if (values.humidity !== undefined) {
         mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_hum/config`, JSON.stringify({
             name: `${device.name} Humidity`,
@@ -109,21 +160,8 @@ function sendDiscovery(protocol, uid, values, friendlyName) {
         }), { retain: true });
     }
     
-    // Battery Sensor
-    if (values.battery !== undefined) {
-         mqttClient.publish(`homeassistant/sensor/homeduino/${uid}_bat/config`, JSON.stringify({
-            name: `${device.name} Battery`,
-            unique_id: `${uid}_bat`,
-            state_topic: `${topicBase}/battery`,
-            device_class: "battery",
-            unit_of_measurement: "%",
-            value_template: "{{ value }}",
-            device: device
-        }), { retain: true });
-    }
-
     // Switch
-    if (values.state !== undefined) {
+    if (values.switch || values.command || values.state !== undefined) {
          mqttClient.publish(`homeassistant/switch/homeduino/${uid}/config`, JSON.stringify({
             name: device.name,
             unique_id: uid,
@@ -146,30 +184,37 @@ io.on('connection', (socket) => {
     }
 
     socket.on('add_device', (data) => {
-        console.log('Received add_device event:', JSON.stringify(data));
         let { protocol, values, name, uid } = data;
+        
+        // If name is not provided or generic, try to improve it
+        if (!name) {
+             const identity = constructDeviceIdentity(protocol, values, 'manual');
+             name = identity.name;
+             uid = identity.uid;
+        }
+        
         sendDiscovery(protocol, uid, values, name);
     });
 
     socket.on('send_command', (data) => {
         const { protocol, values } = data;
+        console.log(`[CMD] Sending to ${protocol}:`, JSON.stringify(values));
+        
         try {
+            // Ensure we encode exactly what was received/requested
             const result = rfcontrol.encodeMessage(protocol, values);
             if (result && serial && serial.isOpen) {
                 const cmd = `RF send 4 ${result.pulseLengths.length} ${result.pulseLengths.join(' ')} ${result.pulses}`;
                 serial.write(cmd + '\n');
-                console.log('Sent command:', cmd);
+                console.log('Sent raw command:', cmd);
+            } else {
+                console.error("Failed to encode message or serial not open");
             }
         } catch (e) {
             console.error('Encode Error:', e.message);
         }
     });
 });
-
-// --- Helper for Robust Hash ---
-function generateSecureHash(str) {
-    return crypto.createHash('md5').update(str).digest('hex').substring(0, 10);
-}
 
 // --- Logic ---
 if (serial) {
@@ -181,40 +226,46 @@ if (serial) {
 
     parser.on('data', (line) => {
         line = line.trim();
-        if (options.debug) console.log('Raw:', line);
+        if (options.debug && line.startsWith('RF receive')) console.log('Raw:', line);
         
         if (line.startsWith('RF receive ')) {
             try {
                 const parts = line.split(' ');
-                // We ignore the first 2-3 parts (RF receive and potentially jittery first timings)
-                // We take the actual pulse sequence (last part usually)
                 const strSeq = parts.slice(2).join(' ');
                 const info = rfcontrol.prepareCompressedPulses(strSeq);
+                
                 if (info) {
                     const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
+                    
                     if (results && results.length > 0) {
+                        // Generate a raw hash for fallback identification
+                        // Use the pulse string (last part of line) for consistency
+                        const pulseStr = parts.slice(-1)[0]; 
+                        const rawHash = generateSecureHash(pulseStr);
+
                         const enrichedResults = results.map(res => {
-                            let idSuffix = '';
-                            if (res.values.id !== undefined) {
-                                idSuffix = res.values.id;
-                                if (res.values.channel !== undefined) idSuffix += '_ch' + res.values.channel;
-                            } else {
-                                // IMPROVED HASH: Use the pulse pattern itself to distinguish sensors
-                                // We take the last part of the sequence which is the most unique bit stream
-                                const bitStream = strSeq.split(' ').pop();
-                                idSuffix = 'sensor_' + generateSecureHash(bitStream);
-                            }
-                            
-                            const uid = `hd_${res.protocol}_${idSuffix}`;
+                            const identity = constructDeviceIdentity(res.protocol, res.values, rawHash);
+                            const uid = identity.uid;
                             const topicBase = `homeduino/${res.protocol}/${uid}`;
 
-                            // Publish State automatically
+                            // Determine state for switches
+                            let statePayload = null;
+                            if (res.values.state !== undefined) statePayload = res.values.state;
+                            if (res.values.command === 'on' || res.values.switch === 'on') statePayload = true;
+                            if (res.values.command === 'off' || res.values.switch === 'off') statePayload = false;
+
+                            // Publish State
                             Object.keys(res.values).forEach(key => {
                                 const val = res.values[key];
                                 mqttClient.publish(`${topicBase}/${key}`, val.toString(), { retain: true });
                             });
+                            
+                            // Publish unified state for switches
+                            if (statePayload !== null) {
+                                mqttClient.publish(`${topicBase}/state`, statePayload.toString(), { retain: true });
+                            }
 
-                            return { ...res, uid, topicBase };
+                            return { ...res, uid, topicBase, identityName: identity.name };
                         });
 
                         io.emit('signal', enrichedResults);
@@ -233,5 +284,5 @@ if (serial) {
 }
 
 server.listen(8080, '0.0.0.0', () => {
-    console.log('Bridge Server listening on port 8080 (v3.9.1)');
+    console.log('Bridge Server listening on port 8080 (v3.9.3)');
 });
