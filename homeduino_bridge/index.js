@@ -239,5 +239,5 @@ RF receive 0
 }
 
 server.listen(8080, '0.0.0.0', () => {
-    console.log('Bridge Server listening on port 8080 (v4.0.0)');
+    console.log('Bridge Server listening on port 8080 (v4.0.1)');
 });

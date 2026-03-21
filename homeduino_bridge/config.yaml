@@ -1,7 +1,7 @@
 name: "Homeduino Bridge"
-version: "4.0.0"
+version: "4.0.1"
 slug: "homeduino_bridge"
-description: "Bridge for 433MHz devices. Now with improved device detection and Glow UI."
+description: "Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling"
 url: "https://github.com/gier76/homeduino-ha-addon"
 arch:
   - amd64
