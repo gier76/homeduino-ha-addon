@@ -8,7 +8,7 @@ const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
 
-// --- Configuration Handling (v3.8.8) ---
+// --- Configuration Handling (v3.8.9) ---
 let options = {
     serial_port: "/dev/ttyUSB0",
     baud_rate: 115200,
@@ -76,7 +76,7 @@ function sendDiscovery(protocol, uid, values, friendlyName) {
         name: friendlyName || `${protocol} ${uid}`,
         model: protocol,
         manufacturer: "Homeduino",
-        sw_version: "3.8.8"
+        sw_version: "3.8.9"
     };
 
     console.log(`Sending Manual Discovery for ${uid} as "${friendlyName}"`);
@@ -144,11 +144,7 @@ io.on('connection', (socket) => {
     }
 
     socket.on('add_device', (data) => {
-        const { protocol, values, name } = data;
-        // Generate UID the same way we do for states
-        let idSuffix = values.id !== undefined ? values.id : (values.channel !== undefined ? 'ch'+values.channel : 'fixed');
-        const uid = `hd_${protocol}_${idSuffix}`;
-        
+        const { protocol, values, name, uid } = data;
         sendDiscovery(protocol, uid, values, name);
     });
 
@@ -187,25 +183,30 @@ if (serial) {
                 if (info) {
                     const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
                     if (results && results.length > 0) {
-                        console.log('Decoded:', JSON.stringify(results));
-                        
-                        // Stream to UI only (No auto-discovery anymore!)
-                        io.emit('signal', results);
-                        
-                        results.forEach(res => {
-                            // Helper for UID
+                        const enrichedResults = results.map(res => {
+                            // Improved UID generation: Use id and/or channel. Fallback to hash of pulses.
                             let idSuffix = res.values.id !== undefined ? res.values.id : '';
                             if (res.values.channel !== undefined) idSuffix += (idSuffix ? '_' : '') + 'ch' + res.values.channel;
-                            if (!idSuffix) idSuffix = 'raw_' + strSeq.split(' ').slice(-1)[0].substring(0, 8); 
+                            if (!idSuffix) {
+                                // Extract meaningful bits from the pulse sequence for the hash
+                                const pulseData = strSeq.split(' ').slice(-1)[0];
+                                idSuffix = 'hash_' + pulseData.substring(pulseData.length - 10); 
+                            }
                             
                             const uid = `hd_${res.protocol}_${idSuffix}`;
                             const topicBase = `homeduino/${res.protocol}/${uid}`;
 
-                            // Publish State (Discovery is now manual via UI)
+                            // Publish State
                             Object.keys(res.values).forEach(key => {
                                 mqttClient.publish(`${topicBase}/${key}`, res.values[key].toString(), { retain: true });
                             });
+
+                            return { ...res, uid, topicBase };
                         });
+
+                        // Stream to UI
+                        io.emit('signal', enrichedResults);
+                        console.log('Emitted enriched signals:', JSON.stringify(enrichedResults));
                     }
                 }
             } catch (e) {
@@ -221,5 +222,5 @@ if (serial) {
 }
 
 server.listen(8080, '0.0.0.0', () => {
-    console.log('Bridge Server listening on port 8080 (v3.8.8)');
+    console.log('Bridge Server listening on port 8080 (v3.8.9)');
 });

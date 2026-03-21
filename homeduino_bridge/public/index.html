@@ -381,20 +381,21 @@
 
             const id = res.values.id !== undefined ? res.values.id : 'N/A';
             const ch = res.values.channel !== undefined ? res.values.channel : '';
+            const uidDisplay = res.uid.replace(`hd_${res.protocol}_`, '');
 
             card.innerHTML = `
                 <div class="card-top">
                     <span class="protocol-tag">${res.protocol}</span>
                     <span class="time-tag">${time}</span>
                 </div>
-                <div style="margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600;">
-                    ID: ${id} ${ch ? `| Kanal: ${ch}` : ''}
+                <div style="margin-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--secondary-text);">
+                    UID: <span style="color: var(--accent-color);">${uidDisplay}</span>
                 </div>
                 <div class="data-grid">
                     ${dataHtml}
                 </div>
                 <div class="actions">
-                    <button class="primary" onclick="addToHA('${res.protocol}', ${JSON.stringify(res.values).replace(/"/g, '&quot;')})">
+                    <button class="primary" onclick="addToHA('${res.protocol}', ${JSON.stringify(res.values).replace(/"/g, '&quot;')}, '${res.uid}')">
                         <span>➕</span> In HA hinzufügen
                     </button>
                     ${res.protocol.includes('switch') ? `
