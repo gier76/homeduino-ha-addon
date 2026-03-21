@@ -7,8 +7,9 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
-// --- Configuration Handling (v3.9.0) ---
+// --- Configuration Handling (v3.9.1) ---
 let options = {
     serial_port: "/dev/ttyUSB0",
     baud_rate: 115200,
@@ -70,20 +71,17 @@ mqttClient.on('error', (err) => {
 
 // --- Manual Discovery Logic ---
 function sendDiscovery(protocol, uid, values, friendlyName) {
-    if (!uid) {
-        console.error("Error: Cannot send discovery without UID!");
-        return;
-    }
+    if (!uid) return;
     const topicBase = `homeduino/${protocol}/${uid}`;
     const device = {
         identifiers: [uid],
-        name: friendlyName || `${protocol} ${uid}`,
+        name: friendlyName || `${protocol} ${uid.split('_').pop()}`,
         model: protocol,
         manufacturer: "Homeduino",
-        sw_version: "3.9.0"
+        sw_version: "3.9.1"
     };
 
-    console.log(`[DISCOVERY] Registering ${uid} as "${friendlyName}"`);
+    console.log(`[DISCOVERY] Registering ${uid} as "${device.name}"`);
 
     // Temperature Sensor
     if (values.temperature !== undefined) {
@@ -150,13 +148,6 @@ io.on('connection', (socket) => {
     socket.on('add_device', (data) => {
         console.log('Received add_device event:', JSON.stringify(data));
         let { protocol, values, name, uid } = data;
-        
-        // Fallback: If UID is missing from UI, generate it here
-        if (!uid) {
-            let idSuffix = values.id !== undefined ? values.id : (values.channel !== undefined ? 'ch'+values.channel : 'fixed');
-            uid = `hd_${protocol}_${idSuffix}`;
-        }
-        
         sendDiscovery(protocol, uid, values, name);
     });
 
@@ -175,6 +166,11 @@ io.on('connection', (socket) => {
     });
 });
 
+// --- Helper for Robust Hash ---
+function generateSecureHash(str) {
+    return crypto.createHash('md5').update(str).digest('hex').substring(0, 10);
+}
+
 // --- Logic ---
 if (serial) {
     serial.on('open', () => {
@@ -190,25 +186,32 @@ if (serial) {
         if (line.startsWith('RF receive ')) {
             try {
                 const parts = line.split(' ');
+                // We ignore the first 2-3 parts (RF receive and potentially jittery first timings)
+                // We take the actual pulse sequence (last part usually)
                 const strSeq = parts.slice(2).join(' ');
                 const info = rfcontrol.prepareCompressedPulses(strSeq);
                 if (info) {
                     const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
                     if (results && results.length > 0) {
                         const enrichedResults = results.map(res => {
-                            let idSuffix = res.values.id !== undefined ? res.values.id : '';
-                            if (res.values.channel !== undefined) idSuffix += (idSuffix ? '_' : '') + 'ch' + res.values.channel;
-                            if (!idSuffix) {
-                                const pulseData = strSeq.split(' ').slice(-1)[0];
-                                idSuffix = 'hash_' + pulseData.substring(pulseData.length - 10); 
+                            let idSuffix = '';
+                            if (res.values.id !== undefined) {
+                                idSuffix = res.values.id;
+                                if (res.values.channel !== undefined) idSuffix += '_ch' + res.values.channel;
+                            } else {
+                                // IMPROVED HASH: Use the pulse pattern itself to distinguish sensors
+                                // We take the last part of the sequence which is the most unique bit stream
+                                const bitStream = strSeq.split(' ').pop();
+                                idSuffix = 'sensor_' + generateSecureHash(bitStream);
                             }
                             
                             const uid = `hd_${res.protocol}_${idSuffix}`;
                             const topicBase = `homeduino/${res.protocol}/${uid}`;
 
-                            // Publish State
+                            // Publish State automatically
                             Object.keys(res.values).forEach(key => {
-                                mqttClient.publish(`${topicBase}/${key}`, res.values[key].toString(), { retain: true });
+                                const val = res.values[key];
+                                mqttClient.publish(`${topicBase}/${key}`, val.toString(), { retain: true });
                             });
 
                             return { ...res, uid, topicBase };
@@ -230,5 +233,5 @@ if (serial) {
 }
 
 server.listen(8080, '0.0.0.0', () => {
-    console.log('Bridge Server listening on port 8080 (v3.9.0)');
+    console.log('Bridge Server listening on port 8080 (v3.9.1)');
 });
