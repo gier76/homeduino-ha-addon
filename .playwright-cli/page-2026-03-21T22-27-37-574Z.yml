@@ -1,0 +1,225 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic "Seitenleiste umschalten" [ref=e10]:
+          - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+            - generic [ref=e13]:
+              - img
+        - generic [ref=e14]: Home Assistant
+      - generic [ref=e15]:
+        - generic [ref=e17]:
+          - generic:
+            - listitem [ref=e19] [cursor=pointer]:
+              - generic [ref=e20]:
+                - generic [ref=e22]:
+                  - img
+                - generic [ref=e24]: Übersicht
+            - listitem [ref=e26] [cursor=pointer]:
+              - generic [ref=e27]:
+                - generic [ref=e28]:
+                  - img
+                - generic [ref=e30]: Energie
+            - listitem [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]:
+                - generic [ref=e34]:
+                  - img
+                - generic [ref=e36]: Aktivität
+            - listitem [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - img
+                - generic [ref=e42]: Verlauf
+            - listitem [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]:
+                - generic [ref=e47]:
+                  - img
+                - generic [ref=e49]: Homeduino Bridge
+            - listitem [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]:
+                - generic [ref=e53]:
+                  - img
+                - generic [ref=e55]: Medien
+            - listitem [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: MQTT Explorer
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: Terminal
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: To-do-Listen
+        - generic [ref=e76]:
+          - generic:
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e80]:
+                  - img
+                - generic [ref=e82]: Einstellungen
+            - listitem [ref=e84] [cursor=pointer]:
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - img
+                - generic [ref=e88]: Benachrichtigungen
+            - listitem [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]:
+                - generic [ref=e93]: t
+                - generic [ref=e95]: test
+  - iframe [ref=e99]:
+    - generic [ref=f1e5]:
+      - generic [ref=f1e8]:
+        - link "Zurück" [ref=f1e9] [cursor=pointer]:
+          - /url: /hassio/dashboard
+          - generic "Zurück" [ref=f1e12]:
+            - button "Zurück" [ref=f1e13]:
+              - generic [ref=f1e15]:
+                - img
+        - generic [ref=f1e16]:
+          - link "Informationen" [ref=f1e17] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/info
+            - tab "Informationen" [ref=f1e19]:
+              - generic [ref=f1e20]: Informationen
+          - link "Konfiguration" [ref=f1e21] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/config
+            - tab "Konfiguration" [ref=f1e23]:
+              - generic [ref=f1e24]: Konfiguration
+          - link "Protokoll" [ref=f1e25] [cursor=pointer]:
+            - /url: /hassio/addon/1afe71df_homeduino_bridge/logs
+            - tab "Protokoll" [selected] [ref=f1e27]:
+              - generic [ref=f1e28]: Protokoll
+      - generic [ref=f1e32]:
+        - generic [ref=f1e36]:
+          - generic: Protokolle durchsuchen
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - img
+          - textbox "Protokolle durchsuchen" [ref=f1e37]:
+            - /placeholder: ""
+        - generic [ref=f1e40]:
+          - generic:
+            - generic [ref=f1e41]:
+              - heading "Homeduino Bridge" [level=1] [ref=f1e42]
+              - generic [ref=f1e43]:
+                - generic "Protokolle herunterladen" [ref=f1e45]:
+                  - button "Protokolle herunterladen" [ref=f1e46] [cursor=pointer]:
+                    - generic [ref=f1e48]:
+                      - img
+                - generic "Volle Breite" [ref=f1e50]:
+                  - button "Volle Breite" [ref=f1e51] [cursor=pointer]:
+                    - generic [ref=f1e53]:
+                      - img
+                - generic [ref=f1e59]:
+                  - button [ref=f1e62] [cursor=pointer]:
+                    - generic [ref=f1e64]:
+                      - img
+                  - generic:
+                    - generic:
+                      - generic: HAOS-Starts einblenden
+            - generic [ref=f1e70]:
+              - generic [ref=f1e71]: at Module._compile (node:internal/modules/cjs/loader:1521:14)
+              - generic [ref=f1e72]: at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+              - generic [ref=f1e73]: at Module.load (node:internal/modules/cjs/loader:1266:32)
+              - generic [ref=f1e74]: at Module._load (node:internal/modules/cjs/loader:1091:12)
+              - generic [ref=f1e75]: at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+              - generic [ref=f1e76]: at node:internal/main/run_main_module:28:49
+              - generic [ref=f1e77]: Node.js v20.20.1
+              - generic [ref=f1e78]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e79]: /app/index.js:23
+              - generic [ref=f1e80]: "const mqttClient = mqtt.connect(`mqtt://${options.mqtt_broker}:${options.mqtt_port}`, { username: options.mqtt_user, password: options.mqtt_password });"
+              - generic [ref=f1e81]: ^
+              - generic [ref=f1e82]: "ReferenceError: mqtt is not defined"
+              - generic [ref=f1e83]: at Object.<anonymous> (/app/index.js:23:20)
+              - generic [ref=f1e84]: at Module._compile (node:internal/modules/cjs/loader:1521:14)
+              - generic [ref=f1e85]: at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+              - generic [ref=f1e86]: at Module.load (node:internal/modules/cjs/loader:1266:32)
+              - generic [ref=f1e87]: at Module._load (node:internal/modules/cjs/loader:1091:12)
+              - generic [ref=f1e88]: at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+              - generic [ref=f1e89]: at node:internal/main/run_main_module:28:49
+              - generic [ref=f1e90]: Node.js v20.20.1
+              - generic [ref=f1e91]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e92]: /app/index.js:23
+              - generic [ref=f1e93]: "const mqttClient = mqtt.connect(`mqtt://${options.mqtt_broker}:${options.mqtt_port}`, { username: options.mqtt_user, password: options.mqtt_password });"
+              - generic [ref=f1e94]: ^
+              - generic [ref=f1e95]: "ReferenceError: mqtt is not defined"
+              - generic [ref=f1e96]: at Object.<anonymous> (/app/index.js:23:20)
+              - generic [ref=f1e97]: at Module._compile (node:internal/modules/cjs/loader:1521:14)
+              - generic [ref=f1e98]: at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+              - generic [ref=f1e99]: at Module.load (node:internal/modules/cjs/loader:1266:32)
+              - generic [ref=f1e100]: at Module._load (node:internal/modules/cjs/loader:1091:12)
+              - generic [ref=f1e101]: at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+              - generic [ref=f1e102]: at node:internal/main/run_main_module:28:49
+              - generic [ref=f1e103]: Node.js v20.20.1
+              - generic [ref=f1e104]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e105]: /app/index.js:23
+              - generic [ref=f1e106]: "const mqttClient = mqtt.connect(`mqtt://${options.mqtt_broker}:${options.mqtt_port}`, { username: options.mqtt_user, password: options.mqtt_password });"
+              - generic [ref=f1e107]: ^
+              - generic [ref=f1e108]: "ReferenceError: mqtt is not defined"
+              - generic [ref=f1e109]: at Object.<anonymous> (/app/index.js:23:20)
+              - generic [ref=f1e110]: at Module._compile (node:internal/modules/cjs/loader:1521:14)
+              - generic [ref=f1e111]: at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+              - generic [ref=f1e112]: at Module.load (node:internal/modules/cjs/loader:1266:32)
+              - generic [ref=f1e113]: at Module._load (node:internal/modules/cjs/loader:1091:12)
+              - generic [ref=f1e114]: at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+              - generic [ref=f1e115]: at node:internal/main/run_main_module:28:49
+              - generic [ref=f1e116]: Node.js v20.20.1
+              - generic [ref=f1e117]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e118]: /app/index.js:23
+              - generic [ref=f1e119]: "const mqttClient = mqtt.connect(`mqtt://${options.mqtt_broker}:${options.mqtt_port}`, { username: options.mqtt_user, password: options.mqtt_password });"
+              - generic [ref=f1e120]: ^
+              - generic [ref=f1e121]: "ReferenceError: mqtt is not defined"
+              - generic [ref=f1e122]: at Object.<anonymous> (/app/index.js:23:20)
+              - generic [ref=f1e123]: at Module._compile (node:internal/modules/cjs/loader:1521:14)
+              - generic [ref=f1e124]: at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+              - generic [ref=f1e125]: at Module.load (node:internal/modules/cjs/loader:1266:32)
+              - generic [ref=f1e126]: at Module._load (node:internal/modules/cjs/loader:1091:12)
+              - generic [ref=f1e127]: at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+              - generic [ref=f1e128]: at node:internal/main/run_main_module:28:49
+              - generic [ref=f1e129]: Node.js v20.20.1
+              - generic [ref=f1e130]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e131]: Bridge Server v4.8.2 (MQTT Fixed)
+              - generic [ref=f1e132]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e133]: node:internal/modules/cjs/loader:1210
+              - generic [ref=f1e134]: throw err;
+              - generic [ref=f1e135]: ^
+              - generic [ref=f1e136]: "Error: Cannot find module '/app/index.js'"
+              - generic [ref=f1e137]: at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+              - generic [ref=f1e138]: at Module._load (node:internal/modules/cjs/loader:1038:27)
+              - generic [ref=f1e139]: at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+              - generic [ref=f1e140]: "at node:internal/main/run_main_module:28:49 {"
+              - generic [ref=f1e141]: "code: 'MODULE_NOT_FOUND',"
+              - generic [ref=f1e142]: "requireStack: []"
+              - generic [ref=f1e143]: "}"
+              - generic [ref=f1e144]: Node.js v20.20.1
+              - generic [ref=f1e145]: Starting Homeduino Bridge (Modernized)...
+              - generic [ref=f1e146]: node:internal/modules/cjs/loader:1210
+              - generic [ref=f1e147]: throw err;
+              - generic [ref=f1e148]: ^
+              - generic [ref=f1e149]: "Error: Cannot find module '/app/index.js'"
+              - generic [ref=f1e150]: at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+              - generic [ref=f1e151]: at Module._load (node:internal/modules/cjs/loader:1038:27)
+              - generic [ref=f1e152]: at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+              - generic [ref=f1e153]: "at node:internal/main/run_main_module:28:49 {"
+              - generic [ref=f1e154]: "code: 'MODULE_NOT_FOUND',"
+              - generic [ref=f1e155]: "requireStack: []"
+              - generic [ref=f1e156]: "}"
+              - generic [ref=f1e157]: Node.js v20.20.1
+            - button "Neue Protokolle – Zum Scrollen klicken" [ref=f1e67] [cursor=pointer]:
+              - generic:
+                - generic:
+                  - img
+              - generic [ref=f1e68]: Neue Protokolle – Zum Scrollen klicken
+              - generic:
+                - generic:
+                  - img
+            - generic [ref=f1e158]:
+              - generic [ref=f1e159]:
+                - img
+              - text: Live
