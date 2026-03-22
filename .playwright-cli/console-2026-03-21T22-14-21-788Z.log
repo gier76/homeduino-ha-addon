@@ -1,4 +1,0 @@
-[    5810ms] [WARNING] [.WebGL-0x3e7403a4b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels @ http://192.168.19.128:8123/api/hassio_ingress/q8EtVe02Bd_n7a5_FqeNiHvuhpKyXmI1Xfy9TjK19TI/:0
-[    5837ms] [WARNING] [.WebGL-0x3e7403a4b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels @ http://192.168.19.128:8123/api/hassio_ingress/q8EtVe02Bd_n7a5_FqeNiHvuhpKyXmI1Xfy9TjK19TI/:0
-[    7331ms] [WARNING] [.WebGL-0x3e7403a4b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels @ http://192.168.19.128:8123/api/hassio_ingress/q8EtVe02Bd_n7a5_FqeNiHvuhpKyXmI1Xfy9TjK19TI/:0
-[   11766ms] [WARNING] [.WebGL-0x3e7403a4b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat) @ http://192.168.19.128:8123/api/hassio_ingress/q8EtVe02Bd_n7a5_FqeNiHvuhpKyXmI1Xfy9TjK19TI/:0

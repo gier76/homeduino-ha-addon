@@ -1,0 +1,115 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic "Seitenleiste umschalten" [ref=e10]:
+          - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+            - generic [ref=e13]:
+              - img
+        - generic [ref=e14]: Home Assistant
+      - generic [ref=e15]:
+        - generic [ref=e17]:
+          - generic:
+            - listitem [ref=e19] [cursor=pointer]:
+              - generic [ref=e20]:
+                - generic [ref=e22]:
+                  - img
+                - generic [ref=e24]: Übersicht
+            - listitem [ref=e26] [cursor=pointer]:
+              - generic [ref=e27]:
+                - generic [ref=e28]:
+                  - img
+                - generic [ref=e30]: Energie
+            - listitem [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]:
+                - generic [ref=e34]:
+                  - img
+                - generic [ref=e36]: Aktivität
+            - listitem [ref=e38] [cursor=pointer]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - img
+                - generic [ref=e42]: Verlauf
+            - listitem [ref=e44] [cursor=pointer]:
+              - generic [ref=e45]:
+                - generic [ref=e46]:
+                  - img
+                - generic [ref=e48]: Medien
+            - listitem [ref=e50] [cursor=pointer]:
+              - generic [ref=e51]:
+                - generic [ref=e53]:
+                  - img
+                - generic [ref=e55]: MQTT Explorer
+            - listitem [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: Terminal
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e66]:
+                  - img
+                - generic [ref=e68]: To-do-Listen
+        - generic [ref=e69]:
+          - generic:
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: Einstellungen
+            - listitem [ref=e77] [cursor=pointer]:
+              - generic [ref=e78]:
+                - generic [ref=e79]:
+                  - img
+                - generic [ref=e81]: Benachrichtigungen
+            - listitem [ref=e83] [cursor=pointer]:
+              - generic [ref=e84]:
+                - generic [ref=e86]: t
+                - generic [ref=e88]: test
+  - generic [ref=e754]:
+    - generic [ref=e757]:
+      - generic "Zurück" [ref=e760]:
+        - link "Zurück" [ref=e761] [cursor=pointer]:
+          - /url: /config/apps/available
+          - generic [ref=e763]:
+            - img
+      - generic [ref=e765]: Open Media Vault 2 MQTT
+    - generic [ref=e771]:
+      - generic [ref=e772]:
+        - generic:
+          - generic [ref=e773]:
+            - generic [ref=e774]:
+              - text: Open Media Vault 2 MQTT
+              - generic [ref=e775]: 0.4.2
+            - generic [ref=e777] [cursor=pointer]: Änderungsprotokoll
+            - button "Bewertung" [ref=e781] [cursor=pointer]:
+              - generic [ref=e783]:
+                - img
+              - generic [ref=e784]: Bewertung
+            - generic [ref=e786]:
+              - text: Open Media Vault 2 MQTT is a wrapper for send data on Open Media Vault to MQTT broker..
+              - text: Weitere Informationen findest du auf der Seite
+              - link "Open Media Vault 2 MQTT" [ref=e787] [cursor=pointer]:
+                - /url: ""
+              - text: .
+          - button "Installieren" [ref=e794] [cursor=pointer]:
+            - generic [ref=e795]:
+              - generic: Installieren
+      - generic [ref=e799]:
+        - heading "Open Media Vault to MQTT for Home Assistant" [level=1] [ref=e800]
+        - paragraph [ref=e801]:
+          - link "\"Buy Me A Coffee\"" [ref=e802] [cursor=pointer]:
+            - /url: https://www.buymeacoffee.com/smeagolworms4
+            - img "\"Buy Me A Coffee\"" [ref=e803]
+          - link "\"Buy Me A Coffee\"" [ref=e804] [cursor=pointer]:
+            - /url: https://www.paypal.com/donate/?business=SURRPGEXF4YVU&no_recurring=0&item_name=Hello%2C+I%27m+SmeagolWorms4.+For+my+open+source+projects.%0AThanks+you+very+mutch+%21%21%21&currency_code=EUR
+            - img "\"Buy Me A Coffee\"" [ref=e805]
+        - paragraph [ref=e806]: An implementation of wrapper OMV to MQTT for home assitant
+        - paragraph [ref=e807]:
+          - img "MQTT" [ref=e808]
+        - paragraph [ref=e809]:
+          - img "HA" [ref=e810]
+        - paragraph [ref=e811]:
+          - text: "Original Github :"
+          - link "https://github.com/Smeagolworms4/omv2mqtt" [ref=e812] [cursor=pointer]:
+            - /url: https://github.com/Smeagolworms4/omv2mqtt

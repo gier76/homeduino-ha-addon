@@ -1,0 +1,560 @@
+- generic [ref=e18]:
+  - complementary [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic "Seitenleiste umschalten" [ref=e24]:
+          - button "Seitenleiste umschalten" [ref=e25] [cursor=pointer]:
+            - generic [ref=e27]:
+              - img
+        - generic [ref=e28]: Home Assistant
+      - generic [ref=e29]:
+        - generic [ref=e31]:
+          - generic:
+            - listitem [ref=e33] [cursor=pointer]:
+              - generic [ref=e34]:
+                - generic [ref=e36]:
+                  - img
+                - generic [ref=e38]: Übersicht
+            - listitem [ref=e40] [cursor=pointer]:
+              - generic [ref=e41]:
+                - generic [ref=e42]:
+                  - img
+                - generic [ref=e44]: Energie
+            - listitem [ref=e46] [cursor=pointer]:
+              - generic [ref=e47]:
+                - generic [ref=e48]:
+                  - img
+                - generic [ref=e50]: Aktivität
+            - listitem [ref=e52] [cursor=pointer]:
+              - generic [ref=e53]:
+                - generic [ref=e54]:
+                  - img
+                - generic [ref=e56]: Verlauf
+            - listitem [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: Medien
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: MQTT Explorer
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e74]:
+                  - img
+                - generic [ref=e76]: Terminal
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e80]:
+                  - img
+                - generic [ref=e82]: To-do-Listen
+        - generic [ref=e83]:
+          - generic:
+            - listitem [ref=e85] [cursor=pointer]:
+              - generic [ref=e86]:
+                - generic [ref=e87]:
+                  - img
+                - generic [ref=e89]: Einstellungen
+            - listitem [ref=e91] [cursor=pointer]:
+              - generic [ref=e92]:
+                - generic [ref=e93]:
+                  - img
+                - generic [ref=e95]: Benachrichtigungen
+            - listitem [ref=e97] [cursor=pointer]:
+              - generic [ref=e98]:
+                - generic [ref=e100]: t
+                - generic [ref=e102]: test
+  - generic [ref=e108]:
+    - generic [ref=e110]:
+      - generic "Zurück" [ref=e113]:
+        - link "Zurück" [ref=e114] [cursor=pointer]:
+          - /url: /config/apps
+          - generic [ref=e116]:
+            - img
+      - generic [ref=e118]: App-Store
+      - generic [ref=e767]:
+        - generic "Menü" [ref=e121]:
+          - button "Menü" [ref=e122] [cursor=pointer]:
+            - generic [ref=e124]:
+              - img
+        - menu [ref=e769]:
+          - generic:
+            - menuitem "Nach Updates suchen" [ref=e770] [cursor=pointer]:
+              - generic [ref=e771]:
+                - generic: Nach Updates suchen
+            - menuitem "Repositories" [ref=e772] [cursor=pointer]:
+              - generic [ref=e773]:
+                - generic: Repositories
+            - menuitem "Register" [ref=e774] [cursor=pointer]:
+              - generic [ref=e775]:
+                - generic: Register
+    - generic [ref=e125]:
+      - generic:
+        - generic [ref=e129]:
+          - generic: Durchsuchen
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - img
+          - textbox "Durchsuchen" [ref=e130]:
+            - /placeholder: ""
+        - generic [ref=e132]:
+          - heading "Official apps" [level=1] [ref=e133]
+          - generic [ref=e134]:
+            - generic [ref=e137] [cursor=pointer]:
+              - generic "Nicht installiert" [ref=e138]:
+                - img
+              - generic [ref=e139]:
+                - generic [ref=e140]: Assist Microphone
+                - generic [ref=e141]: Use Assist with local microphone
+            - generic [ref=e144] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e685]
+              - generic [ref=e145]:
+                - generic [ref=e146]: CEC Scanner
+                - generic [ref=e147]: Scan for HDMI CEC devices
+            - generic [ref=e150] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e686]
+              - generic [ref=e151]:
+                - generic [ref=e152]: deCONZ
+                - generic [ref=e153]: Control a Zigbee network with ConBee or RaspBee by dresden elektronik
+            - generic [ref=e156] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e687]
+              - generic [ref=e157]:
+                - generic [ref=e158]: Dnsmasq
+                - generic [ref=e159]: A simple DNS server
+            - generic [ref=e162] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e688]
+              - generic [ref=e163]:
+                - generic [ref=e164]: Duck DNS
+                - generic [ref=e165]: Free Dynamic DNS (DynDNS or DDNS) service with Let's Encrypt support
+            - generic [ref=e168] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e689]
+              - generic [ref=e169]:
+                - generic [ref=e170]: File editor
+                - generic [ref=e171]: Simple browser-based file editor for Home Assistant
+            - generic [ref=e174] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e690]
+              - generic [ref=e175]:
+                - generic [ref=e176]: Git pull
+                - generic [ref=e177]: Simple git pull to update the local configuration
+            - generic [ref=e180] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e691]
+              - generic [ref=e181]:
+                - generic [ref=e182]: Let's Encrypt
+                - generic [ref=e183]: Manage certificate from Let's Encrypt
+            - generic [ref=e186] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e692]
+              - generic [ref=e187]:
+                - generic [ref=e188]: MariaDB
+                - generic [ref=e189]: A SQL database server
+            - generic [ref=e192] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e693]
+              - generic [ref=e193]:
+                - generic [ref=e194]: Matter Server
+                - generic [ref=e195]: Matter WebSocket Server for Home Assistant Matter support.
+            - generic [ref=e198] [cursor=pointer]:
+              - img "Installiert" [ref=e694]
+              - generic [ref=e200]:
+                - generic [ref=e201]: Mosquitto broker
+                - generic [ref=e202]: An Open Source MQTT broker
+            - generic [ref=e205] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e695]
+              - generic [ref=e206]:
+                - generic [ref=e207]: NGINX Home Assistant SSL proxy
+                - generic [ref=e208]: An SSL/TLS proxy
+            - generic [ref=e211] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e696]
+              - generic [ref=e212]:
+                - generic [ref=e213]: OpenThread Border Router
+                - generic [ref=e214]: OpenThread Border Router add-on
+            - generic [ref=e217] [cursor=pointer]:
+              - generic "Nicht installiert" [ref=e218]:
+                - img
+              - generic [ref=e219]:
+                - generic [ref=e220]: openWakeWord
+                - generic [ref=e221]: openWakeWord using the Wyoming protocol
+            - generic [ref=e224] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e697]
+              - generic [ref=e225]:
+                - generic [ref=e226]: Piper
+                - generic [ref=e227]: Text-to-speech with Piper
+            - generic [ref=e230] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e698]
+              - generic [ref=e231]:
+                - generic [ref=e232]: RPC Shutdown
+                - generic [ref=e233]: Shutdown Windows machines remotely
+            - generic [ref=e236] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e699]
+              - generic [ref=e237]:
+                - generic [ref=e238]: Samba share
+                - generic [ref=e239]: Expose Home Assistant folders with SMB/CIFS
+            - generic [ref=e242] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e700]
+              - generic [ref=e243]:
+                - generic [ref=e244]: Silicon Labs Flasher
+                - generic [ref=e245]: Silicon Labs firmware flasher add-on
+            - generic [ref=e248] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e701]
+              - generic [ref=e249]:
+                - generic [ref=e250]: Silicon Labs Multiprotocol [deprecated]
+                - generic [ref=e251]: Zigbee and OpenThread multiprotocol add-on
+            - generic [ref=e254] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e702]
+              - generic [ref=e255]:
+                - generic [ref=e256]: Speech-to-Phrase
+                - generic [ref=e257]: Fast and personalized local speech-to-text
+            - generic [ref=e260] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e703]
+              - generic [ref=e261]:
+                - generic [ref=e262]: Terminal & SSH
+                - generic [ref=e263]: Allow logging in remotely to Home Assistant using SSH
+            - generic [ref=e266] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e704]
+              - generic [ref=e267]:
+                - generic [ref=e268]: VLC
+                - generic [ref=e269]: Turn your device into a Media Player with VLC
+            - generic [ref=e272] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e705]
+              - generic [ref=e273]:
+                - generic [ref=e274]: Whisper
+                - generic [ref=e275]: Speech-to-text with Whisper
+            - generic [ref=e278] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e706]
+              - generic [ref=e279]:
+                - generic [ref=e280]: Z-Wave JS
+                - generic [ref=e281]: Control a Z-Wave network with Home Assistant Z-Wave JS
+        - generic [ref=e283]:
+          - heading "ESPHome" [level=1] [ref=e284]
+          - generic [ref=e285]:
+            - generic [ref=e288] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e707]
+              - generic [ref=e289]:
+                - generic [ref=e290]: ESPHome Device Builder
+                - generic [ref=e291]: Build your own smart home devices using ESPHome, no programming experience required
+            - generic [ref=e294] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e708]
+              - generic [ref=e295]:
+                - generic [ref=e296]: ESPHome Device Builder (beta)
+                - generic [ref=e297]: Beta version of ESPHome Device Builder
+            - generic [ref=e300] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e709]
+              - generic [ref=e301]:
+                - generic [ref=e302]: ESPHome Device Builder (dev)
+                - generic [ref=e303]: Development version of ESPHome Device Builder
+        - generic [ref=e305]:
+          - heading "Gier76 Homeduino Repository" [level=1] [ref=e306]
+          - generic [ref=e310] [cursor=pointer]:
+            - generic "Nicht installiert" [ref=e311]:
+              - img
+            - generic [ref=e312]:
+              - generic [ref=e313]: Homeduino Bridge
+              - generic [ref=e314]: Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling
+        - generic [ref=e316]:
+          - heading "Gollum add-on repository for Home Assistant" [level=1] [ref=e317]
+          - generic [ref=e318]:
+            - generic [ref=e321] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e710]
+              - generic [ref=e322]:
+                - generic [ref=e323]: Aldes 2 MQTT
+                - generic [ref=e324]: Aldes 2 MQTT is a wrapper for send data on Aldes API to MQTT broker.
+            - generic [ref=e327] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e711]
+              - generic [ref=e328]:
+                - generic [ref=e329]: Google Find My Tools
+                - generic [ref=e330]: An implementation of web version for Google Find My Tools python script..
+            - generic [ref=e333] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e712]
+              - generic [ref=e334]:
+                - generic [ref=e335]: HA Second Core
+                - generic [ref=e336]: Run a second home assistante core on port 8124 by default.
+            - generic [ref=e339] [cursor=pointer]:
+              - img "Installiert" [ref=e713]
+              - generic [ref=e341]:
+                - generic [ref=e342]: MQTT Explorer
+                - generic [ref=e343]: MQTT Explorer is a comprehensive MQTT client that provides a structured overview of your MQTT topics and makes working with devices/services on your broker dead-simple.
+            - generic [ref=e346] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e714]
+              - generic [ref=e347]:
+                - generic [ref=e348]: Open Media Vault 2 MQTT
+                - generic [ref=e349]: Open Media Vault 2 MQTT is a wrapper for send data on Open Media Vault to MQTT broker.
+            - generic [ref=e352] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e715]
+              - generic [ref=e353]:
+                - generic [ref=e354]: OpenThread Border Router (Network device)
+                - generic [ref=e355]: OpenThread Border Router add-on for network device.
+            - generic [ref=e358] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e716]
+              - generic [ref=e359]:
+                - generic [ref=e360]: Synology Download Station 2 MQTT
+                - generic [ref=e361]: Synology Download Station 2 MQTT is a wrapper for send data on Synology Download Station to MQTT broker.
+        - generic [ref=e363]:
+          - heading "Home Assistant Community Apps" [level=1] [ref=e364]
+          - generic [ref=e365]:
+            - generic [ref=e368] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e717]
+              - generic [ref=e369]:
+                - generic [ref=e370]: AdGuard Home
+                - generic [ref=e371]: Network-wide ads & trackers blocking DNS server
+            - generic [ref=e374] [cursor=pointer]:
+              - img "Installiert" [ref=e718]
+              - generic [ref=e376]:
+                - generic [ref=e377]: Advanced SSH & Web Terminal
+                - generic [ref=e378]: A supercharged SSH & Web Terminal access to your Home Assistant instance
+            - generic [ref=e381] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e719]
+              - generic [ref=e382]:
+                - generic [ref=e383]: AirCast
+                - generic [ref=e384]: AirPlay capabilities for your Chromecast devices.
+            - generic [ref=e387] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e720]
+              - generic [ref=e388]:
+                - generic [ref=e389]: AirSonos
+                - generic [ref=e390]: AirPlay capabilities for your Sonos (and UPnP) devices.
+            - generic [ref=e393] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e721]
+              - generic [ref=e394]:
+                - generic [ref=e395]: AppDaemon
+                - generic [ref=e396]: Python Apps and Dashboard using AppDaemon 4.x for Home Assistant
+            - generic [ref=e399] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e722]
+              - generic [ref=e400]:
+                - generic [ref=e401]: Bazarr
+                - generic [ref=e402]: Download and manage subtitles for Sonarr and Radarr
+            - generic [ref=e405] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e723]
+              - generic [ref=e406]:
+                - generic [ref=e407]: Bookstack
+                - generic [ref=e408]: Simple & Free Wiki Software
+            - generic [ref=e411] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e724]
+              - generic [ref=e412]:
+                - generic [ref=e413]: chrony
+                - generic [ref=e414]: A local NTP (Network Time Protocol) server for cameras etc.
+            - generic [ref=e417] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e725]
+              - generic [ref=e418]:
+                - generic [ref=e419]: EMQX
+                - generic [ref=e420]: The most scalable open-source MQTT broker for IoT. An alternative for the Mosquitto add-on
+            - generic [ref=e423] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e726]
+              - generic [ref=e424]:
+                - generic [ref=e425]: Example
+                - generic [ref=e426]: Example app by Home Assistant Community Apps
+            - generic [ref=e429] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e727]
+              - generic [ref=e430]:
+                - generic [ref=e431]: Folding@home
+                - generic [ref=e432]: Fighting disease with a world wide distributed super computer
+            - generic [ref=e435] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e728]
+              - generic [ref=e436]:
+                - generic [ref=e437]: FTP
+                - generic [ref=e438]: A secure and fast FTP server for Home Assistant
+            - generic [ref=e441] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e729]
+              - generic [ref=e442]:
+                - generic [ref=e443]: Glances
+                - generic [ref=e444]: A cross-platform system monitoring tool
+            - generic [ref=e447] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e730]
+              - generic [ref=e448]:
+                - generic [ref=e449]: Grafana
+                - generic [ref=e450]: The open platform for beautiful analytics and monitoring
+            - generic [ref=e453] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e731]
+              - generic [ref=e454]:
+                - generic [ref=e455]: Grocy
+                - generic [ref=e456]: ERP beyond your fridge! A groceries & household management solution for your home
+            - generic [ref=e459] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e732]
+              - generic [ref=e460]:
+                - generic [ref=e461]: InfluxDB
+                - generic [ref=e462]: Scalable datastore for metrics, events, and real-time analytics
+            - generic [ref=e465] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e733]
+              - generic [ref=e466]:
+                - generic [ref=e467]: JupyterLab
+                - generic [ref=e468]: Create documents containing live code, equations, visualizations, and explanatory text
+            - generic [ref=e471] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e734]
+              - generic [ref=e472]:
+                - generic [ref=e473]: Lidarr
+                - generic [ref=e474]: Looks and smells like Sonarr but made for music
+            - generic [ref=e477] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e735]
+              - generic [ref=e478]:
+                - generic [ref=e479]: Log Viewer
+                - generic [ref=e480]: Browser-based log utility for Home Assistant
+            - generic [ref=e483] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e736]
+              - generic [ref=e484]:
+                - generic [ref=e485]: motionEye
+                - generic [ref=e486]: Simple, elegant and feature-rich CCTV/NVR for your cameras
+            - generic [ref=e489] [cursor=pointer]:
+              - generic "Nicht installiert" [ref=e490]:
+                - img
+              - generic [ref=e491]:
+                - generic [ref=e492]: MQTT IO
+                - generic [ref=e493]: Expose GPIO modules and digital sensors via MQTT for remote control and monitoring.
+            - generic [ref=e496] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e737]
+              - generic [ref=e497]:
+                - generic [ref=e498]: Network UPS Tools
+                - generic [ref=e499]: Manage battery backup (UPS) devices
+            - generic [ref=e502] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e738]
+              - generic [ref=e503]:
+                - generic [ref=e504]: Nginx Proxy Manager
+                - generic [ref=e505]: Manage Nginx proxy hosts with a simple, powerful interface
+            - generic [ref=e508] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e739]
+              - generic [ref=e509]:
+                - generic [ref=e510]: Node-RED
+                - generic [ref=e511]: Flow-based programming for the Internet of Things
+            - generic [ref=e514] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e740]
+              - generic [ref=e515]:
+                - generic [ref=e516]: Overseerr
+                - generic [ref=e517]: Request management and media discovery tool for the Plex ecosystem
+            - generic [ref=e520] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e741]
+              - generic [ref=e521]:
+                - generic [ref=e522]: phpMyAdmin
+                - generic [ref=e523]: A web interface for the official MariaDB add-on
+            - generic [ref=e526] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e742]
+              - generic [ref=e527]:
+                - generic [ref=e528]: Plex Media Server
+                - generic [ref=e529]: Recorded media, live TV, online news, and podcasts ready to stream.
+            - generic [ref=e532] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e743]
+              - generic [ref=e533]:
+                - generic [ref=e534]: Prowlarr
+                - generic [ref=e535]: Indexer manager/proxy built on the popular arr stack to integrate with your various PVR apps
+            - generic [ref=e538] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e744]
+              - generic [ref=e539]:
+                - generic [ref=e540]: Radarr
+                - generic [ref=e541]: Movie organizer/manager for usenet and torrent users
+            - generic [ref=e544] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e745]
+              - generic [ref=e545]:
+                - generic [ref=e546]: SABnzbd
+                - generic [ref=e547]: Free and easy binary newsreader
+            - generic [ref=e550] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e746]
+              - generic [ref=e551]:
+                - generic [ref=e552]: Sonarr
+                - generic [ref=e553]: Smart PVR for newsgroup and bittorrent users
+            - generic [ref=e556] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e747]
+              - generic [ref=e557]:
+                - generic [ref=e558]: Spotify Connect
+                - generic [ref=e559]: Play Spotify music on your Home Assistant device
+            - generic [ref=e562] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e748]
+              - generic [ref=e563]:
+                - generic [ref=e564]: SQLite Web
+                - generic [ref=e565]: Explore your SQLite database
+            - generic [ref=e568] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e749]
+              - generic [ref=e569]:
+                - generic [ref=e570]: Studio Code Server
+                - generic [ref=e571]: Fully featured Visual Studio Code (VSCode) experience integrated in the Home Assistant frontend.
+            - generic [ref=e574] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e750]
+              - generic [ref=e575]:
+                - generic [ref=e576]: Tailscale
+                - generic [ref=e577]: Zero config VPN for building secure networks
+            - generic [ref=e580] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e751]
+              - generic [ref=e581]:
+                - generic [ref=e582]: TasmoAdmin
+                - generic [ref=e583]: Centrally manage all your Sonoff-Tasmota devices
+            - generic [ref=e586] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e752]
+              - generic [ref=e587]:
+                - generic [ref=e588]: Tautulli
+                - generic [ref=e589]: Monitoring and tracking tool for Plex Media Server
+            - generic [ref=e592] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e753]
+              - generic [ref=e593]:
+                - generic [ref=e594]: The Lounge
+                - generic [ref=e595]: A self-hosted web IRC client
+            - generic [ref=e598] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e754]
+              - generic [ref=e599]:
+                - generic [ref=e600]: Tor
+                - generic [ref=e601]: Protect your privacy and access Home Assistant via Tor
+            - generic [ref=e604] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e755]
+              - generic [ref=e605]:
+                - generic [ref=e606]: Traccar
+                - generic [ref=e607]: Modern GPS Tracking Platform
+            - generic [ref=e610] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e756]
+              - generic [ref=e611]:
+                - generic [ref=e612]: UniFi Network Application
+                - generic [ref=e613]: Manage your UniFi network using a web browser
+            - generic [ref=e616] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e757]
+              - generic [ref=e617]:
+                - generic [ref=e618]: Uptime Kuma
+                - generic [ref=e619]: It is a self-hosted monitoring tool like "Uptime Robot"
+            - generic [ref=e622] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e758]
+              - generic [ref=e623]:
+                - generic [ref=e624]: Vaultwarden
+                - generic [ref=e625]: Open source password management solution
+            - generic [ref=e628] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e759]
+              - generic [ref=e629]:
+                - generic [ref=e630]: Whisparr
+                - generic [ref=e631]: Whisparr is an adult video collection manager for Usenet and BitTorrent users
+            - generic [ref=e634] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e760]
+              - generic [ref=e635]:
+                - generic [ref=e636]: WireGuard
+                - generic [ref=e637]: Fast, modern, secure VPN tunnel
+            - generic [ref=e640] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e761]
+              - generic [ref=e641]:
+                - generic [ref=e642]: Z-Wave JS UI
+                - generic [ref=e643]: Fully configurable Z-Wave JS gateway and control panel
+            - generic [ref=e646] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e762]
+              - generic [ref=e647]:
+                - generic [ref=e648]: ZeroTier One
+                - generic [ref=e649]: Radically simplify your network with a virtual networking layer that works the same everywhere
+        - generic [ref=e651]:
+          - heading "Music Assistant" [level=1] [ref=e652]
+          - generic [ref=e653]:
+            - generic [ref=e656] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e763]
+              - generic [ref=e657]:
+                - generic [ref=e658]: Music Assistant
+                - generic [ref=e659]: The Music Assistant server is a free, opensource Media library manager that connects to your streaming services and a wide range of connected speakers.
+            - generic [ref=e662] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e764]
+              - generic [ref=e663]:
+                - generic [ref=e664]: Music Assistant (BETA)
+                - generic [ref=e665]: BETA version of the Music Assistant Server.
+            - generic [ref=e668] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e765]
+              - generic [ref=e669]:
+                - generic [ref=e670]: Music Assistant (NIGHTLY)
+                - generic [ref=e671]: NIGHTLY version of Music Assistant. Install this version if you want to keep up with the latest bleeding edge development of Music Assistant! Use it at your own risk, it might not be recommended for daily/production use because it can be unstable.
+            - generic [ref=e674] [cursor=pointer]:
+              - img "Nicht installiert" [ref=e766]
+              - generic [ref=e675]:
+                - generic [ref=e676]: Music Assistant DEV SERVER
+                - generic [ref=e677]: Development add-on for Music Assistant. For developers only.
+            - generic [ref=e680] [cursor=pointer]:
+              - generic "Nicht installiert" [ref=e681]:
+                - img
+              - generic [ref=e682]:
+                - generic [ref=e683]: YT Music PO Token Generator
+                - generic [ref=e684]: A HA addon wrapper for the BgUtils POT Provider that can generate PO tokens for Youtube Music.

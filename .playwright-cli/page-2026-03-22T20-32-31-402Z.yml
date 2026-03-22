@@ -1,0 +1,235 @@
+- generic [ref=e18]:
+  - complementary [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic "Seitenleiste umschalten" [ref=e24]:
+          - button "Seitenleiste umschalten" [ref=e25] [cursor=pointer]:
+            - generic [ref=e27]:
+              - img
+        - generic [ref=e28]: Home Assistant
+      - generic [ref=e71]:
+        - generic [ref=e73]:
+          - generic:
+            - listitem [ref=e75] [cursor=pointer]:
+              - generic [ref=e76]:
+                - generic [ref=e78]:
+                  - img
+                - generic [ref=e80]: Übersicht
+            - listitem [ref=e82] [cursor=pointer]:
+              - generic [ref=e83]:
+                - generic [ref=e84]:
+                  - img
+                - generic [ref=e86]: Energie
+            - listitem [ref=e88] [cursor=pointer]:
+              - generic [ref=e89]:
+                - generic [ref=e90]:
+                  - img
+                - generic [ref=e92]: Aktivität
+            - listitem [ref=e94] [cursor=pointer]:
+              - generic [ref=e95]:
+                - generic [ref=e96]:
+                  - img
+                - generic [ref=e98]: Verlauf
+            - listitem [ref=e100] [cursor=pointer]:
+              - generic [ref=e101]:
+                - generic [ref=e102]:
+                  - img
+                - generic [ref=e104]: Medien
+            - listitem [ref=e106] [cursor=pointer]:
+              - generic [ref=e107]:
+                - generic [ref=e109]:
+                  - img
+                - generic [ref=e111]: MQTT Explorer
+            - listitem [ref=e113] [cursor=pointer]:
+              - generic [ref=e114]:
+                - generic [ref=e116]:
+                  - img
+                - generic [ref=e118]: Terminal
+            - listitem [ref=e120] [cursor=pointer]:
+              - generic [ref=e121]:
+                - generic [ref=e122]:
+                  - img
+                - generic [ref=e124]: To-do-Listen
+        - generic [ref=e125]:
+          - generic:
+            - listitem [ref=e127] [cursor=pointer]:
+              - generic [ref=e128]:
+                - generic [ref=e129]:
+                  - img
+                - generic [ref=e131]: Einstellungen
+            - listitem [ref=e133] [cursor=pointer]:
+              - generic [ref=e134]:
+                - generic [ref=e135]:
+                  - img
+                - generic [ref=e137]: Benachrichtigungen
+            - listitem [ref=e139] [cursor=pointer]:
+              - generic [ref=e140]:
+                - generic [ref=e142]: t
+                - generic [ref=e144]: test
+  - generic [ref=e371]:
+    - banner [ref=e372]:
+      - generic [ref=e373]:
+        - generic [ref=e376]: Einstellungen
+        - toolbar [ref=e377]:
+          - generic:
+            - generic "Home Assistant durchsuchen" [ref=e379]:
+              - button "Home Assistant durchsuchen" [ref=e380] [cursor=pointer]:
+                - generic [ref=e382]:
+                  - img
+            - generic [ref=e383]:
+              - generic:
+                - generic "Menü" [ref=e385]:
+                  - button "Menü" [ref=e386] [cursor=pointer]:
+                    - generic [ref=e388]:
+                      - img
+                - generic:
+                  - generic: Nach Updates suchen
+                  - generic: Home Assistant neu starten
+    - generic [ref=e394]:
+      - generic:
+        - generic [ref=e396]:
+          - heading "Einstellungen" [level=2] [ref=e397]
+          - generic [ref=e399]:
+            - generic:
+              - listitem [ref=e401] [cursor=pointer]:
+                - generic [ref=e402]:
+                  - generic [ref=e404]:
+                    - img
+                  - generic [ref=e405]:
+                    - generic [ref=e406]: Home Assistant Cloud
+                    - generic [ref=e407]: Steuerung deines Zuhauses von unterwegs und Integration mit Alexa und Google Assistant
+                  - generic [ref=e408]:
+                    - img
+              - listitem [ref=e410] [cursor=pointer]:
+                - generic [ref=e411]:
+                  - generic [ref=e413]:
+                    - img
+                  - generic [ref=e414]:
+                    - generic [ref=e415]: Geräte & Dienste
+                    - generic [ref=e416]: Integrationen, Geräte, Entitäten und Helfer
+                  - generic [ref=e417]:
+                    - img
+              - listitem [ref=e419] [cursor=pointer]:
+                - generic [ref=e420]:
+                  - generic [ref=e422]:
+                    - img
+                  - generic [ref=e423]:
+                    - generic [ref=e424]: Automationen & Szenen
+                    - generic [ref=e425]: Automationen, Szenen, Skripte und Blueprints
+                  - generic [ref=e426]:
+                    - img
+              - listitem [ref=e428] [cursor=pointer]:
+                - generic [ref=e429]:
+                  - generic [ref=e431]:
+                    - img
+                  - generic [ref=e432]:
+                    - generic [ref=e433]: Bereiche, Labels & Zonen
+                    - generic [ref=e434]: Orte in und an deinem Haus verwalten
+                  - generic [ref=e435]:
+                    - img
+              - listitem [ref=e437] [cursor=pointer]:
+                - generic [ref=e438]:
+                  - generic [ref=e440]:
+                    - img
+                  - generic [ref=e441]:
+                    - generic [ref=e442]: Apps
+                    - generic [ref=e443]: Zusätzliche Anwendungen neben Home Assistant ausführen
+                  - generic [ref=e444]:
+                    - img
+              - listitem [ref=e446] [cursor=pointer]:
+                - generic [ref=e447]:
+                  - generic [ref=e449]:
+                    - img
+                  - generic [ref=e450]:
+                    - generic [ref=e451]: Dashboards
+                    - generic [ref=e452]: Die Interaktion mit deinem Zuhause organisieren
+                  - generic [ref=e453]:
+                    - img
+              - listitem [ref=e455] [cursor=pointer]:
+                - generic [ref=e456]:
+                  - generic [ref=e458]:
+                    - img
+                  - generic [ref=e459]:
+                    - generic [ref=e460]: Sprachassistenten
+                    - generic [ref=e461]: Deine Sprachassistenten verwalten
+                  - generic [ref=e462]:
+                    - img
+        - generic [ref=e464]:
+          - heading "Einstellungen" [level=2] [ref=e465]
+          - listitem [ref=e469] [cursor=pointer]:
+            - generic [ref=e470]:
+              - generic [ref=e472]:
+                - img
+              - generic [ref=e473]:
+                - generic [ref=e474]: Tags
+                - generic [ref=e475]: NFC-Tags und QR-Codes einrichten
+              - generic [ref=e476]:
+                - img
+        - generic [ref=e478]:
+          - heading "Einstellungen" [level=2] [ref=e479]
+          - generic [ref=e481]:
+            - generic:
+              - listitem [ref=e483] [cursor=pointer]:
+                - generic [ref=e484]:
+                  - generic [ref=e486]:
+                    - img
+                  - generic [ref=e487]:
+                    - generic [ref=e488]: Personen
+                    - generic [ref=e489]: Den Zugriff auf dein Zuhause verwalten
+                  - generic [ref=e490]:
+                    - img
+              - listitem [ref=e492] [cursor=pointer]:
+                - generic [ref=e493]:
+                  - generic [ref=e495]:
+                    - img
+                  - generic [ref=e496]:
+                    - generic [ref=e497]: System
+                    - generic [ref=e498]: Backups erstellen, Protokolle prüfen oder dein System neu starten
+                  - generic [ref=e499]:
+                    - img
+              - listitem [ref=e501] [cursor=pointer]:
+                - generic [ref=e502]:
+                  - generic [ref=e504]:
+                    - img
+                  - generic [ref=e505]:
+                    - generic [ref=e506]: Entwicklerwerkzeuge
+                    - generic [ref=e507]: Erweiterte Werkzeuge zur Prüfung und Fehlersuche in deinem System
+                  - generic [ref=e508]:
+                    - img
+              - listitem [ref=e510] [cursor=pointer]:
+                - generic [ref=e511]:
+                  - generic [ref=e513]:
+                    - img
+                  - generic [ref=e514]:
+                    - generic [ref=e515]: Über
+                    - generic [ref=e516]: Versionsinformationen, Credits und mehr
+                  - generic [ref=e517]:
+                    - img
+        - generic [ref=e518]:
+          - generic [ref=e519]:
+            - img
+          - generic [ref=e520]: Tipp!
+          - generic [ref=e521]:
+            - generic:
+              - text: Werde Teil der Community in unseren
+              - link "Foren" [ref=e522] [cursor=pointer]:
+                - /url: https://community.home-assistant.io
+              - text: ", per"
+              - link "Mastodon" [ref=e523] [cursor=pointer]:
+                - /url: https://www.home-assistant.io/mastodon
+              - text: ","
+              - link "Bluesky" [ref=e524] [cursor=pointer]:
+                - /url: https://www.home-assistant.io/bluesky
+              - text: ","
+              - link "X (ehemals Twitter)" [ref=e525] [cursor=pointer]:
+                - /url: https://www.home-assistant.io/twitter
+              - text: ","
+              - link "Chat" [ref=e526] [cursor=pointer]:
+                - /url: https://www.home-assistant.io/join-chat
+              - text: ","
+              - link "Blog" [ref=e527] [cursor=pointer]:
+                - /url: https://www.home-assistant.io/blog
+              - text: oder
+              - link "Newsletter" [ref=e529] [cursor=pointer]:
+                - /url: https://newsletter.openhomefoundation.org/
+              - text: .

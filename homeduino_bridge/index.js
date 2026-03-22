@@ -41,25 +41,26 @@ if (serial) {
 }
 
 function processSignal(line) {
-    try {
-        if (!line.startsWith('RF receive ')) return;
-        const strSeq = line.split(' ').slice(2).join(' ');
-        const info = rfcontrol.prepareCompressedPulses(strSeq);
-        if (info) {
-            const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
-            if (results && results.length > 0) {
-                const enriched = results.map(res => {
-                    res.values.raw = strSeq.split(' ').pop();
-                    const uid = 'hd_' + res.protocol + '_' + (res.values.id || 'fixed');
-                    Object.keys(res.values).forEach(k => {
-                        if (k !== 'raw') mqttClient.publish(`homeduino/${res.protocol}/${uid}/${k}`, res.values[k].toString(), { retain: true });
-                    });
-                    return { ...res, uid, groupTimestamp: new Date().toISOString() };
-                });
-                io.emit('signal_group', enriched);
-            }
-        }
-    } catch (e) { console.error('Parse Error:', e); }
-}
-
+      try {
+          if (!line.startsWith('RF receive ')) return;
+          const strSeq = line.split(' ').slice(2).join(' ');
+          console.log(`[DEBUG RAW] Received signal: ${strSeq}`);
+          const info = rfcontrol.prepareCompressedPulses(strSeq);
+          if (info) {
+              const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
+              console.log(`[DEBUG RAW] Decoded results: ${JSON.stringify(results)}`);
+              if (results && results.length > 0) {
+                  const enriched = results.map(res => {
+                      res.values.raw = strSeq.split(' ').pop();
+                      const uid = 'hd_' + res.protocol + '_' + (res.values.id || 'fixed');
+                      Object.keys(res.values).forEach(k => {
+                          if (k !== 'raw') mqttClient.publish(`homeduino/${res.protocol}/${uid}/${k}`, res.values[k].toString(), { retain: true });
+                      });
+                      return { ...res, uid, groupTimestamp: new Date().toISOString() };
+                  });
+                  io.emit('signal_group', enriched);
+              }
+          }
+      } catch (e) { console.error('Parse Error:', e); }
+  }
 server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.1 (Restored)'));
