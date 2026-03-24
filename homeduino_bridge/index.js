@@ -98,14 +98,11 @@ function processSignal(line) {
         if (!line.startsWith('RF receive ')) return;
         const strSeq = line.split(' ').slice(2).join(' ');
         
-        if (options.debug) console.log(`[DEBUG RAW] Received: ${strSeq}`);
-
         const info = rfcontrol.prepareCompressedPulses(strSeq);
         if (info) {
             const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
             if (results && results.length > 0) {
                 const enriched = results.map(res => {
-                    // --- STABLE UID LOGIC ---
                     let idParts = [];
                     const v = res.values;
                     
@@ -118,7 +115,6 @@ function processSignal(line) {
 
                     let idString = idParts.join('_');
                     if (!idString) {
-                        // Fallback only if no identifiers exist
                         idString = crypto.createHash('md5').update(res.protocol + JSON.stringify(v)).digest('hex').substring(0, 6);
                     }
                     
@@ -131,7 +127,6 @@ function processSignal(line) {
                         }
                     });
 
-                    // Auto-subscribe for control
                     if (v.state !== undefined) {
                         mqttClient.subscribe(`homeduino/${res.protocol}/${res.uid}/set`);
                     }
@@ -143,7 +138,7 @@ function processSignal(line) {
                         raw_data: strSeq
                     };
                     
-                    console.log(`[DECODED] ${res.protocol} (${res.uid}): ${output.values_json}`);
+                    if (options.debug) console.log(`[DECODED] ${res.protocol} (${res.uid}): ${output.values_json}`);
                     return output;
                 });
 
@@ -153,59 +148,89 @@ function processSignal(line) {
     } catch (e) { console.error('Processing Error:', e); }
 }
 
-// --- Discovery & Command Handlers ---
+// --- Discovery Handler ---
 io.on('connection', (socket) => {
     socket.on('add_to_ha', (data) => {
         const { res } = data;
         if (!res || !res.uid) return;
         
         const values = typeof res.values === 'string' ? JSON.parse(res.values) : res.values;
+        const device_id = res.uid;
+        
         const device = {
-            identifiers: [res.uid],
-            name: `Homeduino ${res.protocol} ${res.uid.split('_').slice(2).join(' ')}`,
+            identifiers: [device_id],
+            name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
             model: res.protocol,
-            manufacturer: 'Homeduino Bridge'
+            manufacturer: 'Homeduino Bridge',
+            sw_version: "5.0.6"
         };
 
+        console.log(`[DISCOVERY] Request for ${device_id} (${res.protocol})`);
+
+        // Temperature
         if (values.temperature !== undefined) {
-            mqttClient.publish(`homeassistant/sensor/${res.uid}/temperature/config`, JSON.stringify({
-                name: "Temperature", unique_id: `${res.uid}_temp`,
-                state_topic: `homeduino/${res.protocol}/${res.uid}/temperature`,
-                unit_of_measurement: "°C", device_class: "temperature", device: device
-            }), { retain: true });
+            const topic = `homeassistant/sensor/${device_id}/temperature/config`;
+            const payload = {
+                name: "Temperature",
+                unique_id: `${device_id}_temperature`,
+                state_topic: `homeduino/${res.protocol}/${device_id}/temperature`,
+                unit_of_measurement: "°C",
+                device_class: "temperature",
+                device: device
+            };
+            console.log(`[DISCOVERY] Publishing Temperature: ${topic}`);
+            mqttClient.publish(topic, JSON.stringify(payload), { retain: true });
         }
+
+        // Humidity
         if (values.humidity !== undefined) {
-            mqttClient.publish(`homeassistant/sensor/${res.uid}/humidity/config`, JSON.stringify({
-                name: "Humidity", unique_id: `${res.uid}_hum`,
-                state_topic: `homeduino/${res.protocol}/${res.uid}/humidity`,
-                unit_of_measurement: "%", device_class: "humidity", device: device
-            }), { retain: true });
+            const topic = `homeassistant/sensor/${device_id}/humidity/config`;
+            const payload = {
+                name: "Humidity",
+                unique_id: `${device_id}_humidity`,
+                state_topic: `homeduino/${res.protocol}/${device_id}/humidity`,
+                unit_of_measurement: "%",
+                device_class: "humidity",
+                device: device
+            };
+            console.log(`[DISCOVERY] Publishing Humidity: ${topic}`);
+            mqttClient.publish(topic, JSON.stringify(payload), { retain: true });
         }
+
+        // Switch
         if (values.state !== undefined) {
-            mqttClient.publish(`homeassistant/switch/${res.uid}/switch/config`, JSON.stringify({
-                name: "Switch", unique_id: `${res.uid}_sw`,
-                state_topic: `homeduino/${res.protocol}/${res.uid}/state`,
-                command_topic: `homeduino/${res.protocol}/${res.uid}/set`,
-                payload_on: "true", payload_off: "false", device: device
-            }), { retain: true });
+            const topic = `homeassistant/switch/${device_id}/config`;
+            const payload = {
+                name: "Switch",
+                unique_id: `${device_id}_switch`,
+                state_topic: `homeduino/${res.protocol}/${device_id}/state`,
+                command_topic: `homeduino/${res.protocol}/${device_id}/set`,
+                payload_on: "true",
+                payload_off: "false",
+                device: device
+            };
+            console.log(`[DISCOVERY] Publishing Switch: ${topic}`);
+            mqttClient.publish(topic, JSON.stringify(payload), { retain: true });
+            mqttClient.subscribe(`homeduino/${res.protocol}/${device_id}/set`);
         }
     });
 });
 
+// --- MQTT Command Listener ---
 mqttClient.on('message', (topic, message) => {
     const match = topic.match(/homeduino\/(.+)\/(.+)\/set/);
     if (match) {
         const protocolName = match[1];
         const uid = match[2];
-        const state = (message.toString() === 'true' || message.toString() === 'on');
+        const stateStr = message.toString();
+        const state = (stateStr === 'true' || stateStr === 'on' || stateStr === '1');
 
-        console.log(`[SEND] MQTT -> Protocol: ${protocolName}, UID: ${uid}, State: ${state}`);
+        console.log(`[SEND] MQTT Command for ${uid}: ${state}`);
 
         try {
             const protocol = rfcontrol.getProtocol(protocolName);
-            const uidParts = uid.split('_').slice(2); // Remove 'hd' and 'protocol'
+            const uidParts = uid.split('_').slice(2); 
 
-            // Build RF message from UID parts
             const rfMsg = { state: state };
             let idx = 0;
             if (protocol.values.id) rfMsg.id = parseInt(uidParts[idx++]);
@@ -231,4 +256,4 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.5 (Stable UIDs & Switch Logic)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.6 (Advanced Discovery Logs)'));
