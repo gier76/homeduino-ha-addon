@@ -1,49 +1,65 @@
-# Homeduino Home Assistant Add-on
+# Homeduino Bridge v5.0.2
 
-Bridge between Homeduino (433MHz) and Home Assistant. This add-on allows you to use your 433MHz devices (switches, sensors, etc.) with Home Assistant via an Arduino running the Homeduino sketch.
+Modernized Home Assistant Add-on that bridges 433MHz devices to Home Assistant using an Arduino (Homeduino) and MQTT.
 
-## Features
+## 🚀 Features
 
-- **Modern Web UI**: A real-time scanner to see incoming 433MHz signals.
-- **Easy Discovery**: Add discovered devices to Home Assistant with a single click.
-- **MQTT Based**: Communicates with Home Assistant using the standard MQTT discovery protocol.
-- **Ingress Support**: Access the scanner UI directly from the Home Assistant sidebar.
-- **Hardware Support**: Handles serial connections to various USB/Serial transceivers.
+- **Fancy Dark UI**: A high-tech "Cyberpunk" style real-time scanner.
+- **Selective Discovery**: Easily add discovered sensors and switches to Home Assistant with a single click.
+- **Humidity Support**: Fixed extraction for weather protocols (e.g., weather2).
+- **Robust Serial Handling**: Automatic re-triggering of the receiver and fragmented line protection.
+- **MQTT Discovery**: Automatically creates devices in HA with correct classes (temperature, humidity, switch).
+- **Ingress Support**: Access the UI directly from the Home Assistant sidebar.
 
-## Installation
+## 🛠 Hardware Setup
+
+To use this add-on, you need a **Homeduino** compatible hardware setup:
+
+1. **Arduino Nano/Uno**: Connected via USB to your Home Assistant host.
+2. **433MHz Receiver**: (e.g., RXB6 or similar high-quality module) connected to the Arduino.
+3. **433MHz Transmitter**: (Optional, for switches) connected to the Arduino.
+4. **Homeduino Sketch**: The Arduino must be running the [Homeduino Sketch](https://github.com/pimatic/homeduino).
+
+### Typical Connection:
+- Receiver Data -> Arduino Pin D2 (Interrupt)
+- Transmitter Data -> Arduino Pin D4
+
+## 🖥 User Interface
+
+The modern Web UI allows you to monitor incoming signals and add them to your smart home.
+
+![GUI Overview](screenshots/gui_overview.png)
+
+### Selective Discovery
+When a signal is detected, simply click the **"In HA hinzufügen"** button. The add-on will immediately send a discovery message to Home Assistant, and the device will appear in your MQTT integration.
+
+![MQTT Devices](screenshots/ha_mqtt_devices.png)
+
+## 📦 Installation
 
 1. Add this repository to your Home Assistant Add-on Store.
-2. Install the "Homeduino Bridge" add-on.
-3. Configure your serial port and MQTT settings (if not using the default `core-mosquitto`).
+2. Install **"Homeduino Bridge"**.
+3. Configure your `serial_port` (e.g., `/dev/ttyUSB0`) and MQTT settings.
 4. Start the add-on.
 
-## Configuration
+## ⚙️ Configuration
 
-Default options:
-
-```yaml
-serial_port: "/dev/ttyUSB0"
-baud_rate: 115200
-mqtt_broker: "core-mosquitto"
-mqtt_port: 1883
-mqtt_user: ""
-mqtt_password: ""
-debug: false
+Example `options.json`:
+```json
+{
+  "serial_port": "/dev/ttyUSB0",
+  "baud_rate": 115200,
+  "mqtt_broker": "core-mosquitto",
+  "mqtt_port": 1883,
+  "debug": true
+}
 ```
 
-### Serial Port
-Make sure to select the correct serial port where your Arduino is connected. You can find available ports in the add-on log if the default one fails to connect.
+## 📝 Troubleshooting
 
-### MQTT
-If you are using the official Mosquitto broker add-on, the default settings should work. If you use an external broker, provide the necessary credentials and address.
+- **No signals?** Check your `serial_port` and ensure the Arduino is flashed correctly.
+- **MQTT issues?** Ensure the Mosquitto broker add-on is running and credentials are correct.
+- **Debug logs**: Set `debug: true` in the configuration to see raw bitstreams in the add-on log.
 
-## Usage
-
-1. Open the "Web UI" from the add-on page or the sidebar.
-2. Watch for incoming signals from your 433MHz remotes or sensors.
-3. Use the "Add to HA" button to create a corresponding device in Home Assistant.
-4. For switches, you can test the "ON" and "OFF" commands directly from the UI.
-
-## Credits
-
-This add-on is based on the `rfcontroljs` library and inspired by various Homeduino implementations.
+---
+*Maintained by gier76*
