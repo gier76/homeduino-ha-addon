@@ -79,13 +79,18 @@ try {
 
 if (serial) {
     serial.on('open', () => { 
-        setInterval(() => serial.write('RF receive 0\n'), 5000); 
+        // Initial re-trigger
+        serial.write('RF receive 0\n');
+        // Keep-alive re-trigger every 30s
+        setInterval(() => serial.write('RF receive 0\n'), 30000); 
     });
     
     parser.on('data', (line) => {
         line = line.trim();
         if (line.includes('RF receive ') || line.match(/^[012\s]+$/)) {
             processSignal(line);
+        } else if (line.length > 0) {
+            console.log(`[SERIAL] ${line}`);
         }
     });
 }
@@ -94,7 +99,9 @@ if (serial) {
 function processSignal(line) {
     try {
         if (!line.startsWith('RF receive ')) return;
-        const strSeq = line.split(' ').slice(2).join(' ');
+        const parts = line.split(' ');
+        const strSeq = parts.slice(2).join(' ');
+        
         if (options.debug) console.log(`[DEBUG RAW] Received: ${strSeq}`);
 
         const info = rfcontrol.prepareCompressedPulses(strSeq);
@@ -102,24 +109,35 @@ function processSignal(line) {
             const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
             if (results && results.length > 0) {
                 const enriched = results.map(res => {
-                    res.values.raw = strSeq.split(' ').pop();
-                    const idSource = res.values.id || res.values.systemcode || res.values.unitcode || 'fixed';
-                    const hash = crypto.createHash('md5').update(res.protocol + idSource + (res.values.raw || '')).digest('hex').substring(0, 6);
-                    res.uid = `hd_${res.protocol}_${res.values.id || hash}`;
+                    // Create stable UID
+                    const idSource = res.values.id !== undefined ? res.values.id : 
+                                   (res.values.systemcode || res.values.unitcode || '0');
+                    
+                    // If no ID-like field, use a hash of the raw sequence to avoid collisions
+                    const hashSource = res.protocol + JSON.stringify(res.values) + strSeq;
+                    const hash = crypto.createHash('md5').update(hashSource).digest('hex').substring(0, 6);
+                    
+                    res.uid = `hd_${res.protocol}_${idSource !== '0' ? idSource : hash}`;
 
                     // Update MQTT State
                     Object.keys(res.values).forEach(k => {
-                        if (k !== 'raw') {
-                            mqttClient.publish(`homeduino/${res.protocol}/${res.uid}/${k}`, res.values[k].toString(), { retain: true });
-                        }
+                        mqttClient.publish(`homeduino/${res.protocol}/${res.uid}/${k}`, res.values[k].toString(), { retain: true });
                     });
 
-                    // For switches, ensure we are subscribed to their commands
-                    if (res.values.state !== undefined) {
+                    // Ensure we are listening for commands for this device if it's a switch
+                    if (res.values.state !== undefined || res.values.contact !== undefined) {
                         mqttClient.subscribe(`homeduino/${res.protocol}/${res.uid}/set`);
                     }
 
-                    return { ...res, groupTimestamp: new Date().toISOString(), values_json: JSON.stringify(res.values) };
+                    const output = {
+                        ...res,
+                        groupTimestamp: new Date().toISOString(),
+                        values_json: JSON.stringify(res.values),
+                        raw_data: strSeq
+                    };
+                    
+                    console.log(`[DECODED] ${res.protocol} (${res.uid}): ${output.values_json}`);
+                    return output;
                 });
 
                 io.emit('signal_group', enriched);
@@ -137,11 +155,12 @@ io.on('connection', (socket) => {
         const values = typeof res.values === 'string' ? JSON.parse(res.values) : res.values;
         const device = {
             identifiers: [res.uid],
-            name: `Homeduino ${res.protocol} ${values.id || ''}`,
+            name: `Homeduino ${res.protocol} ${values.id !== undefined ? values.id : ''}`,
             model: res.protocol,
             manufacturer: 'Homeduino Bridge'
         };
 
+        // Temperature
         if (values.temperature !== undefined) {
             mqttClient.publish(`homeassistant/sensor/${res.uid}/temperature/config`, JSON.stringify({
                 name: "Temperature",
@@ -153,6 +172,7 @@ io.on('connection', (socket) => {
             }), { retain: true });
         }
 
+        // Humidity
         if (values.humidity !== undefined) {
             mqttClient.publish(`homeassistant/sensor/${res.uid}/humidity/config`, JSON.stringify({
                 name: "Humidity",
@@ -164,6 +184,7 @@ io.on('connection', (socket) => {
             }), { retain: true });
         }
 
+        // Switch / State
         if (values.state !== undefined) {
             mqttClient.publish(`homeassistant/switch/${res.uid}/state/config`, JSON.stringify({
                 name: "Switch",
@@ -174,7 +195,6 @@ io.on('connection', (socket) => {
                 payload_off: "false",
                 device: device
             }), { retain: true });
-            mqttClient.subscribe(`homeduino/${res.protocol}/${res.uid}/set`);
         }
     });
 });
@@ -185,35 +205,32 @@ mqttClient.on('message', (topic, message) => {
     if (match) {
         const protocolName = match[1];
         const uid = match[2];
-        const state = message.toString() === 'true';
+        const stateStr = message.toString();
+        const state = (stateStr === 'true' || stateStr === 'on' || stateStr === '1');
 
-        console.log(`[SEND] Command for ${uid} (${protocolName}): ${state}`);
+        console.log(`[SEND] Received MQTT Command for ${uid}: ${state}`);
 
         try {
-            // 1. Find protocol
             const protocol = rfcontrol.getProtocol(protocolName);
             if (!protocol) throw new Error(`Protocol ${protocolName} not found`);
 
-            // 2. Prepare message (extract ID/Unit from UID or metadata)
-            // UIDs are hd_protocol_ID. We need to extract the numeric ID.
-            const idParts = uid.split('_');
-            const id = parseInt(idParts[idParts.length - 1]);
+            // Extract ID from UID (hd_protocol_ID)
+            const parts = uid.split('_');
+            const id = parts[parts.length - 1];
 
+            // Build message object based on protocol requirements
             const rfMessage = {
-                id: id,
-                state: state,
-                all: false,
-                unit: 0 // Default unit, might need more logic
+                state: state
             };
+            
+            // Assign ID (handle numeric or systemcode/unitcode)
+            if (protocol.values.id) rfMessage.id = parseInt(id) || 0;
+            if (protocol.values.systemcode) rfMessage.systemcode = id; // simplified
+            if (protocol.values.unitcode) rfMessage.unitcode = 0;
 
-            // 3. Encode to pulses
             const encoded = rfcontrol.encodeMessage(protocolName, rfMessage);
             if (encoded) {
-                // 4. Format for Homeduino: "RF send <pulseCount> <p1> <p2> ... <bitstream>"
-                const pulseCount = encoded.pulses.length / 2; // Each bit is 2 pulses in RF send? No, rfcontroljs returns bitstream
-                // Let's use the raw pulse format if possible, but Homeduino sketch expects:
-                // "RF send <p1> <p2> <p3> <p4> <p5> <p6> <p7> <p8> <pulseCount> <pulses>"
-                
+                // Format: "RF send <p1> <p2> <p3> <p4> <p5> <p6> <p7> <p8> <pulseCount> <pulses>"
                 let sendCmd = "RF send ";
                 for(let i=0; i<8; i++) {
                     sendCmd += (encoded.pulseLengths[i] || 0) + " ";
@@ -221,11 +238,13 @@ mqttClient.on('message', (topic, message) => {
                 sendCmd += encoded.pulses.length + " " + encoded.pulses + "\n";
                 
                 if (serial) {
-                    console.log(`[SERIAL] Sending: ${sendCmd.trim()}`);
+                    console.log(`[SERIAL SEND] ${sendCmd.trim()}`);
                     serial.write(sendCmd);
-                    // Update state immediately in MQTT for feedback
+                    // Optimistic update
                     mqttClient.publish(`homeduino/${protocolName}/${uid}/state`, state.toString(), { retain: true });
                 }
+            } else {
+                console.error(`[SEND ERROR] Could not encode message for ${protocolName}`);
             }
         } catch (e) {
             console.error(`[SEND ERROR] ${e.message}`);
@@ -233,4 +252,4 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.3 (RF Send Implemented)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.3 (Ready for Switches)'));
