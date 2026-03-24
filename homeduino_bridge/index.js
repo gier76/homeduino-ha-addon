@@ -22,7 +22,9 @@ let options = {
 
 if (fs.existsSync('/data/options.json')) {
     try { 
-        options = { ...options, ...JSON.parse(fs.readFileSync('/data/options.json', 'utf8')) }; 
+        const fileConfig = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
+        options = { ...options, ...fileConfig }; 
+        console.log('Config loaded from /data/options.json');
     } catch (e) { 
         console.error('Config Error:', e); 
     }
@@ -78,8 +80,10 @@ try {
 
 if (serial) {
     serial.on('open', () => { 
+        console.log('Serial port opened, starting receiver...');
         serial.write('RF receive 0\n');
-        setInterval(() => serial.write('RF receive 0\n'), 30000); 
+        // Re-trigger every 5 seconds (more aggressive)
+        setInterval(() => serial.write('RF receive 0\n'), 5000); 
     });
     
     parser.on('data', (line) => {
@@ -98,6 +102,9 @@ function processSignal(line) {
         if (!line.startsWith('RF receive ')) return;
         const strSeq = line.split(' ').slice(2).join(' ');
         
+        // Always log raw signal if debug is on
+        if (options.debug) console.log(`[RAW] ${strSeq}`);
+
         const info = rfcontrol.prepareCompressedPulses(strSeq);
         if (info) {
             const results = rfcontrol.decodePulses(info.pulseLengths, info.pulses);
@@ -138,11 +145,14 @@ function processSignal(line) {
                         raw_data: strSeq
                     };
                     
-                    if (options.debug) console.log(`[DECODED] ${res.protocol} (${res.uid}): ${output.values_json}`);
+                    // ALWAYS LOG DECODED SIGNALS
+                    console.log(`[DECODED] ${res.protocol} (${res.uid}): ${output.values_json}`);
                     return output;
                 });
 
                 io.emit('signal_group', enriched);
+            } else if (options.debug) {
+                console.log(`[INFO] Signal received but no protocol matched.`);
             }
         }
     } catch (e) { console.error('Processing Error:', e); }
@@ -162,55 +172,37 @@ io.on('connection', (socket) => {
             name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
             model: res.protocol,
             manufacturer: 'Homeduino Bridge',
-            sw_version: "5.0.6"
+            sw_version: "5.0.7"
         };
 
-        console.log(`[DISCOVERY] Request for ${device_id} (${res.protocol})`);
+        console.log(`[DISCOVERY] Sending config for ${device_id} to MQTT...`);
 
         // Temperature
         if (values.temperature !== undefined) {
-            const topic = `homeassistant/sensor/${device_id}/temperature/config`;
-            const payload = {
-                name: "Temperature",
-                unique_id: `${device_id}_temperature`,
+            mqttClient.publish(`homeassistant/sensor/${device_id}/temperature/config`, JSON.stringify({
+                name: "Temperature", unique_id: `${device_id}_temperature`,
                 state_topic: `homeduino/${res.protocol}/${device_id}/temperature`,
-                unit_of_measurement: "°C",
-                device_class: "temperature",
-                device: device
-            };
-            console.log(`[DISCOVERY] Publishing Temperature: ${topic}`);
-            mqttClient.publish(topic, JSON.stringify(payload), { retain: true });
+                unit_of_measurement: "°C", device_class: "temperature", device: device
+            }), { retain: true });
         }
 
         // Humidity
         if (values.humidity !== undefined) {
-            const topic = `homeassistant/sensor/${device_id}/humidity/config`;
-            const payload = {
-                name: "Humidity",
-                unique_id: `${device_id}_humidity`,
+            mqttClient.publish(`homeassistant/sensor/${device_id}/humidity/config`, JSON.stringify({
+                name: "Humidity", unique_id: `${device_id}_humidity`,
                 state_topic: `homeduino/${res.protocol}/${device_id}/humidity`,
-                unit_of_measurement: "%",
-                device_class: "humidity",
-                device: device
-            };
-            console.log(`[DISCOVERY] Publishing Humidity: ${topic}`);
-            mqttClient.publish(topic, JSON.stringify(payload), { retain: true });
+                unit_of_measurement: "%", device_class: "humidity", device: device
+            }), { retain: true });
         }
 
         // Switch
         if (values.state !== undefined) {
-            const topic = `homeassistant/switch/${device_id}/config`;
-            const payload = {
-                name: "Switch",
-                unique_id: `${device_id}_switch`,
+            mqttClient.publish(`homeassistant/switch/${device_id}/config`, JSON.stringify({
+                name: "Switch", unique_id: `${device_id}_switch`,
                 state_topic: `homeduino/${res.protocol}/${device_id}/state`,
                 command_topic: `homeduino/${res.protocol}/${device_id}/set`,
-                payload_on: "true",
-                payload_off: "false",
-                device: device
-            };
-            console.log(`[DISCOVERY] Publishing Switch: ${topic}`);
-            mqttClient.publish(topic, JSON.stringify(payload), { retain: true });
+                payload_on: "true", payload_off: "false", device: device
+            }), { retain: true });
             mqttClient.subscribe(`homeduino/${res.protocol}/${device_id}/set`);
         }
     });
@@ -256,4 +248,4 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.6 (Advanced Discovery Logs)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.7 (Enhanced Logging)'));
