@@ -2,36 +2,235 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Homeduino Analysis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homeduino Bridge - Advanced Analysis</title>
     <style>
-        body { background: #0a0b10; color: #e0e6ed; font-family: monospace; padding: 20px; }
-        .signal-group { border: 1px solid #333; margin-bottom: 20px; padding: 10px; border-radius: 8px; }
-        .card { background: #161922; padding: 10px; margin: 5px 0; border-radius: 4px; }
-        .raw-data { color: #00f2ff; word-break: break-all; font-size: 0.8rem; margin-top: 5px; }
+        :root {
+            --bg-color: #0a0b10;
+            --card-bg: #161922;
+            --accent-color: #00f2ff;
+            --text-color: #e0e6ed;
+            --glow-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
+        body { 
+            background: var(--bg-color); 
+            color: var(--text-color); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: var(--glow-shadow);
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+
+        #signals {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .signal-group {
+            background: var(--card-bg);
+            border: 1px solid #2a2f3e;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            transition: transform 0.2s, border-color 0.2s;
+            animation: slideIn 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .signal-group:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #2a2f3e;
+            padding-bottom: 8px;
+        }
+
+        .protocol-badge {
+            background: #252b3d;
+            color: var(--accent-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: 1px solid var(--accent-color);
+            box-shadow: var(--glow-shadow);
+        }
+
+        .uid-label {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #8892b0;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .value-item {
+            background: #1c2230;
+            padding: 8px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .value-label {
+            font-size: 0.7rem;
+            color: #8892b0;
+            text-transform: uppercase;
+        }
+
+        .value-content {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .raw-data {
+            font-family: monospace;
+            font-size: 0.7rem;
+            color: #4a5568;
+            background: #0d1117;
+            padding: 6px;
+            border-radius: 4px;
+            margin-top: 10px;
+            word-break: break-all;
+            border-left: 3px solid #4a5568;
+        }
+
+        .add-btn {
+            background: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-left: 10px;
+        }
+
+        .add-btn:hover {
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: var(--glow-shadow);
+        }
+
+        .add-btn:active {
+            transform: scale(0.95);
+        }
+
+        .add-btn.success {
+            border-color: #00ff88;
+            color: #00ff88;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: #2a2f3e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a415a; }
+
     </style>
 </head>
 <body>
-    <h1>Signal-Analysator (v4.6.0)</h1>
+    <h1>Homeduino Bridge v5.0.2</h1>
     <div id="signals"></div>
+
     <script src="socket.io/socket.io.js"></script>
     <script>
         const socket = io({ path: window.location.pathname.replace(/\/$/, "") + "/socket.io" });
         const container = document.getElementById('signals');
+        const MAX_GROUPS = 20;
+
         socket.on('signal_group', (results) => {
-            const group = document.createElement('div');
-            group.className = 'signal-group';
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'signal-group';
+            
+            // We use the first result as representative for the group UI
+            const mainRes = results[0];
+            
+            let html = `
+                <div class="signal-header">
+                    <span class="protocol-badge">${mainRes.protocol}</span>
+                    <span class="uid-label">${mainRes.uid}</span>
+                    <button class="add-btn" onclick='addToHA(${JSON.stringify(mainRes).replace(/'/g, "&apos;")}, this)'>In HA hinzufügen</button>
+                </div>
+                <div class="values-grid">
+            `;
+
+            // Merge values from all protocols in the group (usually just one)
             results.forEach(res => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <strong>${res.protocol}</strong><br>
-                    Values: ${JSON.stringify(res.values)}<br>
-                    <div class="raw-data">RAW BITS: ${res.values.raw || 'N/A'}</div>
-                `;
-                group.appendChild(card);
+                Object.keys(res.values).forEach(key => {
+                    if (key !== 'raw') {
+                        html += `
+                            <div class="value-item">
+                                <span class="value-label">${key}</span>
+                                <span class="value-content">${res.values[key]}</span>
+                            </div>
+                        `;
+                    }
+                });
             });
-            container.prepend(group);
+
+            html += `</div>`;
+            
+            if (mainRes.values.raw) {
+                html += `<div class="raw-data">RAW: ${mainRes.values.raw}</div>`;
+            }
+
+            groupDiv.innerHTML = html;
+            container.prepend(groupDiv);
+
+            // Limit list size
+            if (container.children.length > MAX_GROUPS) {
+                container.removeChild(container.lastChild);
+            }
         });
+
+        function addToHA(res, btn) {
+            console.log("Adding to HA:", res.uid);
+            socket.emit('add_to_ha', { res: res });
+            
+            btn.textContent = "Hinzugefügt!";
+            btn.classList.add('success');
+            setTimeout(() => {
+                btn.textContent = "In HA hinzufügen";
+                btn.classList.remove('success');
+            }, 3000);
+        }
     </script>
 </body>
 </html>

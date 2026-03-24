@@ -2,23 +2,22 @@
 
 ## Erledigt
 - [x] `index.js` fixen (`homeduino.connect()` Fehler behoben).
-- [x] Version in `config.yaml` auf `3.9.3` erhöht.
+- [x] Version in `config.yaml` auf `5.0.2` erhöht.
 - [x] README.md aktualisiert.
-- [x] GitHub Zugangsdaten gefunden.
-- [x] Änderungen zu GitHub pushen (v3.9.3).
-- [x] **Fancy Dark Theme mit Glow-Effekten** implementiert.
-- [x] **Selektive Discovery** in GUI integriert.
+- [x] **Fancy Dark Theme mit Glow-Effekten** implementiert (v5.0.2).
+- [x] **Selektive Discovery** ("In HA hinzufügen") in GUI integriert.
 - [x] **UID Anzeige in GUI** hinzugefügt.
-- [x] UID-Logik massiv verbessert:
-    - [x] Hash-basierte UIDs bei fehlender ID.
-    - [x] Einbeziehung von `id`, `systemcode`, `unitcode` etc. in UID und Namen.
-- [x] **Switch-Logik verbessert**:
-    - [x] Korrekte Erkennung von `state` (on/off).
-    - [x] Robustes Senden von Befehlen.
+- [x] **UID-Logik massiv verbessert**:
+    - [x] Hash-basierte UIDs bei fehlender ID (MD5-basiert).
+    - [x] Einbeziehung von `id`, `systemcode`, `unitcode` etc. in UID.
+- [x] **Humidity Fix für weather2**:
+    - [x] Bits 28-35 erfolgreich als Luftfeuchtigkeit identifiziert.
+    - [x] Laufzeit-Patch für `rfcontroljs` implementiert, um `weather2` zu erweitern.
+- [x] **Bridge Server v5.0.2** Start-Logs korrigiert.
 
 ## Offen
-- [ ] Addon in HA auf Version 3.9.3 aktualisieren (Warten auf HA Cache Update).
-- [ ] GUI öffnen und Geräte hinzufügen (Namen sollten nun automatisch generiert werden).
-- [ ] Humidity prüfen: Falls immer noch fehlend, Rohdaten-Analyse starten (Daten sind in den Logs sichtbar).
-- [ ] Switches testen: Reagieren sie auf Befehle und Updates von extern?
+- [ ] Addon in HA neu installieren (Docker-Cache leeren).
+- [ ] GUI testen: Werden Luftfeuchtigkeitswerte für alle Sensoren korrekt angezeigt?
+- [ ] MQTT Discovery validieren: Erscheinen die Geräte in HA nach Klick auf "Add to HA"?
+- [ ] Senden von Befehlen (Switches) finalisieren (Encoding-Logik fehlt noch im Backend).
 - [ ] Diese Aufgabenliste pflegen bei Session-Abbruch.
