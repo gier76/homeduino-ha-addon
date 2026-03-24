@@ -252,4 +252,4 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.3 (Ready for Switches)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.4 (Debugging Enabled)'));
