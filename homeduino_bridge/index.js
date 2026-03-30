@@ -66,6 +66,29 @@ const mqttClient = mqtt.connect(`mqtt://${options.mqtt_broker}:${options.mqtt_po
 mqttClient.on('connect', () => {
     console.log('MQTT Connected');
     mqttClient.subscribe('homeduino/+/+/set');
+
+    // AUTO-DISCOVERY for specific known devices (v5.1.2)
+    const knownDevices = [
+        { protocol: 'switch2', uid: 'hd_switch2_31_4', name: 'Homeduino Switch 31 4', values: { state: false } }
+    ];
+    
+    knownDevices.forEach(d => {
+        console.log(`[AUTO-DISCOVERY] Triggering discovery for ${d.uid}...`);
+        const device = {
+            identifiers: [d.uid],
+            name: d.name,
+            model: d.protocol,
+            manufacturer: 'Homeduino Bridge',
+            sw_version: "5.1.2"
+        };
+        mqttClient.publish(`homeassistant/switch/${d.uid}/config`, JSON.stringify({
+            name: "Switch", unique_id: `${d.uid}_switch`,
+            state_topic: `homeduino/${d.protocol}/${d.uid}/state`,
+            command_topic: `homeduino/${d.protocol}/${d.uid}/set`,
+            payload_on: "true", payload_off: "false", device: device
+        }), { retain: true });
+        mqttClient.subscribe(`homeduino/${d.protocol}/${d.uid}/set`);
+    });
 });
 
 // --- Serial Connection ---
@@ -265,4 +288,4 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.1.1 (Dynamic UI Fix)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.1.2 (Auto-Discovery Fix)'));

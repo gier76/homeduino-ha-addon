@@ -1,0 +1,213 @@
+- generic [ref=e18]:
+  - complementary [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic "Seitenleiste umschalten" [ref=e24]:
+          - button "Seitenleiste umschalten" [ref=e25] [cursor=pointer]:
+            - generic [ref=e27]:
+              - img
+        - generic [ref=e28]: Home Assistant
+      - generic [ref=e29]:
+        - generic [ref=e31]:
+          - generic:
+            - listitem [ref=e33] [cursor=pointer]:
+              - generic [ref=e34]:
+                - generic [ref=e36]:
+                  - img
+                - generic [ref=e38]: Übersicht
+            - listitem [ref=e40] [cursor=pointer]:
+              - generic [ref=e41]:
+                - generic [ref=e42]:
+                  - img
+                - generic [ref=e44]: Energie
+            - listitem [ref=e46] [cursor=pointer]:
+              - generic [ref=e47]:
+                - generic [ref=e48]:
+                  - img
+                - generic [ref=e50]: Aktivität
+            - listitem [ref=e52] [cursor=pointer]:
+              - generic [ref=e53]:
+                - generic [ref=e54]:
+                  - img
+                - generic [ref=e56]: Verlauf
+            - listitem [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]:
+                - generic [ref=e61]:
+                  - img
+                - generic [ref=e63]: Homeduino Bridge
+            - listitem [ref=e65] [cursor=pointer]:
+              - generic [ref=e66]:
+                - generic [ref=e67]:
+                  - img
+                - generic [ref=e69]: Medien
+            - listitem [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]:
+                - generic [ref=e74]:
+                  - img
+                - generic [ref=e76]: MQTT Explorer
+            - listitem [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]:
+                - generic [ref=e81]:
+                  - img
+                - generic [ref=e83]: Terminal
+            - listitem [ref=e85] [cursor=pointer]:
+              - generic [ref=e86]:
+                - generic [ref=e87]:
+                  - img
+                - generic [ref=e89]: To-do-Listen
+        - generic [ref=e90]:
+          - generic:
+            - listitem [ref=e92] [cursor=pointer]:
+              - generic [ref=e93]:
+                - generic [ref=e94]:
+                  - img
+                - generic [ref=e96]: Einstellungen
+            - listitem [ref=e98] [cursor=pointer]:
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - img
+                - generic [ref=e102]: Benachrichtigungen
+            - listitem [ref=e104] [cursor=pointer]:
+              - generic [ref=e105]:
+                - generic [ref=e107]: t
+                - generic [ref=e109]: test
+  - generic [ref=e116]:
+    - generic [ref=e119]:
+      - generic "Zurück" [ref=e122]:
+        - link "Zurück" [ref=e123] [cursor=pointer]:
+          - /url: /config
+          - generic [ref=e125]:
+            - img
+      - generic [ref=e126]:
+        - link "Integrationen" [ref=e127] [cursor=pointer]:
+          - /url: /config/integrations
+          - tab "Integrationen" [ref=e129]:
+            - generic [ref=e130]:
+              - img
+            - generic [ref=e131]: Integrationen
+        - link "Geräte" [ref=e132] [cursor=pointer]:
+          - /url: /config/devices
+          - tab "Geräte" [selected] [ref=e134]:
+            - generic [ref=e135]:
+              - img
+            - generic [ref=e136]: Geräte
+        - link "Entitäten" [ref=e137] [cursor=pointer]:
+          - /url: /config/entities
+          - tab "Entitäten" [ref=e139]:
+            - generic [ref=e140]:
+              - img
+            - generic [ref=e141]: Entitäten
+        - link "Helfer" [ref=e142] [cursor=pointer]:
+          - /url: /config/helpers
+          - tab "Helfer" [ref=e144]:
+            - generic [ref=e145]:
+              - img
+            - generic [ref=e146]: Helfer
+      - generic [ref=e150]:
+        - generic:
+          - generic "Menü" [ref=e152]:
+            - button "Menü" [ref=e153] [cursor=pointer]:
+              - generic [ref=e155]:
+                - img
+          - generic:
+            - generic: OAuth-Anmeldedaten
+    - generic [ref=e159]:
+      - generic [ref=e163]:
+        - generic [ref=e164]:
+          - button "Filter" [ref=e167] [cursor=pointer]:
+            - generic [ref=e169]:
+              - img
+            - generic [ref=e170]: Filter
+          - generic [ref=e172]: "2"
+        - generic "Auswahlmodus aufrufen" [ref=e173] [cursor=pointer]:
+          - button [ref=e175]:
+            - generic [ref=e177]:
+              - img
+        - generic [ref=e185]:
+          - generic [ref=e189]:
+            - img
+          - textbox "2 Geräte durchsuchen" [ref=e193]
+        - generic [ref=e194]:
+          - generic:
+            - button "Gruppieren nach" [ref=e197] [cursor=pointer]:
+              - generic [ref=e198]: Gruppieren nach
+              - generic [ref=e201]:
+                - img
+            - generic:
+              - generic: Bereich
+              - generic: Etage
+              - generic: Integration
+              - generic: Hersteller
+              - generic: Nicht gruppieren
+              - generic: Alle einklappen
+              - generic: Alle ausklappen
+        - generic [ref=e202]:
+          - generic:
+            - button "Sortieren nach Gerät" [ref=e205] [cursor=pointer]:
+              - generic [ref=e206]: Sortieren nach Gerät
+              - generic [ref=e209]:
+                - img
+            - generic:
+              - generic: Gerät
+              - generic: Bereich
+              - generic: Etage
+              - generic: Integration
+              - generic: Hersteller
+              - generic: Modell
+              - generic: Batterie
+              - generic: Erstellt
+              - generic: Geändert
+              - generic: Status
+        - generic "Tabelle anpassen" [ref=e210] [cursor=pointer]:
+          - button [ref=e212]:
+            - generic [ref=e214]:
+              - img
+      - table [ref=e216]:
+        - row "Symbol Gerät Bereich Integration Hersteller Modell Batterie" [ref=e217]:
+          - generic [ref=e218]:
+            - columnheader "Symbol"
+            - columnheader "Gerät" [ref=e219] [cursor=pointer]:
+              - generic [ref=e220]:
+                - img
+              - generic [ref=e221]: Gerät
+            - columnheader "Bereich" [ref=e222] [cursor=pointer]:
+              - generic [ref=e223]:
+                - img
+              - generic [ref=e224]: Bereich
+            - columnheader "Integration" [ref=e225] [cursor=pointer]:
+              - generic [ref=e226]:
+                - img
+              - generic [ref=e227]: Integration
+            - columnheader "Hersteller" [ref=e228] [cursor=pointer]:
+              - generic [ref=e229]:
+                - img
+              - generic [ref=e230]: Hersteller
+            - columnheader "Modell" [ref=e231] [cursor=pointer]:
+              - generic [ref=e232]:
+                - img
+              - generic [ref=e233]: Modell
+            - columnheader "Batterie" [ref=e234] [cursor=pointer]:
+              - generic [ref=e235]:
+                - img
+              - generic [ref=e236]: Batterie
+        - generic [ref=e237]:
+          - row "Homeduino weather2 MQTT Homeduino Bridge weather2 —" [ref=e238] [cursor=pointer]:
+            - cell [ref=e239]
+            - rowheader "Homeduino weather2" [ref=e240]
+            - cell
+            - cell "MQTT" [ref=e241]
+            - cell "Homeduino Bridge" [ref=e242]
+            - cell "weather2" [ref=e243]
+            - cell "—" [ref=e244]
+          - row "Homeduino weather2 92 MQTT Homeduino Bridge weather2 —" [ref=e245] [cursor=pointer]:
+            - cell [ref=e246]
+            - rowheader "Homeduino weather2 92" [ref=e247]
+            - cell
+            - cell "MQTT" [ref=e248]
+            - cell "Homeduino Bridge" [ref=e249]
+            - cell "weather2" [ref=e250]
+            - cell "—" [ref=e251]
+    - button "Gerät hinzufügen" [ref=e256] [cursor=pointer]:
+      - generic [ref=e258]:
+        - img
+      - generic [ref=e259]: Gerät hinzufügen
