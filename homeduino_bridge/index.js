@@ -182,7 +182,7 @@ io.on('connection', (socket) => {
         name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
         model: res.protocol,
         manufacturer: 'Homeduino Bridge',
-        sw_version: "5.0.9"
+        sw_version: "5.1.0"
         };
         console.log(`[DISCOVERY] Sending config for ${device_id} to MQTT...`);
 
@@ -244,8 +244,12 @@ mqttClient.on('message', (topic, message) => {
             const encoded = rfcontrol.encodeMessage(protocolName, rfMsg);
             if (encoded) {
                 const pl = encoded.pulseLengths;
-                let sendCmd = `RF send ${pl.length} `;
-                pl.forEach(p => sendCmd += p + " ");
+                // Homeduino often expects exactly 8 pulse lengths, padded with 0
+                let fullPl = Array(8).fill(0);
+                for(let i=0; i<pl.length && i<8; i++) fullPl[i] = pl[i];
+
+                let sendCmd = `RF send ${fullPl.length} `;
+                fullPl.forEach(p => sendCmd += p + " ");
                 sendCmd += `${encoded.pulses.length} ${encoded.pulses}\n`;
                 
                 if (serial) {
@@ -260,4 +264,4 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.9 (Improved Logging)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.1.0 (Pulse Padding Fix)'));
