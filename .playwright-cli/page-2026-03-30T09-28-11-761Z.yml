@@ -1,0 +1,47 @@
+- generic [ref=e2]:
+  - img "Home Assistant" [ref=e4]
+  - generic [ref=e5]:
+    - generic [ref=e8]:
+      - heading "Willkommen zuhause!" [level=1] [ref=e18]
+      - generic [ref=e20]:
+        - alert [ref=e22]:
+          - generic [ref=e25]:
+            - img
+          - generic [ref=e27]:
+            - generic: Ungültiger Benutzername oder Passwort
+        - generic [ref=e30]:
+          - generic: Benutzername
+          - textbox "Benutzername" [ref=e31]:
+            - /placeholder: ""
+        - generic [ref=e33]:
+          - generic [ref=e35]:
+            - generic: Passwort
+            - textbox "Passwort" [ref=e36]:
+              - /placeholder: ""
+          - generic "Passwort anzeigen" [ref=e40]:
+            - button "Passwort anzeigen" [ref=e41] [cursor=pointer]:
+              - generic [ref=e43]:
+                - img
+      - generic [ref=e44]:
+        - generic [ref=e46]:
+          - generic [ref=e48] [cursor=pointer]:
+            - checkbox "Angemeldet bleiben" [checked] [ref=e49]
+            - generic:
+              - img
+          - generic [ref=e51]: Angemeldet bleiben
+        - link "Passwort vergessen?" [ref=e52] [cursor=pointer]:
+          - /url: https://www.home-assistant.io/docs/locked_out/#forgot-password
+      - button "Anmelden" [ref=e55] [cursor=pointer]:
+        - generic [ref=e56]: Anmelden
+    - generic [ref=e15]:
+      - button "Deutsch" [ref=e62] [cursor=pointer]:
+        - generic [ref=e63]: Deutsch
+        - generic:
+          - generic:
+            - img
+      - link "Hilfe" [ref=e64] [cursor=pointer]:
+        - /url: https://www.home-assistant.io/docs/authentication/
+        - generic [ref=e65]: Hilfe
+        - generic:
+          - generic:
+            - img

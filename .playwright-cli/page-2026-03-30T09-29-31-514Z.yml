@@ -1,0 +1,25 @@
+- complementary [ref=e5]:
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - generic "Seitenleiste umschalten" [ref=e10]:
+        - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+          - generic [ref=e13]:
+            - img
+      - generic [ref=e14]: Home Assistant
+    - progressbar "Loading" [ref=e17]
+    - generic [ref=e20]:
+      - generic:
+        - listitem [ref=e22] [cursor=pointer]:
+          - generic [ref=e23]:
+            - generic [ref=e24]:
+              - img
+            - generic [ref=e26]: Einstellungen
+        - listitem [ref=e28] [cursor=pointer]:
+          - generic [ref=e29]:
+            - generic [ref=e30]:
+              - img
+            - generic [ref=e32]: Benachrichtigungen
+        - listitem [ref=e34] [cursor=pointer]:
+          - generic [ref=e35]:
+            - generic [ref=e37]: t
+            - generic [ref=e39]: test

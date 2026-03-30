@@ -1,0 +1,32 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - img [ref=e3]
+    - generic [ref=e7]:
+      - progressbar "Loading" [ref=e10]
+      - generic [ref=e13]: Loading data
+    - img "Home Assistant is a project by the Open Home Foundation" [ref=e15]
+  - complementary [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic "Seitenleiste umschalten" [ref=e24]:
+          - button "Seitenleiste umschalten" [ref=e25] [cursor=pointer]:
+            - generic [ref=e27]:
+              - img
+        - generic [ref=e28]: Home Assistant
+      - progressbar "Loading" [ref=e31]
+      - generic [ref=e34]:
+        - generic:
+          - listitem [ref=e36] [cursor=pointer]:
+            - generic [ref=e37]:
+              - generic [ref=e38]:
+                - img
+              - generic [ref=e40]: Einstellungen
+          - listitem [ref=e42] [cursor=pointer]:
+            - generic [ref=e43]:
+              - generic [ref=e44]:
+                - img
+              - generic [ref=e46]: Benachrichtigungen
+          - listitem [ref=e48] [cursor=pointer]:
+            - generic [ref=e49]:
+              - generic [ref=e51]: t
+              - generic [ref=e53]: test

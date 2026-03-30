@@ -1,0 +1,185 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic "Seitenleiste umschalten" [ref=e10]:
+          - button "Seitenleiste umschalten" [ref=e11] [cursor=pointer]:
+            - generic [ref=e13]:
+              - img
+        - generic [ref=e14]: Home Assistant
+      - generic [ref=e41]:
+        - generic [ref=e43]:
+          - generic:
+            - listitem [ref=e45] [cursor=pointer]:
+              - generic [ref=e46]:
+                - generic [ref=e48]:
+                  - img
+                - generic [ref=e50]: Übersicht
+            - listitem [ref=e52] [cursor=pointer]:
+              - generic [ref=e53]:
+                - generic [ref=e54]:
+                  - img
+                - generic [ref=e56]: Energie
+            - listitem [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]:
+                - generic [ref=e60]:
+                  - img
+                - generic [ref=e62]: Aktivität
+            - listitem [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]:
+                - generic [ref=e66]:
+                  - img
+                - generic [ref=e68]: Verlauf
+            - listitem [ref=e70] [cursor=pointer]:
+              - generic [ref=e71]:
+                - generic [ref=e73]:
+                  - img
+                - generic [ref=e75]: Homeduino Bridge
+            - listitem [ref=e77] [cursor=pointer]:
+              - generic [ref=e78]:
+                - generic [ref=e79]:
+                  - img
+                - generic [ref=e81]: Medien
+            - listitem [ref=e83] [cursor=pointer]:
+              - generic [ref=e84]:
+                - generic [ref=e86]:
+                  - img
+                - generic [ref=e88]: MQTT Explorer
+            - listitem [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]:
+                - generic [ref=e93]:
+                  - img
+                - generic [ref=e95]: Terminal
+            - listitem [ref=e97] [cursor=pointer]:
+              - generic [ref=e98]:
+                - generic [ref=e99]:
+                  - img
+                - generic [ref=e101]: To-do-Listen
+        - generic [ref=e102]:
+          - generic:
+            - listitem [ref=e104] [cursor=pointer]:
+              - generic [ref=e105]:
+                - generic [ref=e106]:
+                  - img
+                - generic [ref=e108]: Einstellungen
+            - listitem [ref=e110] [cursor=pointer]:
+              - generic [ref=e111]:
+                - generic:
+                  - generic:
+                    - generic [ref=e112]:
+                      - img
+                    - generic: "1"
+                - generic [ref=e114]: Benachrichtigungen
+                - generic [ref=e115]: "1"
+            - listitem [ref=e117] [cursor=pointer]:
+              - generic [ref=e118]:
+                - generic [ref=e120]: t
+                - generic [ref=e122]: test
+  - generic [ref=e126]:
+    - generic [ref=e129]:
+      - generic "Zurück" [ref=e132]:
+        - link "Zurück" [ref=e133] [cursor=pointer]:
+          - /url: /config/apps
+          - generic [ref=e135]:
+            - img
+      - generic [ref=e136]:
+        - link "Info" [ref=e137] [cursor=pointer]:
+          - /url: /config/app/1afe71df_homeduino_bridge/info
+          - tab "Info" [selected] [ref=e139]:
+            - generic [ref=e140]:
+              - img
+            - generic [ref=e141]: Info
+        - link "Konfiguration" [ref=e142] [cursor=pointer]:
+          - /url: /config/app/1afe71df_homeduino_bridge/config
+          - tab "Konfiguration" [ref=e144]:
+            - generic [ref=e145]:
+              - img
+            - generic [ref=e146]: Konfiguration
+        - link "Protokoll" [ref=e147] [cursor=pointer]:
+          - /url: /config/app/1afe71df_homeduino_bridge/logs
+          - tab "Protokoll" [ref=e149]:
+            - generic [ref=e150]:
+              - img
+            - generic [ref=e151]: Protokoll
+    - generic [ref=e158]:
+      - generic:
+        - generic [ref=e159]:
+          - generic [ref=e160]:
+            - text: Homeduino Bridge
+            - generic "App wird ausgeführt" [ref=e162]:
+              - img
+          - generic [ref=e163]:
+            - text: "Aktuelle Version: 5.0.8"
+            - generic [ref=e164]:
+              - text: (
+              - generic [ref=e165] [cursor=pointer]: Änderungsprotokoll
+              - text: )
+          - generic [ref=e166]:
+            - generic:
+              - button "Bewertung" [ref=e169] [cursor=pointer]:
+                - generic [ref=e171]:
+                  - img
+                - generic [ref=e172]: Bewertung
+              - button "Ingress" [ref=e176] [cursor=pointer]:
+                - generic [ref=e178]:
+                  - img
+                - generic [ref=e179]: Ingress
+          - generic [ref=e181]:
+            - text: Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling.
+            - text: Weitere Informationen findest du auf der Seite
+            - link "Homeduino Bridge" [ref=e182] [cursor=pointer]:
+              - /url: https://github.com/gier76/homeduino-ha-addon
+            - text: .
+          - generic [ref=e183]:
+            - generic [ref=e185]:
+              - generic [ref=e186]:
+                - generic [ref=e188]:
+                  - generic [ref=e189]: Beim Systemstart starten
+                  - generic [ref=e191]: Diese App beim Start von Home Assistant automatisch starten.
+                - switch [checked] [ref=e197] [cursor=pointer]
+              - generic [ref=e198]:
+                - generic [ref=e200]:
+                  - generic [ref=e201]: Watchdog
+                  - generic [ref=e203]: Diese App bei einem Absturz automatisch neu starten.
+                - switch [checked] [ref=e209] [cursor=pointer]
+              - generic [ref=e210]:
+                - generic [ref=e212]:
+                  - generic [ref=e213]: Automatische Updates
+                  - generic [ref=e215]: Diese App automatisch aktualisieren, wenn eine neue Version verfügbar ist.
+                - switch [checked] [ref=e221] [cursor=pointer]
+              - generic [ref=e222]:
+                - generic [ref=e224]:
+                  - generic [ref=e225]: In Seitenleiste anzeigen
+                  - generic [ref=e227]: Eine Verknüpfung zu dieser App in der Seitenleiste anzeigen.
+                - switch [checked] [ref=e233] [cursor=pointer]
+            - generic [ref=e234]:
+              - generic [ref=e237]:
+                - generic [ref=e238]: Hostname
+                - code [ref=e240]: 1afe71df-homeduino-bridge
+              - generic [ref=e245]:
+                - generic [ref=e246]: CPU-Auslastung
+                - generic [ref=e248]:
+                  - generic [ref=e249]: 0 %
+                  - img [ref=e251]
+              - generic [ref=e258]:
+                - generic [ref=e259]: RAM-Nutzung
+                - generic "0 Bytes/0 Bytes" [ref=e261]:
+                  - generic [ref=e262]: 0 %
+                  - img [ref=e264]
+        - generic [ref=e268]:
+          - generic [ref=e269]:
+            - button "Stoppen" [ref=e272] [cursor=pointer]:
+              - generic [ref=e273]:
+                - generic: Stoppen
+            - button "Neu starten" [ref=e276] [cursor=pointer]:
+              - generic [ref=e277]:
+                - generic: Neu starten
+          - generic [ref=e278]:
+            - button "Deinstallieren" [ref=e281] [cursor=pointer]:
+              - generic [ref=e282]:
+                - generic: Deinstallieren
+            - button "Neu aufbauen" [ref=e285] [cursor=pointer]:
+              - generic [ref=e286]:
+                - generic: Neu aufbauen
+            - button "Benutzeroberfläche öffnen" [ref=e288] [cursor=pointer]:
+              - generic [ref=e289]: Benutzeroberfläche öffnen

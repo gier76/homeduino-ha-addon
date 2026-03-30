@@ -1,0 +1,11 @@
+- generic [ref=e2]:
+  - img "Home Assistant" [ref=e4]
+  - generic [ref=e5]:
+    - alert [ref=e10]:
+      - generic [ref=e13]:
+        - img
+    - link [ref=e17] [cursor=pointer]:
+      - /url: https://www.home-assistant.io/docs/authentication/
+      - generic:
+        - generic:
+          - img

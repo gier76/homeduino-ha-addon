@@ -155,6 +155,11 @@ function processSignal(line) {
                     return output;
                 });
 
+                // Show all protocols that matched the same signal
+                if (enriched.length > 1) {
+                    console.log(`[DEBUG] Signal matched ${enriched.length} protocols: ${enriched.map(e => e.protocol).join(', ')}`);
+                }
+
                 io.emit('signal_group', enriched);
             } else if (options.debug) {
                 console.log(`[INFO] Signal received but no protocol matched.`);
@@ -177,7 +182,7 @@ io.on('connection', (socket) => {
         name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
         model: res.protocol,
         manufacturer: 'Homeduino Bridge',
-        sw_version: "5.0.8"
+        sw_version: "5.0.9"
         };
         console.log(`[DISCOVERY] Sending config for ${device_id} to MQTT...`);
 
@@ -255,4 +260,4 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.8 (Switch Fix)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.9 (Improved Logging)'));
