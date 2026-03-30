@@ -67,28 +67,34 @@ mqttClient.on('connect', () => {
     console.log('MQTT Connected');
     mqttClient.subscribe('homeduino/+/+/set');
 
-    // AUTO-DISCOVERY for specific known devices (v5.1.2)
-    const knownDevices = [
-        { protocol: 'switch2', uid: 'hd_switch2_31_4', name: 'Homeduino Switch 31 4', values: { state: false } }
-    ];
-    
-    knownDevices.forEach(d => {
-        console.log(`[AUTO-DISCOVERY] Triggering discovery for ${d.uid}...`);
-        const device = {
-            identifiers: [d.uid],
-            name: d.name,
-            model: d.protocol,
-            manufacturer: 'Homeduino Bridge',
-            sw_version: "5.1.3"
-        };
-        mqttClient.publish(`homeassistant/switch/${d.uid}/config`, JSON.stringify({
-            name: "Switch", unique_id: `${d.uid}_switch`,
-            state_topic: `homeduino/${d.protocol}/${d.uid}/state`,
-            command_topic: `homeduino/${d.protocol}/${d.uid}/set`,
-            payload_on: "true", payload_off: "false", device: device
-        }), { retain: true });
-        mqttClient.subscribe(`homeduino/${d.protocol}/${d.uid}/set`);
-    });
+    // AUTO-DISCOVERY for specific known devices (v5.1.4)
+    setTimeout(() => {
+        const knownDevices = [
+            { protocol: 'switch2', uid: 'hd_switch2_31_4', name: 'Homeduino Switch 31 4', values: { state: false } }
+        ];
+        
+        knownDevices.forEach(d => {
+            const device = {
+                identifiers: [d.uid],
+                name: d.name,
+                model: d.protocol,
+                manufacturer: 'Homeduino Bridge',
+                sw_version: "5.1.4"
+            };
+            const configTopic = `homeassistant/switch/${d.uid}/config`;
+            const configPayload = {
+                name: `${d.name}`,
+                unique_id: `${d.uid}_switch`,
+                state_topic: `homeduino/${d.protocol}/${d.uid}/state`,
+                command_topic: `homeduino/${d.protocol}/${d.uid}/set`,
+                payload_on: "true", payload_off: "false",
+                device: device
+            };
+            console.log(`[AUTO-DISCOVERY] Sending config to ${configTopic}`);
+            mqttClient.publish(configTopic, JSON.stringify(configPayload), { retain: true });
+            mqttClient.subscribe(`homeduino/${d.protocol}/${d.uid}/set`);
+        });
+    }, 2000);
 });
 
 // --- Serial Connection ---
@@ -168,7 +174,7 @@ function processSignal(line) {
 
                     const output = {
                         ...res,
-                        sw_version: "5.1.3",
+                        sw_version: "5.1.4",
                         groupTimestamp: new Date().toISOString(),
                         values_json: JSON.stringify(res.values),
                         raw_data: strSeq
@@ -206,7 +212,7 @@ io.on('connection', (socket) => {
         name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
         model: res.protocol,
         manufacturer: 'Homeduino Bridge',
-        sw_version: "5.1.3"
+        sw_version: "5.1.4"
         };
         console.log(`[DISCOVERY] Sending config for ${device_id} to MQTT...`);
 
@@ -288,4 +294,4 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.1.3 (Unified Versioning Fix)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.1.4 (Discovery & Naming Fix)'));
