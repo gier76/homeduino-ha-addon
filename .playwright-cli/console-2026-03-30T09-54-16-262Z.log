@@ -1,0 +1,29 @@
+[ 2033095ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2033096ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2036155ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2036156ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2042183ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2042184ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2047244ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2047245ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2053300ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2053314ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2060371ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2060383ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2080889ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2080919ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2086524ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ http://192.168.19.128:8123/auth/token:0
+[ 2087986ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2095065ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2095081ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2102138ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2102153ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2109667ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2109668ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2116708ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2116772ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2123784ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2123964ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2131008ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/auth/token:0
+[ 2131628ms] [ERROR] WebSocket connection to 'ws://192.168.19.128:8123/api/websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://192.168.19.128:8123/frontend_latest/core.27ba88253f279dda.js:0
+[ 2137926ms] Object

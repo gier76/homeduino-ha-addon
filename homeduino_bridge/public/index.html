@@ -166,16 +166,30 @@
     </style>
 </head>
 <body>
-    <h1>Homeduino Bridge v5.0.7</h1>
+    <h1 id="version-title">Homeduino Bridge ...</h1>
     <div id="signals"></div>
 
     <script src="socket.io/socket.io.js"></script>
     <script>
         const socket = io({ path: window.location.pathname.replace(/\/$/, "") + "/socket.io" });
         const container = document.getElementById('signals');
+        const versionTitle = document.getElementById('version-title');
         const MAX_GROUPS = 20;
 
+        // Fetch version from server or set default
+        socket.on('connect', () => {
+            console.log("Connected to Bridge");
+        });
+
         socket.on('signal_group', (results) => {
+            if (results && results.length > 0) {
+                // Update version title from first enriched result if available
+                if (results[0].sw_version) {
+                    versionTitle.textContent = `Homeduino Bridge v${results[0].sw_version}`;
+                } else {
+                    versionTitle.textContent = `Homeduino Bridge v5.1.1`;
+                }
+            }
             const groupDiv = document.createElement('div');
             groupDiv.className = 'signal-group';
             

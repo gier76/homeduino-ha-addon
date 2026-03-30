@@ -145,6 +145,7 @@ function processSignal(line) {
 
                     const output = {
                         ...res,
+                        sw_version: "5.1.1",
                         groupTimestamp: new Date().toISOString(),
                         values_json: JSON.stringify(res.values),
                         raw_data: strSeq
@@ -182,7 +183,7 @@ io.on('connection', (socket) => {
         name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
         model: res.protocol,
         manufacturer: 'Homeduino Bridge',
-        sw_version: "5.1.0"
+        sw_version: "5.1.1"
         };
         console.log(`[DISCOVERY] Sending config for ${device_id} to MQTT...`);
 
@@ -264,4 +265,4 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.1.0 (Pulse Padding Fix)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.1.1 (Dynamic UI Fix)'));
