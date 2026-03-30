@@ -130,7 +130,12 @@ function processSignal(line) {
                     // Update MQTT State
                     Object.keys(v).forEach(k => {
                         if (k !== 'raw') {
-                            mqttClient.publish(`homeduino/${res.protocol}/${res.uid}/${k}`, v[k].toString(), { retain: true });
+                            let val = v[k];
+                            // Standardize state to "true"/"false" for Home Assistant
+                            if (k === 'state') {
+                                val = (val == 1 || val === true || val === 'on' || val === 'true') ? 'true' : 'false';
+                            }
+                            mqttClient.publish(`homeduino/${res.protocol}/${res.uid}/${k}`, val.toString(), { retain: true });
                         }
                     });
 
@@ -168,13 +173,12 @@ io.on('connection', (socket) => {
         const device_id = res.uid;
         
         const device = {
-            identifiers: [device_id],
-            name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
-            model: res.protocol,
-            manufacturer: 'Homeduino Bridge',
-            sw_version: "5.0.7"
+        identifiers: [device_id],
+        name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
+        model: res.protocol,
+        manufacturer: 'Homeduino Bridge',
+        sw_version: "5.0.8"
         };
-
         console.log(`[DISCOVERY] Sending config for ${device_id} to MQTT...`);
 
         // Temperature
@@ -234,18 +238,21 @@ mqttClient.on('message', (topic, message) => {
 
             const encoded = rfcontrol.encodeMessage(protocolName, rfMsg);
             if (encoded) {
-                let sendCmd = "RF send ";
-                for(let i=0; i<8; i++) sendCmd += (encoded.pulseLengths[i] || 0) + " ";
-                sendCmd += encoded.pulses.length + " " + encoded.pulses + "\n";
+                const pl = encoded.pulseLengths;
+                let sendCmd = `RF send ${pl.length} `;
+                pl.forEach(p => sendCmd += p + " ");
+                sendCmd += `${encoded.pulses.length} ${encoded.pulses}\n`;
                 
                 if (serial) {
                     console.log(`[SERIAL SEND] ${sendCmd.trim()}`);
                     serial.write(sendCmd);
-                    mqttClient.publish(`homeduino/${protocolName}/${uid}/state`, state.toString(), { retain: true });
+                    // Standardize state for feedback to MQTT
+                    const stateFeedback = state ? 'true' : 'false';
+                    mqttClient.publish(`homeduino/${protocolName}/${uid}/state`, stateFeedback, { retain: true });
                 }
             }
         } catch (e) { console.error('[SEND ERROR]', e.message); }
     }
 });
 
-server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.7 (Enhanced Logging)'));
+server.listen(8080, '0.0.0.0', () => console.log('Bridge Server v5.0.8 (Switch Fix)'));
