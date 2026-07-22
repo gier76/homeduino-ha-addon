@@ -24,13 +24,75 @@
             align-items: center;
         }
 
+        .header-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
         h1 {
             color: var(--accent-color);
             text-transform: uppercase;
             letter-spacing: 3px;
             text-shadow: var(--glow-shadow);
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .status-badge {
+            background: var(--card-bg);
+            border: 1px solid #2a2f3e;
+            border-radius: 20px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transition: border-color 0.3s ease;
+        }
+
+        .status-badge:hover {
+            border-color: var(--accent-color);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .status-dot.connected {
+            background: #00ff88;
+            box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+        }
+
+        .status-dot.disconnected {
+            background: #ff3366;
+            box-shadow: 0 0 10px #ff3366, 0 0 20px #ff3366;
+        }
+
+        .status-title {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .status-value {
+            color: #a0aec0;
+            font-family: monospace;
         }
 
         #signals {
@@ -166,7 +228,22 @@
     </style>
 </head>
 <body>
-    <h1 id="version-title">Homeduino Bridge ...</h1>
+    <div class="header-container">
+        <h1 id="version-title">Homeduino Bridge v5.1.5</h1>
+        <div class="status-bar">
+            <div class="status-badge" id="usb-status-badge">
+                <span class="status-dot disconnected" id="usb-dot"></span>
+                <span class="status-title">USB:</span>
+                <span class="status-value" id="usb-val">Verbinde...</span>
+            </div>
+            <div class="status-badge" id="mqtt-status-badge">
+                <span class="status-dot disconnected" id="mqtt-dot"></span>
+                <span class="status-title">MQTT:</span>
+                <span class="status-value" id="mqtt-val">Verbinde...</span>
+            </div>
+        </div>
+    </div>
+
     <div id="signals"></div>
 
     <script src="socket.io/socket.io.js"></script>
@@ -176,19 +253,41 @@
         const versionTitle = document.getElementById('version-title');
         const MAX_GROUPS = 20;
 
-        // Fetch version from server or set default
         socket.on('connect', () => {
-            console.log("Connected to Bridge");
+            console.log("Connected to Bridge Socket");
+        });
+
+        socket.on('status_update', (data) => {
+            if (data.version) {
+                versionTitle.textContent = `Homeduino Bridge v${data.version}`;
+            }
+            
+            // USB Status
+            const usbDot = document.getElementById('usb-dot');
+            const usbVal = document.getElementById('usb-val');
+            if (data.serialConnected) {
+                usbDot.className = 'status-dot connected';
+                usbVal.textContent = `${data.serialPort} (Connected)`;
+            } else {
+                usbDot.className = 'status-dot disconnected';
+                usbVal.textContent = `${data.serialPort} (Disconnected)`;
+            }
+
+            // MQTT Status
+            const mqttDot = document.getElementById('mqtt-dot');
+            const mqttVal = document.getElementById('mqtt-val');
+            if (data.mqttConnected) {
+                mqttDot.className = 'status-dot connected';
+                mqttVal.textContent = `${data.mqttBroker} (Connected)`;
+            } else {
+                mqttDot.className = 'status-dot disconnected';
+                mqttVal.textContent = `${data.mqttBroker} (Disconnected)`;
+            }
         });
 
         socket.on('signal_group', (results) => {
-            if (results && results.length > 0) {
-                // Update version title from first enriched result if available
-                if (results[0].sw_version) {
-                    versionTitle.textContent = `Homeduino Bridge v${results[0].sw_version}`;
-                } else {
-                    versionTitle.textContent = `Homeduino Bridge v5.1.1`;
-                }
+            if (results && results.length > 0 && results[0].sw_version) {
+                versionTitle.textContent = `Homeduino Bridge v${results[0].sw_version}`;
             }
             const groupDiv = document.createElement('div');
             groupDiv.className = 'signal-group';
@@ -205,7 +304,7 @@
                 <div class="values-grid">
             `;
 
-            // Merge values from all protocols in the group (usually just one)
+            // Merge values from all protocols in the group
             results.forEach(res => {
                 Object.keys(res.values).forEach(key => {
                     if (key !== 'raw') {
@@ -248,3 +347,4 @@
     </script>
 </body>
 </html>
+
