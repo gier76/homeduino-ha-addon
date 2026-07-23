@@ -1,5 +1,5 @@
 # Homeduino Bridge v5.1.5
-[Screenshot](Screenshot 2026-07-23 191412.png)
+[Screenshot](https://github.com/gier76/homeduino-ha-addon/blob/main/Screenshot%202026-07-23%20191412.png)
 Modernized Home Assistant Add-on that bridges 433MHz RF sensors and switches to Home Assistant using an Arduino (Homeduino) and MQTT Discovery.
 
 ## 🚀 Features
