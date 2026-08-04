@@ -9,7 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-const VERSION = "5.1.6";
+const VERSION = "5.1.7";
 
 // --- Configuration ---
 let options = {
@@ -20,7 +20,7 @@ let options = {
     mqtt_user: "",
     mqtt_password: "",
     debug: true,
-    rf_transmitter_pin: 0,
+    rf_transmitter_pin: 4,
     rf_repeats: 5
 };
 
@@ -89,6 +89,7 @@ mqttClient.on('connect', () => {
     mqttConnected = true;
     broadcastStatus();
     console.log('MQTT Connected');
+    // Subscribe to ALL homeduino command topics
     mqttClient.subscribe('homeduino/+/+/set');
 
     // AUTO-DISCOVERY for specific known devices
@@ -116,7 +117,6 @@ mqttClient.on('connect', () => {
             };
             console.log(`[AUTO-DISCOVERY] Sending config to ${configTopic}`);
             mqttClient.publish(configTopic, JSON.stringify(configPayload), { retain: true });
-            mqttClient.subscribe(`homeduino/${d.protocol}/${d.uid}/set`);
         });
     }, 2000);
 });
@@ -227,10 +227,6 @@ function processSignal(line) {
                         }
                     });
 
-                    if (v.state !== undefined) {
-                        mqttClient.subscribe(`homeduino/${res.protocol}/${res.uid}/set`);
-                    }
-
                     const output = {
                         ...res,
                         sw_version: VERSION,
@@ -302,10 +298,22 @@ io.on('connection', (socket) => {
                 command_topic: `homeduino/${res.protocol}/${device_id}/set`,
                 payload_on: "true", payload_off: "false", device: device
             }), { retain: true });
-            mqttClient.subscribe(`homeduino/${res.protocol}/${device_id}/set`);
         }
     });
 });
+
+// Helper for type conversion when building RF message values
+function parseValueForProtocol(valStr, schemaDef) {
+    if (!valStr) return valStr;
+    if (schemaDef && schemaDef.type === 'number') {
+        const parsed = parseInt(valStr, 10);
+        return isNaN(parsed) ? valStr : parsed;
+    }
+    if (schemaDef && schemaDef.type === 'boolean') {
+        return valStr === 'true' || valStr === '1';
+    }
+    return valStr;
+}
 
 // --- MQTT Command Listener ---
 mqttClient.on('message', (topic, message) => {
@@ -316,7 +324,7 @@ mqttClient.on('message', (topic, message) => {
         const stateStr = message.toString().trim().toLowerCase();
         const state = (stateStr === 'true' || stateStr === 'on' || stateStr === '1');
 
-        console.log(`[SEND] MQTT Command for ${protocolName} (${uid}): ${state}`);
+        console.log(`[SEND] MQTT Command received for ${protocolName} (${uid}): ${stateStr} -> state=${state}`);
 
         try {
             const protocol = rfcontrol.getProtocol(protocolName);
@@ -328,14 +336,18 @@ mqttClient.on('message', (topic, message) => {
 
             const rfMsg = { state: state };
             let idx = 0;
-            if (protocol.values.id) rfMsg.id = parseInt(uidParts[idx++], 10);
-            if (protocol.values.houseCode) rfMsg.houseCode = parseInt(uidParts[idx++], 10);
-            if (protocol.values.unitCode) rfMsg.unitCode = parseInt(uidParts[idx++], 10);
-            if (protocol.values.systemcode) rfMsg.systemcode = uidParts[idx++];
-            if (protocol.values.unitcode) rfMsg.unitcode = parseInt(uidParts[idx++], 10);
-            if (protocol.values.unit) rfMsg.unit = parseInt(uidParts[idx++], 10);
-            if (protocol.values.channel) rfMsg.channel = parseInt(uidParts[idx++], 10);
-            if (protocol.values.all) rfMsg.all = (uidParts[idx++] === 'all');
+            const valuesSchema = protocol.values || {};
+
+            if (valuesSchema.id) rfMsg.id = parseValueForProtocol(uidParts[idx++], valuesSchema.id);
+            if (valuesSchema.houseCode) rfMsg.houseCode = parseValueForProtocol(uidParts[idx++], valuesSchema.houseCode);
+            if (valuesSchema.unitCode) rfMsg.unitCode = parseValueForProtocol(uidParts[idx++], valuesSchema.unitCode);
+            if (valuesSchema.systemcode) rfMsg.systemcode = parseValueForProtocol(uidParts[idx++], valuesSchema.systemcode);
+            if (valuesSchema.unitcode) rfMsg.unitcode = parseValueForProtocol(uidParts[idx++], valuesSchema.unitcode);
+            if (valuesSchema.unit) rfMsg.unit = parseValueForProtocol(uidParts[idx++], valuesSchema.unit);
+            if (valuesSchema.channel) rfMsg.channel = parseValueForProtocol(uidParts[idx++], valuesSchema.channel);
+            if (valuesSchema.all) rfMsg.all = (uidParts[idx++] === 'all');
+
+            console.log(`[SEND] Encoding msg for ${protocolName}:`, JSON.stringify(rfMsg));
 
             const encoded = rfcontrol.encodeMessage(protocolName, rfMsg);
             if (encoded) {
@@ -344,11 +356,11 @@ mqttClient.on('message', (topic, message) => {
                 for(let i=0; i<pl.length && i<8; i++) fullPl[i] = pl[i];
 
                 // Build correct RF send command using configured pin and repeats
-                const transmitterPin = options.rf_transmitter_pin !== undefined ? options.rf_transmitter_pin : 0;
+                const transmitterPin = options.rf_transmitter_pin !== undefined ? options.rf_transmitter_pin : 4;
                 const repeats = options.rf_repeats !== undefined ? options.rf_repeats : 5;
                 let sendCmd = `RF send ${transmitterPin} ${repeats} `;
                 fullPl.forEach(p => sendCmd += p + " ");
-                // Append the compressed pulse string (no length prefix needed)
+                // Append the compressed pulse string
                 sendCmd += `${encoded.pulses}\n`;
 
                 if (serial && serial.isOpen) {
@@ -357,15 +369,17 @@ mqttClient.on('message', (topic, message) => {
 
                     const stateFeedback = state ? 'true' : 'false';
                     mqttClient.publish(`homeduino/${protocolName}/${uid}/state`, stateFeedback, { retain: true });
-                    // Re-enable receiving after a short delay to keep listening for updates
+                    // Re-enable receiving after 200ms to resume listening
                     setTimeout(() => {
                         if (serial && serial.isOpen) serial.write('RF receive 0\n');
                     }, 200);
                 } else {
                     console.error('[SERIAL ERROR] Cannot send command: Serial port is not open');
                 }
+            } else {
+                console.error(`[SEND ERROR] rfcontrol.encodeMessage failed for ${protocolName}`);
             }
-        } catch (e) { console.error('[SEND ERROR]', e.message); }
+        } catch (e) { console.error('[SEND ERROR]', e.message, e.stack); }
     }
 });
 
