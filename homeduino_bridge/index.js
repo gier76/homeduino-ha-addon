@@ -12,29 +12,25 @@ const crypto = require('crypto');
 const VERSION = "5.1.6";
 
 // --- Configuration ---
-let options = { 
-    serial_port: "/dev/ttyUSB0", 
-    baud_rate: 115200, 
-    mqtt_broker: "core-mosquitto", 
-    mqtt_port: 1883, 
-    mqtt_user: "", 
-    mqtt_password: "", 
-<<<<<<< HEAD
-    debug: true 
-=======
+let options = {
+    serial_port: "/dev/ttyUSB0",
+    baud_rate: 115200,
+    mqtt_broker: "core-mosquitto",
+    mqtt_port: 1883,
+    mqtt_user: "",
+    mqtt_password: "",
     debug: true,
     rf_transmitter_pin: 0,
     rf_repeats: 5
->>>>>>> a5e7369 (Fix RF send command format, add RF config options, re‑enable receive after send)
 };
 
 if (fs.existsSync('/data/options.json')) {
-    try { 
+    try {
         const fileConfig = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
-        options = { ...options, ...fileConfig }; 
+        options = { ...options, ...fileConfig };
         console.log('Config loaded from /data/options.json');
-    } catch (e) { 
-        console.error('Config Error:', e); 
+    } catch (e) {
+        console.error('Config Error:', e);
     }
 }
 
@@ -57,10 +53,10 @@ if (weather2) {
 // --- Express & Socket.io ---
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { 
-    path: '/socket.io', 
-    cors: { origin: "*" }, 
-    transports: ["polling", "websocket"] 
+const io = new Server(server, {
+    path: '/socket.io',
+    cors: { origin: "*" },
+    transports: ["polling", "websocket"]
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -84,9 +80,9 @@ function broadcastStatus() {
 }
 
 // --- MQTT Client ---
-const mqttClient = mqtt.connect(`mqtt://${options.mqtt_broker}:${options.mqtt_port}`, { 
-    username: options.mqtt_user, 
-    password: options.mqtt_password 
+const mqttClient = mqtt.connect(`mqtt://${options.mqtt_broker}:${options.mqtt_port}`, {
+    username: options.mqtt_user,
+    password: options.mqtt_password
 });
 
 mqttClient.on('connect', () => {
@@ -95,12 +91,12 @@ mqttClient.on('connect', () => {
     console.log('MQTT Connected');
     mqttClient.subscribe('homeduino/+/+/set');
 
-    // AUTO-DISCOVERY for specific known devices (v5.1.5)
+    // AUTO-DISCOVERY for specific known devices
     setTimeout(() => {
         const knownDevices = [
             { protocol: 'switch2', uid: 'hd_switch2_31_4', name: 'Homeduino Switch 31 4', values: { state: false } }
         ];
-        
+
         knownDevices.forEach(d => {
             const device = {
                 identifiers: [d.uid],
@@ -147,12 +143,12 @@ try {
     serial = new SerialPort({ path: options.serial_port, baudRate: parseInt(options.baud_rate) });
     parser = serial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
     console.log(`Serial connected to ${options.serial_port} at ${options.baud_rate}`);
-} catch (err) { 
-    console.error('Serial Error:', err.message); 
+} catch (err) {
+    console.error('Serial Error:', err.message);
 }
 
 if (serial) {
-    serial.on('open', () => { 
+    serial.on('open', () => {
         serialConnected = true;
         broadcastStatus();
         console.log('Serial port opened, starting receiver...');
@@ -161,7 +157,7 @@ if (serial) {
             if (serial && serial.isOpen) {
                 serial.write('RF receive 0\n');
             }
-        }, 5000); 
+        }, 5000);
     });
 
     serial.on('close', () => {
@@ -175,7 +171,7 @@ if (serial) {
         broadcastStatus();
         console.error('Serial Error:', err.message);
     });
-    
+
     parser.on('data', (line) => {
         line = line.trim();
         if (line.includes('RF receive ') || line.match(/^[012\s]+$/)) {
@@ -191,7 +187,7 @@ function processSignal(line) {
     try {
         if (!line.startsWith('RF receive ')) return;
         const strSeq = line.split(' ').slice(2).join(' ');
-        
+
         if (options.debug) console.log(`[RAW] ${strSeq}`);
 
         const info = rfcontrol.prepareCompressedPulses(strSeq);
@@ -201,7 +197,7 @@ function processSignal(line) {
                 const enriched = results.map(res => {
                     let idParts = [];
                     const v = res.values;
-                    
+
                     if (v.id !== undefined) idParts.push(v.id);
                     if (v.houseCode !== undefined) idParts.push(v.houseCode);
                     if (v.unitCode !== undefined) idParts.push(v.unitCode);
@@ -215,7 +211,7 @@ function processSignal(line) {
                     if (!idString) {
                         idString = crypto.createHash('md5').update(res.protocol + JSON.stringify(v)).digest('hex').substring(0, 6);
                     }
-                    
+
                     res.uid = `hd_${res.protocol}_${idString}`;
 
                     // Update MQTT State
@@ -242,7 +238,7 @@ function processSignal(line) {
                         values_json: JSON.stringify(res.values),
                         raw_data: strSeq
                     };
-                    
+
                     console.log(`[DECODED] ${res.protocol} (${res.uid}): ${output.values_json}`);
                     return output;
                 });
@@ -267,10 +263,10 @@ io.on('connection', (socket) => {
     socket.on('add_to_ha', (data) => {
         const { res } = data;
         if (!res || !res.uid) return;
-        
+
         const values = typeof res.values === 'string' ? JSON.parse(res.values) : res.values;
         const device_id = res.uid;
-        
+
         const device = {
             identifiers: [device_id],
             name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
@@ -328,7 +324,7 @@ mqttClient.on('message', (topic, message) => {
                 console.error(`[SEND ERROR] Unknown protocol: ${protocolName}`);
                 return;
             }
-            const uidParts = uid.split('_').slice(2); 
+            const uidParts = uid.split('_').slice(2);
 
             const rfMsg = { state: state };
             let idx = 0;
@@ -347,29 +343,12 @@ mqttClient.on('message', (topic, message) => {
                 let fullPl = Array(8).fill(0);
                 for(let i=0; i<pl.length && i<8; i++) fullPl[i] = pl[i];
 
-<<<<<<< HEAD
-                let sendCmd = `RF send ${fullPl.length} `;
-                fullPl.forEach(p => sendCmd += p + " ");
-                sendCmd += `${encoded.pulses.length} ${encoded.pulses}\n`;
-                
-                if (serial && serial.isOpen) {
-                    console.log(`[SERIAL SEND] ${sendCmd.trim()}`);
-                    // Repeat 5 times for 433MHz reliability
-                    for (let r = 0; r < 5; r++) {
-                        setTimeout(() => {
-                            if (serial && serial.isOpen) serial.write(sendCmd);
-                        }, r * 40);
-                    }
-                    
-                    const stateFeedback = state ? 'true' : 'false';
-                    mqttClient.publish(`homeduino/${protocolName}/${uid}/state`, stateFeedback, { retain: true });
-=======
                 // Build correct RF send command using configured pin and repeats
                 const transmitterPin = options.rf_transmitter_pin !== undefined ? options.rf_transmitter_pin : 0;
                 const repeats = options.rf_repeats !== undefined ? options.rf_repeats : 5;
                 let sendCmd = `RF send ${transmitterPin} ${repeats} `;
                 fullPl.forEach(p => sendCmd += p + " ");
-                // Append the compressed pulse string (no length needed)
+                // Append the compressed pulse string (no length prefix needed)
                 sendCmd += `${encoded.pulses}\n`;
 
                 if (serial && serial.isOpen) {
@@ -378,11 +357,10 @@ mqttClient.on('message', (topic, message) => {
 
                     const stateFeedback = state ? 'true' : 'false';
                     mqttClient.publish(`homeduino/${protocolName}/${uid}/state`, stateFeedback, { retain: true });
-                    // Re‑enable receiving after a short delay to keep listening for updates
+                    // Re-enable receiving after a short delay to keep listening for updates
                     setTimeout(() => {
                         if (serial && serial.isOpen) serial.write('RF receive 0\n');
                     }, 200);
->>>>>>> a5e7369 (Fix RF send command format, add RF config options, re‑enable receive after send)
                 } else {
                     console.error('[SERIAL ERROR] Cannot send command: Serial port is not open');
                 }
@@ -392,4 +370,3 @@ mqttClient.on('message', (topic, message) => {
 });
 
 server.listen(8080, '0.0.0.0', () => console.log(`Bridge Server v${VERSION} (MQTT Switch & Status Fixes)`));
-

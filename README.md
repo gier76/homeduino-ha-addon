@@ -1,16 +1,14 @@
-# Homeduino Bridge v5.1.5
-<<<<<<< HEAD
-![Screenshot](https://github.com/gier76/homeduino-ha-addon/blob/main/Screenshot%202026-07-23%20191412.png)
-=======
+# Homeduino Bridge v5.1.6
 
->>>>>>> a5e7369 (Fix RF send command format, add RF config options, re‑enable receive after send)
+![Screenshot](https://github.com/gier76/homeduino-ha-addon/blob/main/Screenshot%202026-07-23%20191412.png)
+
 Modernized Home Assistant Add-on that bridges 433MHz RF sensors and switches to Home Assistant using an Arduino (Homeduino) and MQTT Discovery.
 
 ## 🚀 Features
 
 - **Cyberpunk Dark UI**: High-tech real-time signal analyzer with glow effects.
 - **Live Status Badges**: Real-time status indicators in the GUI for USB Hardware (`/dev/ttyUSB0`) and MQTT Broker connection.
-- **Bi-Directional Switch Control**: Full sending and receiving support for 433MHz switches (`switch1`, `switch2`, `switch3`, `switch4`) with 5-burst signal repetition for maximum reliability.
+- **Bi-Directional Switch Control**: Full sending and receiving support for 433MHz switches (`switch1`, `switch2`, `switch3`, `switch4`) with configurable signal repetition for maximum reliability.
 - **Selective Discovery**: Add discovered sensors and switches to Home Assistant with a single click ("In HA hinzufügen").
 - **Extended Weather Protocol**: Full temperature and humidity decoding for `weather2` (bits 28-35) and `weather1`/`weather3`.
 - **Robust UID Generation**: Guarantees unique device IDs in Home Assistant using protocol parameters (`id`, `houseCode`, `unitCode`, `unit`, `channel`, `systemcode`) with MD5 fallback.
@@ -55,7 +53,9 @@ Example configuration:
   "mqtt_port": 1883,
   "mqtt_user": "",
   "mqtt_password": "",
-  "debug": false
+  "debug": false,
+  "rf_transmitter_pin": 0,
+  "rf_repeats": 5
 }
 ```
 
@@ -67,4 +67,3 @@ Example configuration:
 
 ---
 *Maintained by gier76*
-
