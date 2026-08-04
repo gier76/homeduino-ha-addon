@@ -9,7 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-const VERSION = "5.1.5";
+const VERSION = "5.1.6";
 
 // --- Configuration ---
 let options = { 
@@ -19,7 +19,13 @@ let options = {
     mqtt_port: 1883, 
     mqtt_user: "", 
     mqtt_password: "", 
+<<<<<<< HEAD
     debug: true 
+=======
+    debug: true,
+    rf_transmitter_pin: 0,
+    rf_repeats: 5
+>>>>>>> a5e7369 (Fix RF send command format, add RF config options, re‑enable receive after send)
 };
 
 if (fs.existsSync('/data/options.json')) {
@@ -341,6 +347,7 @@ mqttClient.on('message', (topic, message) => {
                 let fullPl = Array(8).fill(0);
                 for(let i=0; i<pl.length && i<8; i++) fullPl[i] = pl[i];
 
+<<<<<<< HEAD
                 let sendCmd = `RF send ${fullPl.length} `;
                 fullPl.forEach(p => sendCmd += p + " ");
                 sendCmd += `${encoded.pulses.length} ${encoded.pulses}\n`;
@@ -356,6 +363,26 @@ mqttClient.on('message', (topic, message) => {
                     
                     const stateFeedback = state ? 'true' : 'false';
                     mqttClient.publish(`homeduino/${protocolName}/${uid}/state`, stateFeedback, { retain: true });
+=======
+                // Build correct RF send command using configured pin and repeats
+                const transmitterPin = options.rf_transmitter_pin !== undefined ? options.rf_transmitter_pin : 0;
+                const repeats = options.rf_repeats !== undefined ? options.rf_repeats : 5;
+                let sendCmd = `RF send ${transmitterPin} ${repeats} `;
+                fullPl.forEach(p => sendCmd += p + " ");
+                // Append the compressed pulse string (no length needed)
+                sendCmd += `${encoded.pulses}\n`;
+
+                if (serial && serial.isOpen) {
+                    console.log(`[SERIAL SEND] ${sendCmd.trim()}`);
+                    serial.write(sendCmd);
+
+                    const stateFeedback = state ? 'true' : 'false';
+                    mqttClient.publish(`homeduino/${protocolName}/${uid}/state`, stateFeedback, { retain: true });
+                    // Re‑enable receiving after a short delay to keep listening for updates
+                    setTimeout(() => {
+                        if (serial && serial.isOpen) serial.write('RF receive 0\n');
+                    }, 200);
+>>>>>>> a5e7369 (Fix RF send command format, add RF config options, re‑enable receive after send)
                 } else {
                     console.error('[SERIAL ERROR] Cannot send command: Serial port is not open');
                 }

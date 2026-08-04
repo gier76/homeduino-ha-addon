@@ -1,5 +1,9 @@
 # Homeduino Bridge v5.1.5
+<<<<<<< HEAD
 ![Screenshot](https://github.com/gier76/homeduino-ha-addon/blob/main/Screenshot%202026-07-23%20191412.png)
+=======
+
+>>>>>>> a5e7369 (Fix RF send command format, add RF config options, re‑enable receive after send)
 Modernized Home Assistant Add-on that bridges 433MHz RF sensors and switches to Home Assistant using an Arduino (Homeduino) and MQTT Discovery.
 
 ## 🚀 Features
