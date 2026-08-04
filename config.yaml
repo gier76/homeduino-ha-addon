@@ -1,0 +1,39 @@
+name: "Homeduino Bridge"
+version: "5.1.8"
+slug: "homeduino_bridge"
+description: "Bridge between Homeduino (433MHz) and Home Assistant - Modernized with Ingress and Hardware handling"
+url: "https://github.com/gier76/homeduino-ha-addon"
+arch:
+  - amd64
+startup: services
+boot: auto
+ingress: true
+ingress_port: 8080
+panel_icon: mdi:radio-tower
+mqtt: true
+options:
+  serial_port: "/dev/ttyUSB0"
+  baud_rate: 115200
+  mqtt_broker: "core-mosquitto"
+  mqtt_port: 1883
+  mqtt_user: ""
+  mqtt_password: ""
+  debug: false
+  rf_transmitter_pin: 4
+  rf_repeats: 5
+schema:
+  serial_port: str
+  baud_rate: int?
+  mqtt_broker: str
+  mqtt_port: int?
+  mqtt_user: str?
+  mqtt_password: password?
+  debug: bool
+  rf_transmitter_pin: int?
+  rf_repeats: int?
+devices:
+  - /dev/ttyUSB0
+  - /dev/ttyUSB1
+  - /dev/ttyS0
+  - /dev/ttyACM0
+  - /dev/ttyACM1

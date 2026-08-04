@@ -9,7 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-const VERSION = "5.1.7";
+const VERSION = "5.1.8";
 
 // --- Configuration ---
 let options = {
