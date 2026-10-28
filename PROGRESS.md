@@ -41,3 +41,6 @@
 ## v5.1.12 (2026-10-28)
 - [x] **brightness_template Jinja-Fix**: `{{ value * 17 }}` multiplizierte den Payload-String (Jinja-Stringverdopplung → Renderfehler → HA zeigte Roh-dimlevel). Jetzt `{{ (value | float(0) * 17) | int }}` (mit HA ha_eval_template verifiziert: "1" → 17).
 
+## v5.1.13 (2026-10-28)
+- [x] **brightness_value_template statt brightness_template**: HA Doku (light.mqtt default schema) — `brightness_template` verarbeitet Command-Payloads, für den State-Topic ist `brightness_value_template` der richtige Parameter. Brightness-Display zeigte weiterhin Roh-dimlevel, jetzt korrekt dimlevel*17.
+
