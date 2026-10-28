@@ -35,3 +35,6 @@
 - [x] **Dimmer-State abgeleitet**: dimmer-Protokolle melden nur `dimlevel` — der state-Topic wird aus `dimlevel > 0` publiziert, damit die HA-Light-Entity den On/Off-State live sieht.
 - [x] **Dimmer Brightness für HA Legacy-Lights**: Discovery-Config bekommt `brightness_command_topic` (`.../brightness`) + `brightness_scale 255`; HA sendet plain brightness 0..255 dorthin, Bridge mappt `floor(brightness/17)` → dimlevel 1..15. Der Listener ist zu `sendRfCommand()` refaktoriert und bedient `/set` (plain + JSON-Payload) und `/brightness`.
 
+## v5.1.11 (2026-10-28)
+- [x] **Legacy-Light Param-Fix**: `brightness_topic` → `brightness_state_topic` (HA Legacy-MQTT-Light kennt nur brightness_state_topic; brightness war sonst read-only unsupported → `light.turn_on` mit brightness wurde mit 400 abgelehnt). VERSION-Konstante in index.js mitgebumpet (Config-Payloads zeigen jetzt korrekt 5.1.11).
+
