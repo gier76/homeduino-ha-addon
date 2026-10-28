@@ -29,3 +29,9 @@
 - [x] **JSON-Command-Payload für HA-Lights** (`{"state":"ON","brightness":191}`) in der MQTT-Command-Verarbeitung unterstützt.
 - [x] **Verifiziert gegen Upstream-Testfixtures**: 259/291 Decode-Fixtures OK (Rest: `switch34`, existiert im publizierten 0.0.61-Tarball nicht), 27/27 Encode-Fixtures OK, Encode→Decode-Roundtrip 26/27 (rolling1: Roundtrip-Vergleich der Feldnamen bei Rolling-Code-Protokollen expected-verschoben, Encoding selbst korrekt).
 
+## v5.1.10 (2026-10-28)
+- [x] **Auto-Discovery pro empfangenem Signal**: `sendDiscoveryConfig()` aus dem GUI-Handler extraktiert; jedes dekodierte Signal publiziert einmal pro Containerlauf seine Discovery-Config (Light/Switch/Sensor/Binary-Sensor/Battery). Entitäten folgen damit den live `hd_...`-Topics statt nur statischen knownDevices/GUI-Klicks.
+- [x] **Discovery auch per MQTT-Command**: ein Command für ein noch nicht empfangenes Gerät erzeugt die Config sofort (`[AUTO-DISCOVERY] ... from command`).
+- [x] **Dimmer-State abgeleitet**: dimmer-Protokolle melden nur `dimlevel` — der state-Topic wird aus `dimlevel > 0` publiziert, damit die HA-Light-Entity den On/Off-State live sieht.
+- [x] **Dimmer Brightness für HA Legacy-Lights**: Discovery-Config bekommt `brightness_command_topic` (`.../brightness`) + `brightness_scale 255`; HA sendet plain brightness 0..255 dorthin, Bridge mappt `floor(brightness/17)` → dimlevel 1..15. Der Listener ist zu `sendRfCommand()` refaktoriert und bedient `/set` (plain + JSON-Payload) und `/brightness`.
+

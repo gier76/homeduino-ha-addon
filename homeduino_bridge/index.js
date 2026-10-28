@@ -95,6 +95,7 @@ mqttClient.on('connect', () => {
     console.log('MQTT Connected');
     // Subscribe to ALL homeduino command topics
     mqttClient.subscribe('homeduino/+/+/set');
+    mqttClient.subscribe('homeduino/+/+/brightness');
 
     // AUTO-DISCOVERY for specific known devices
     setTimeout(() => {
@@ -188,6 +189,7 @@ if (serial) {
 
 // --- Signal Processing ---
 const lastDimlevel = {}; // uid -> last seen dimlevel (1..15), for dimmer sends without brightness
+const discoverySent = new Set(); // uid -> discovery config published this container run
 
 function processSignal(line) {
     try {
@@ -234,6 +236,10 @@ function processSignal(line) {
                             mqttClient.publish(`homeduino/${res.protocol}/${res.uid}/${k}`, val.toString(), { retain: true });
                         }
                     });
+                    // Dimmer protocols report only dimlevel: derive on/off state from it
+                    if (v.state === undefined && v.dimlevel !== undefined) {
+                        mqttClient.publish(`homeduino/${res.protocol}/${res.uid}/state`, v.dimlevel > 0 ? 'true' : 'false', { retain: true });
+                    }
 
                     const output = {
                         ...res,
@@ -244,6 +250,12 @@ function processSignal(line) {
                     };
 
                     console.log(`[DECODED] ${res.protocol} (${res.uid}): ${output.values_json}`);
+                    // Publish discovery config once per device per run so HA entities track live topics
+                    if (!discoverySent.has(res.uid)) {
+                        discoverySent.add(res.uid);
+                        console.log(`[AUTO-DISCOVERY] Sending config for ${res.uid} (${res.protocol})`);
+                        sendDiscoveryConfig(res, res.values);
+                    }
                     return output;
                 });
 
@@ -259,26 +271,17 @@ function processSignal(line) {
     } catch (e) { console.error('Processing Error:', e); }
 }
 
-// --- Discovery Handler & Status Initializer ---
-io.on('connection', (socket) => {
-    // Send status update on connection
-    socket.emit('status_update', getStatusPayload());
+// --- Discovery Handler: MQTT discovery configs for a decoded device ---
+function sendDiscoveryConfig(res, values) {
+    const device_id = res.uid;
 
-    socket.on('add_to_ha', (data) => {
-        const { res } = data;
-        if (!res || !res.uid) return;
-
-        const values = typeof res.values === 'string' ? JSON.parse(res.values) : res.values;
-        const device_id = res.uid;
-
-        const device = {
-            identifiers: [device_id],
-            name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
-            model: res.protocol,
-            manufacturer: 'Homeduino Bridge',
-            sw_version: VERSION
-        };
-        console.log(`[DISCOVERY] Sending config for ${device_id} to MQTT...`);
+    const device = {
+        identifiers: [device_id],
+        name: `Homeduino ${res.protocol} ${device_id.split('_').slice(2).join(' ')}`,
+        model: res.protocol,
+        manufacturer: 'Homeduino Bridge',
+        sw_version: VERSION
+    };
 
         // Weather sensors (temperature/humidity + extra weather fields, mirroring the HA reference integration)
         if (values.temperature !== undefined) {
@@ -326,12 +329,14 @@ io.on('connection', (socket) => {
             }), { retain: true });
         }
 
-        // Dimmer -> light (brightness = dimlevel * 17, like the HA reference integration)
-        if (res.protocol.startsWith('dimmer') && values.state !== undefined) {
+        // Dimmer -> light (brightness = dimlevel * 17; HA legacy light with separate brightness_command_topic)
+        if (res.protocol.startsWith('dimmer') && (values.state !== undefined || values.dimlevel !== undefined)) {
             mqttClient.publish(`homeassistant/light/${device_id}/config`, JSON.stringify({
                 name: "Light", unique_id: `${device_id}_light`,
                 state_topic: `homeduino/${res.protocol}/${device_id}/state`,
                 command_topic: `homeduino/${res.protocol}/${device_id}/set`,
+                brightness_command_topic: `homeduino/${res.protocol}/${device_id}/brightness`,
+                brightness_scale: 255,
                 brightness_topic: `homeduino/${res.protocol}/${device_id}/dimlevel`,
                 brightness_template: "{{ value * 17 }}",
                 payload_on: "true", payload_off: "false", device: device
@@ -379,6 +384,19 @@ io.on('connection', (socket) => {
                 payload_on: "true", payload_off: "false", device: device
             }), { retain: true });
         }
+}
+
+// --- Manual discovery via GUI + status on socket connect ---
+io.on('connection', (socket) => {
+    // Send status update on connection
+    socket.emit('status_update', getStatusPayload());
+
+    socket.on('add_to_ha', (data) => {
+        const { res } = data;
+        if (!res || !res.uid) return;
+        const values = typeof res.values === 'string' ? JSON.parse(res.values) : res.values;
+        console.log(`[DISCOVERY] Sending config for ${res.uid} to MQTT...`);
+        sendDiscoveryConfig(res, values);
     });
 });
 
@@ -396,29 +414,10 @@ function parseValueForProtocol(valStr, schemaDef) {
 }
 
 // --- MQTT Command Listener ---
-mqttClient.on('message', (topic, message) => {
-    const match = topic.match(/homeduino\/(.+)\/(.+)\/set/);
-    if (match) {
-        const protocolName = match[1];
-        const uid = match[2];
-        const rawPayload = message.toString().trim();
-        let stateStr = rawPayload.toLowerCase();
-        let brightness = null;
-        // Home Assistant MQTT lights send JSON like {"state":"ON","brightness":191}
-        if (rawPayload.startsWith('{')) {
-            try {
-                const j = JSON.parse(rawPayload);
-                stateStr = String(j.state === true || j.state === 'ON' || j.state === 'on' || j.state === 'true' ? 'true' : 'false');
-                if (j.brightness !== undefined && j.brightness !== null) brightness = j.brightness;
-            } catch (e) {
-                stateStr = rawPayload.toLowerCase();
-            }
-        }
-        const state = (stateStr === 'true' || stateStr === 'on' || stateStr === '1');
+function sendRfCommand(protocolName, uid, state, brightness, rawPayload) {
+    console.log(`[SEND] MQTT Command received for ${protocolName} (${uid}): ${rawPayload} -> state=${state}${brightness !== null ? ', brightness=' + brightness : ''}`);
 
-        console.log(`[SEND] MQTT Command received for ${protocolName} (${uid}): ${rawPayload} -> state=${state}`);
-
-        try {
+    try {
             const protocol = rfcontrol.getProtocol(protocolName);
             if (!protocol) {
                 console.error(`[SEND ERROR] Unknown protocol: ${protocolName}`);
@@ -472,6 +471,12 @@ mqttClient.on('message', (topic, message) => {
                     if (rfMsg.dimlevel !== undefined) {
                         mqttClient.publish(`homeduino/${protocolName}/${uid}/dimlevel`, String(state ? rfMsg.dimlevel : 0), { retain: true });
                     }
+                    // Ensure a HA discovery config exists for this device even if no RF signal was received yet
+                    if (!discoverySent.has(uid)) {
+                        discoverySent.add(uid);
+                        console.log(`[AUTO-DISCOVERY] Sending config for ${uid} (${protocolName}) from command`);
+                        sendDiscoveryConfig({ protocol: protocolName, uid }, rfMsg);
+                    }
                     // Re-enable receiving after 200ms to resume listening
                     setTimeout(() => {
                         if (serial && serial.isOpen) serial.write('RF receive 0\n');
@@ -483,7 +488,34 @@ mqttClient.on('message', (topic, message) => {
                 console.error(`[SEND ERROR] rfcontrol.encodeMessage failed for ${protocolName}`);
             }
         } catch (e) { console.error('[SEND ERROR]', e.message, e.stack); }
+}
+
+mqttClient.on('message', (topic, message) => {
+    const rawPayload = message.toString().trim();
+    const match = topic.match(/homeduino\/(.+)\/(.+)\/(set|brightness)/);
+    if (!match) return;
+    const protocolName = match[1];
+    const uid = match[2];
+    if (match[3] === 'brightness') {
+        // HA legacy MQTT light publishes plain brightness 0..255 on brightness_command_topic
+        const b = parseInt(rawPayload, 10);
+        if (!Number.isNaN(b)) sendRfCommand(protocolName, uid, b > 0, b, rawPayload);
+        return;
     }
+    let stateStr = rawPayload.toLowerCase();
+    let brightness = null;
+    // JSON payloads like {"state":"ON","brightness":191} are still accepted on the set topic
+    if (rawPayload.startsWith('{')) {
+        try {
+            const j = JSON.parse(rawPayload);
+            stateStr = String(j.state === true || j.state === 'ON' || j.state === 'on' || j.state === 'true' ? 'true' : 'false');
+            if (j.brightness !== undefined && j.brightness !== null) brightness = j.brightness;
+        } catch (e) {
+            stateStr = rawPayload.toLowerCase();
+        }
+    }
+    const state = (stateStr === 'true' || stateStr === 'on' || stateStr === '1');
+    sendRfCommand(protocolName, uid, state, brightness, rawPayload);
 });
 
 server.listen(8080, '0.0.0.0', () => console.log(`Bridge Server v${VERSION} (MQTT Switch & Status Fixes)`));
