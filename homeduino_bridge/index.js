@@ -1,6 +1,8 @@
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
-const rfcontrol = require('rfcontroljs');
+// Vendored full rfcontroljs stack (pimatic/rfcontroljs v0.0.61) — the npm package
+// rfcontroljs@0.0.10 only ships 9 protocols and lacks pulseCounts support.
+const rfcontrol = require('./vendor/controller');
 const mqtt = require('mqtt');
 const express = require('express');
 const http = require('http');
@@ -9,7 +11,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-const VERSION = "5.1.8";
+const VERSION = "5.1.9";
 
 // --- Configuration ---
 let options = {
@@ -42,13 +44,15 @@ if (weather2) {
     const originalDecode = weather2.decodePulses;
     weather2.decodePulses = function(pulses) {
         const result = originalDecode.call(this, pulses);
-        const helper = require('rfcontroljs/lib/helper');
+        const helper = require('./vendor/helper');
         const binary = helper.map(pulses, { '01': '0', '02': '1', '03': '' });
         result.humidity = helper.binaryToNumber(binary, 28, 35);
         result.id = helper.binaryToNumber(binary, 0, 7);
         return result;
     };
 }
+
+// The vendored controller loads all 87 upstream protocols itself; no extra registration needed.
 
 // --- Express & Socket.io ---
 const app = express();
@@ -183,6 +187,8 @@ if (serial) {
 }
 
 // --- Signal Processing ---
+const lastDimlevel = {}; // uid -> last seen dimlevel (1..15), for dimmer sends without brightness
+
 function processSignal(line) {
     try {
         if (!line.startsWith('RF receive ')) return;
@@ -213,6 +219,8 @@ function processSignal(line) {
                     }
 
                     res.uid = `hd_${res.protocol}_${idString}`;
+
+                    if (v.dimlevel !== undefined) lastDimlevel[res.uid] = v.dimlevel;
 
                     // Update MQTT State
                     Object.keys(v).forEach(k => {
@@ -272,7 +280,7 @@ io.on('connection', (socket) => {
         };
         console.log(`[DISCOVERY] Sending config for ${device_id} to MQTT...`);
 
-        // Temperature
+        // Weather sensors (temperature/humidity + extra weather fields, mirroring the HA reference integration)
         if (values.temperature !== undefined) {
             mqttClient.publish(`homeassistant/sensor/${device_id}/temperature/config`, JSON.stringify({
                 name: "Temperature", unique_id: `${device_id}_temperature`,
@@ -281,7 +289,6 @@ io.on('connection', (socket) => {
             }), { retain: true });
         }
 
-        // Humidity
         if (values.humidity !== undefined) {
             mqttClient.publish(`homeassistant/sensor/${device_id}/humidity/config`, JSON.stringify({
                 name: "Humidity", unique_id: `${device_id}_humidity`,
@@ -290,8 +297,81 @@ io.on('connection', (socket) => {
             }), { retain: true });
         }
 
-        // Switch
-        if (values.state !== undefined) {
+        const extraSensors = {
+            avgAirspeed: { label: "Wind Speed (avg)", unit: "m/s", class: "wind_speed" },
+            windGust: { label: "Wind Gust", unit: "m/s", class: "wind_speed" },
+            windDirection: { label: "Wind Direction", unit: "°", class: "wind_direction" },
+            rain: { label: "Rain", unit: "mm", class: "precipitation" },
+            barometricPressure: { label: "Barometric Pressure", unit: "hPa", class: "pressure" },
+            brightness: { label: "Brightness", unit: "lx", class: "illuminance" },
+            co2: { label: "CO2", unit: "ppm" }
+        };
+        Object.keys(extraSensors).forEach(field => {
+            if (values[field] !== undefined) {
+                const s = extraSensors[field];
+                mqttClient.publish(`homeassistant/sensor/${device_id}/${field}/config`, JSON.stringify({
+                    name: s.label, unique_id: `${device_id}_${field}`,
+                    state_topic: `homeduino/${res.protocol}/${device_id}/${field}`,
+                    unit_of_measurement: s.unit, ...(s.class ? { device_class: s.class } : {}), device: device
+                }), { retain: true });
+            }
+        });
+
+        // Battery sensor for protocols reporting lowBattery
+        if (values.lowBattery !== undefined) {
+            mqttClient.publish(`homeassistant/binary_sensor/${device_id}/battery/config`, JSON.stringify({
+                name: "Battery", unique_id: `${device_id}_battery`,
+                state_topic: `homeduino/${res.protocol}/${device_id}/lowBattery`,
+                device_class: "battery", payload_on: "true", payload_off: "false", device: device
+            }), { retain: true });
+        }
+
+        // Dimmer -> light (brightness = dimlevel * 17, like the HA reference integration)
+        if (res.protocol.startsWith('dimmer') && values.state !== undefined) {
+            mqttClient.publish(`homeassistant/light/${device_id}/config`, JSON.stringify({
+                name: "Light", unique_id: `${device_id}_light`,
+                state_topic: `homeduino/${res.protocol}/${device_id}/state`,
+                command_topic: `homeduino/${res.protocol}/${device_id}/set`,
+                brightness_topic: `homeduino/${res.protocol}/${device_id}/dimlevel`,
+                brightness_template: "{{ value * 17 }}",
+                payload_on: "true", payload_off: "false", device: device
+            }), { retain: true });
+        }
+
+        // PIR -> motion sensor, contact -> door sensor (contact state is inverted, like reference)
+        if (res.protocol.startsWith('pir') && values.state !== undefined) {
+            mqttClient.publish(`homeassistant/binary_sensor/${device_id}/motion/config`, JSON.stringify({
+                name: "Motion", unique_id: `${device_id}_motion`,
+                state_topic: `homeduino/${res.protocol}/${device_id}/state`,
+                device_class: "motion", payload_on: "true", payload_off: "false", device: device
+            }), { retain: true });
+        }
+        if (res.protocol.startsWith('contact') && values.state !== undefined) {
+            mqttClient.publish(`homeassistant/binary_sensor/${device_id}/contact/config`, JSON.stringify({
+                name: "Contact", unique_id: `${device_id}_contact`,
+                state_topic: `homeduino/${res.protocol}/${device_id}/state`,
+                device_class: "door", payload_on: "false", payload_off: "true", device: device
+            }), { retain: true });
+        }
+        if (res.protocol.startsWith('alarm') && values.state !== undefined) {
+            mqttClient.publish(`homeassistant/binary_sensor/${device_id}/alarm/config`, JSON.stringify({
+                name: "Alarm", unique_id: `${device_id}_alarm`,
+                state_topic: `homeduino/${res.protocol}/${device_id}/state`,
+                device_class: "alarm", payload_on: "true", payload_off: "false", device: device
+            }), { retain: true });
+        }
+        if (res.protocol.startsWith('doorbell') && values.state !== undefined) {
+            mqttClient.publish(`homeassistant/binary_sensor/${device_id}/doorbell/config`, JSON.stringify({
+                name: "Doorbell", unique_id: `${device_id}_doorbell`,
+                state_topic: `homeduino/${res.protocol}/${device_id}/state`,
+                device_class: "door", payload_on: "true", payload_off: "false", device: device
+            }), { retain: true });
+        }
+
+        // Switch (plain state protocols: switch*, led*, shutter*, awning*, rolling1, ...)
+        if (values.state !== undefined && !res.protocol.startsWith('dimmer')
+            && !res.protocol.startsWith('pir') && !res.protocol.startsWith('contact')
+            && !res.protocol.startsWith('alarm') && !res.protocol.startsWith('doorbell')) {
             mqttClient.publish(`homeassistant/switch/${device_id}/config`, JSON.stringify({
                 name: "Switch", unique_id: `${device_id}_switch`,
                 state_topic: `homeduino/${res.protocol}/${device_id}/state`,
@@ -321,10 +401,22 @@ mqttClient.on('message', (topic, message) => {
     if (match) {
         const protocolName = match[1];
         const uid = match[2];
-        const stateStr = message.toString().trim().toLowerCase();
+        const rawPayload = message.toString().trim();
+        let stateStr = rawPayload.toLowerCase();
+        let brightness = null;
+        // Home Assistant MQTT lights send JSON like {"state":"ON","brightness":191}
+        if (rawPayload.startsWith('{')) {
+            try {
+                const j = JSON.parse(rawPayload);
+                stateStr = String(j.state === true || j.state === 'ON' || j.state === 'on' || j.state === 'true' ? 'true' : 'false');
+                if (j.brightness !== undefined && j.brightness !== null) brightness = j.brightness;
+            } catch (e) {
+                stateStr = rawPayload.toLowerCase();
+            }
+        }
         const state = (stateStr === 'true' || stateStr === 'on' || stateStr === '1');
 
-        console.log(`[SEND] MQTT Command received for ${protocolName} (${uid}): ${stateStr} -> state=${state}`);
+        console.log(`[SEND] MQTT Command received for ${protocolName} (${uid}): ${rawPayload} -> state=${state}`);
 
         try {
             const protocol = rfcontrol.getProtocol(protocolName);
@@ -346,6 +438,14 @@ mqttClient.on('message', (topic, message) => {
             if (valuesSchema.unit) rfMsg.unit = parseValueForProtocol(uidParts[idx++], valuesSchema.unit);
             if (valuesSchema.channel) rfMsg.channel = parseValueForProtocol(uidParts[idx++], valuesSchema.channel);
             if (valuesSchema.all) rfMsg.all = (uidParts[idx++] === 'all');
+            if (valuesSchema.dimlevel) {
+                // dimlevel 1..15; HA light brightness 0..255 maps via /17 (reference integration)
+                let dim = 15;
+                if (brightness !== null) dim = Math.min(15, Math.max(1, Math.floor(brightness / 17)));
+                else if (lastDimlevel[uid] !== undefined) dim = lastDimlevel[uid];
+                if (!state) dim = 0;
+                rfMsg.dimlevel = dim;
+            }
 
             console.log(`[SEND] Encoding msg for ${protocolName}:`, JSON.stringify(rfMsg));
 
@@ -369,6 +469,9 @@ mqttClient.on('message', (topic, message) => {
 
                     const stateFeedback = state ? 'true' : 'false';
                     mqttClient.publish(`homeduino/${protocolName}/${uid}/state`, stateFeedback, { retain: true });
+                    if (rfMsg.dimlevel !== undefined) {
+                        mqttClient.publish(`homeduino/${protocolName}/${uid}/dimlevel`, String(state ? rfMsg.dimlevel : 0), { retain: true });
+                    }
                     // Re-enable receiving after 200ms to resume listening
                     setTimeout(() => {
                         if (serial && serial.isOpen) serial.write('RF receive 0\n');

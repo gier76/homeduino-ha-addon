@@ -23,3 +23,9 @@
 ## Offen
 - Keine offenen Aufgaben. Das Projekt v5.1.5 ist vollständig einsatzbereit.
 
+## v5.1.9 (2026-10-28)
+- [x] **Kompletter rfcontroljs-Stack vendored** (`vendor/controller.js`, `vendor/helper.js`, `vendor/protocols/` — 87 Protokolle aus pimatic/rfcontroljs v0.0.61). Das npm-Paket `rfcontroljs@0.0.10` (vom Dockerfile installiert) kannte nur 9 Protokolle und kein `pulseCounts` — Empfang/Senden für switch5-33, dimmer, shutter, awning, contact, pir2-6, led, doorbell, alarm, weather4-21, rawswitch/rawshutter, rolling1, generic2 fehlte komplett. Dependency `rfcontroljs` aus package.json entfernt.
+- [x] **MQTT Discovery erweitert**: Weather-Sensoren (Temp/Humidity/Wind/Regen/Druck/Helligkeit/CO2), Battery-Binary-Sensor, PIR→motion, contact→door, alarm, doorbell, dimmer→Light (mit Brightness, dimlevel 1..15 via HA brightness 0..255 / 17).
+- [x] **JSON-Command-Payload für HA-Lights** (`{"state":"ON","brightness":191}`) in der MQTT-Command-Verarbeitung unterstützt.
+- [x] **Verifiziert gegen Upstream-Testfixtures**: 259/291 Decode-Fixtures OK (Rest: `switch34`, existiert im publizierten 0.0.61-Tarball nicht), 27/27 Encode-Fixtures OK, Encode→Decode-Roundtrip 26/27 (rolling1: Roundtrip-Vergleich der Feldnamen bei Rolling-Code-Protokollen expected-verschoben, Encoding selbst korrekt).
+
