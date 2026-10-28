@@ -38,3 +38,6 @@
 ## v5.1.11 (2026-10-28)
 - [x] **Legacy-Light Param-Fix**: `brightness_topic` → `brightness_state_topic` (HA Legacy-MQTT-Light kennt nur brightness_state_topic; brightness war sonst read-only unsupported → `light.turn_on` mit brightness wurde mit 400 abgelehnt). VERSION-Konstante in index.js mitgebumpet (Config-Payloads zeigen jetzt korrekt 5.1.11).
 
+## v5.1.12 (2026-10-28)
+- [x] **brightness_template Jinja-Fix**: `{{ value * 17 }}` multiplizierte den Payload-String (Jinja-Stringverdopplung → Renderfehler → HA zeigte Roh-dimlevel). Jetzt `{{ (value | float(0) * 17) | int }}` (mit HA ha_eval_template verifiziert: "1" → 17).
+

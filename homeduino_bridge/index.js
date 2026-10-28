@@ -11,7 +11,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-const VERSION = "5.1.11";
+const VERSION = "5.1.12";
 
 // --- Configuration ---
 let options = {
@@ -338,7 +338,7 @@ function sendDiscoveryConfig(res, values) {
                 brightness_command_topic: `homeduino/${res.protocol}/${device_id}/brightness`,
                 brightness_scale: 255,
                 brightness_state_topic: `homeduino/${res.protocol}/${device_id}/dimlevel`,
-                brightness_template: "{{ value * 17 }}",
+                brightness_template: "{{ (value | float(0) * 17) | int }}",
                 payload_on: "true", payload_off: "false", device: device
             }), { retain: true });
         }
